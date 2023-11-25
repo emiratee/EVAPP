@@ -1,13 +1,20 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import React from 'react';
+import { useNavigation } from 'expo-router';
 
 const trips = [
     {
-        departure_city: 'Berlin',
-        destination_city: 'Hamburg',
-        departure_time: '12:15',
-        destination_time: '15:30',
+        departure: {
+            city: 'Berlin',
+            address: 'Stresemannstraße 123c',
+            time: '12:15'
+        },
+        destination: {
+            city: 'Hamburg',
+            address: 'Bornheide 9',
+            time: '15:45'
+        },
         stops: [
             {
                 city: 'Lüneburg',
@@ -25,10 +32,16 @@ const trips = [
         }
     },
     {
-        departure_city: 'Berlin',
-        destination_city: 'Recklinghausen',
-        departure_time: '12:15',
-        destination_time: '16:35',
+        departure: {
+            city: 'Berlin',
+            address: 'Stresemannstraße 123c',
+            time: '12:15'
+        },
+        destination: {
+            city: 'Hamburg',
+            address: 'Bornheide 9',
+            time: '15:45'
+        },
         driver: {
             name: 'Erik',
             rating: '4,7'
@@ -40,10 +53,16 @@ const trips = [
         }
     },
     {
-        departure_city: 'Berlin',
-        destination_city: 'Magdeburg',
-        departure_time: '12:15',
-        destination_time: '15:30',
+        departure: {
+            city: 'Berlin',
+            address: 'Stresemannstraße 123c',
+            time: '12:15'
+        },
+        destination: {
+            city: 'Hamburg',
+            address: 'Bornheide 9',
+            time: '15:45'
+        },
         driver: {
             name: 'Oguz',
             rating: '4,7'
@@ -57,56 +76,58 @@ const trips = [
 ];
 
 const TripCardItem = ({ trip }) => {
-    return (
-        <TouchableOpacity style={styles.cardButton}>
-            <View style={styles.cardContainer}>
-                <View style={styles.route}>
-                    {/* Departure Information */}
-                    <View style={styles.routeItem}>
-                        <View style={styles.dot}>
+    const navigate = useNavigation();
 
-                            <View style={styles.line}></View>
-                        </View>
-                        <View>
-                            <Text style={styles.city}>{trip.departure_city}</Text>
-                            <Text style={styles.time}>{trip.departure_time}</Text>
-                        </View>
-                    </View>
-                    {/* Destination Information */}
-                    <View style={styles.routeItem}>
-                        <View style={styles.dot}></View>
-                        <View>
-                            <Text style={styles.city}>{trip.destination_city}</Text>
-                            <Text style={styles.time}>{trip.destination_time}</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.information}>
-                    <View>
-                        <View style={styles.priceContainer}>
-                            <Text style={styles.price}>{`${trip.price}€`}</Text>
-                        </View>
-                        <View style={styles.seatContainer}>
-                            <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
-                            <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.informationItem}>
-                        <View>
-                            <Text style={styles.name}>{trip.driver.name}</Text>
-                            <View style={styles.ratingContainer}>
-                                <icons.AntDesign name='star' size={12} />
-                                <Text style={styles.rating}>{trip.driver.rating}</Text>
+    return (
+            <TouchableOpacity style={styles.cardButton} onPress={() => { navigate.navigate('TripInfo', { trip }) }}>
+                <View style={styles.cardContainer}>
+                    <View style={styles.route}>
+                        {/* Departure Information */}
+                        <View style={styles.routeItem}>
+                            <View style={styles.dot}>
+
+                                <View style={styles.line}></View>
+                            </View>
+                            <View>
+                                <Text style={styles.city}>{trip.departure.city}</Text>
+                                <Text style={styles.time}>{trip.departure.time}</Text>
                             </View>
                         </View>
-                        <Image
-                            source={require('../../assets/images/driver.png')}
-                            style={{ height: 50, width: 50, borderRadius: 50 }}
-                        />
+                        {/* Destination Information */}
+                        <View style={styles.routeItem}>
+                            <View style={styles.dot}></View>
+                            <View>
+                                <Text style={styles.city}>{trip.destination.city}</Text>
+                                <Text style={styles.time}>{trip.destination.time}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.information}>
+                        <View>
+                            <View style={styles.priceContainer}>
+                                <Text style={styles.price}>{`${trip.price}€`}</Text>
+                            </View>
+                            <View style={styles.seatContainer}>
+                                <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                                <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.informationItem}>
+                            <View>
+                                <Text style={styles.name}>{trip.driver.name}</Text>
+                                <View style={styles.ratingContainer}>
+                                    <icons.AntDesign name='star' size={12} />
+                                    <Text style={styles.rating}>{trip.driver.rating}</Text>
+                                </View>
+                            </View>
+                            <Image
+                                source={require('../../assets/images/driver.png')}
+                                style={{ height: 50, width: 50, borderRadius: 50 }}
+                            />
+                        </View>
                     </View>
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
     );
 };
 
