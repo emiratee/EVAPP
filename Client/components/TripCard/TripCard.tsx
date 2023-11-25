@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as icons from '@expo/vector-icons';
 import React from 'react';
 
 const trips = [
@@ -20,8 +20,8 @@ const trips = [
         },
         price: '18.00',
         seats: {
-            available: 2,
-            total: 3
+            available: 4,
+            total: 4
         }
     },
     {
@@ -30,27 +30,27 @@ const trips = [
         departure_time: '12:15',
         destination_time: '16:35',
         driver: {
-            name: 'Vladislav',
+            name: 'Erik',
             rating: '4,7'
         },
-        price: '18.00',
+        price: '14.30',
         seats: {
-            available: 2,
+            available: 1,
             total: 3
         }
     },
     {
         departure_city: 'Berlin',
-        destination_city: 'Hamburg',
+        destination_city: 'Magdeburg',
         departure_time: '12:15',
         destination_time: '15:30',
         driver: {
-            name: 'Vladislav',
+            name: 'Oguz',
             rating: '4,7'
         },
-        price: '18.00',
+        price: '23.00',
         seats: {
-            available: 2,
+            available: 0,
             total: 3
         }
     }
@@ -82,14 +82,20 @@ const TripCardItem = ({ trip }) => {
                     </View>
                 </View>
                 <View style={styles.information}>
-                    <View style={styles.priceContainer}>
-                        <Text style={styles.price}>{`${trip.price}€`}</Text>
+                    <View>
+                        <View style={styles.priceContainer}>
+                            <Text style={styles.price}>{`${trip.price}€`}</Text>
+                        </View>
+                        <View style={styles.seatContainer}>
+                            <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                            <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
+                        </View>
                     </View>
                     <View style={styles.informationItem}>
                         <View>
                             <Text style={styles.name}>{trip.driver.name}</Text>
                             <View style={styles.ratingContainer}>
-                                <MaterialCommunityIcons name='star' size={15} />
+                                <icons.AntDesign name='star' size={12} />
                                 <Text style={styles.rating}>{trip.driver.rating}</Text>
                             </View>
                         </View>
@@ -197,6 +203,16 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold'
     },
+    seatContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
+        padding: 5
+    },
+    seats: {
+        fontSize: 12,
+        fontWeight: '600'
+    },
     information: {
         flex: 1,
         flexDirection: 'column',
@@ -215,6 +231,8 @@ const styles = StyleSheet.create({
     },
     ratingContainer: {
         flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-end',
         gap: 3
     },
     rating: {
