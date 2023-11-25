@@ -48,9 +48,9 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="two"
                 options={{
-                    href: null,
+                    // href: null,
 
-                    title: 'Tab Three',
+                    title: 'Search results/ wont be visible',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />

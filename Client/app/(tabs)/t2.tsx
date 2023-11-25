@@ -1,19 +1,19 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity,  } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Switch, useColorScheme, TextInput } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
 import { Text, View } from '../../components/Themed';
-
+import { API_URL } from '@env'
 
 
 type Props = {}
 
 const t2 = (props: Props) => {
 
-   
+    const [seatPrice, setSeatPrice] = useState("")
 
-
+    // console.log(API_URL)
 
     const [smokingToggled, setSmokingToggled] = useState<boolean>(false)
     const [childSeatToggled, setChildSeatToggled] = useState<boolean>(false)
@@ -27,8 +27,8 @@ const t2 = (props: Props) => {
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
 
     const styles = getDynamicStyles(iconColor);
-
-
+    const ab = API_URL
+    console.log(API_URL)
     const fakeCars = [
         {
             id: 1,
@@ -54,16 +54,28 @@ const t2 = (props: Props) => {
 
 
     ]
+    const handlePriceChange = (text) => {
+        let newText = text.replace(/,/g, '.');
 
+        // Check if the newText has more than one dot
+        const splitText = newText.split('.');
+        if (splitText.length > 2) {
+            // If more than one dot, remove the last entered character
+            newText = newText.slice(0, -1);
+        }
+
+        // Allow only two decimal places
+        const formattedInput = newText.replace(/(\.\d{2})\d+/, '$1');
+        setSeatPrice(formattedInput);
+    }
 
     return (
- 
+
 
         <ScrollView
             automaticallyAdjustKeyboardInsets={true}
-
-
-            style={styles.container}>
+            style={styles.container}
+        >
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
@@ -173,16 +185,25 @@ const t2 = (props: Props) => {
 
 
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        keyboardType='numeric'
-                        placeholder='Enter price'
-                    // onChangeText={(text) => setPrice(text)}
-                    // value={price}
-                    />
+                    <View style={styles.priceContainer}>
+
+                        <Text style={styles.currency}>EUR</Text>
+
+                        <TextInput
+                            style={styles.inputPrice}
+                            keyboardType="decimal-pad"
+                            placeholder='Enter price per seat'
+                            onChangeText={handlePriceChange}
+                            value={seatPrice}
+                        />
+                    </View>
 
                 </View>
             </View>
+            <TouchableOpacity >
+                <Text >Create a trip</Text>
+            </TouchableOpacity>
+
         </ScrollView>
 
     )
@@ -192,6 +213,9 @@ export default t2
 const getDynamicStyles = (textColor: string) => {
 
     return StyleSheet.create({
+        btn: {
+
+        },
         container: {
             padding: 10,
             flex: 1
@@ -213,7 +237,7 @@ const getDynamicStyles = (textColor: string) => {
         parameters: {
             gap: 5,
             borderRadius: 10,
-            borderWidth: 1,
+            // borderWidth: 1,
             borderColor: '#a8a8a8',
             padding: 5,
             marginBottom: 10
@@ -226,6 +250,26 @@ const getDynamicStyles = (textColor: string) => {
             borderRadius: 10,
             borderColor: '#a8a8a8',
             color: textColor
+        },
+
+        currency: {
+            position: 'absolute',
+            left: 10, // Adjust the position as needed
+            // Style your text as needed
+        },
+        priceContainer: {
+            flexDirection: 'row',
+            alignItems: 'center'
+        },
+        inputPrice: {
+            height: 50,
+            width: '100%',
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 10,
+            borderColor: '#a8a8a8',
+            color: textColor,
+            paddingLeft: 40
         },
         carsContainer: {
 
@@ -242,4 +286,6 @@ const getDynamicStyles = (textColor: string) => {
         }
     })
 }
+
+
 
