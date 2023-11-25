@@ -15,15 +15,18 @@ const trips = [
             address: 'Bornheide 9',
             time: '15:45'
         },
-        stops: [
-            {
-                city: 'Lüneburg',
-                arrival_time: '14:45'
-            }
-        ],
+        trip: {
+            total_time: '3:30',
+            stops: [
+                {
+                    city: 'Lüneburg',
+                    arrival_time: '14:45'
+                }
+            ],
+        },
         driver: {
             name: 'Vladislav',
-            rating: '4,7'
+            rating: '2,3'
         },
         price: '18.00',
         seats: {
@@ -42,9 +45,12 @@ const trips = [
             address: 'Bornheide 9',
             time: '15:45'
         },
+        trip: {
+            total_time: '3:30'
+        },
         driver: {
             name: 'Erik',
-            rating: '4,7'
+            rating: '4,9'
         },
         price: '14.30',
         seats: {
@@ -63,9 +69,12 @@ const trips = [
             address: 'Bornheide 9',
             time: '15:45'
         },
+        trip: {
+            total_time: '3:30'
+        },
         driver: {
             name: 'Oguz',
-            rating: '4,7'
+            rating: '4,1'
         },
         price: '23.00',
         seats: {
@@ -79,55 +88,55 @@ const TripCardItem = ({ trip }) => {
     const navigate = useNavigation();
 
     return (
-            <TouchableOpacity style={styles.cardButton} onPress={() => { navigate.navigate('TripInfo', { trip }) }}>
-                <View style={styles.cardContainer}>
-                    <View style={styles.route}>
-                        {/* Departure Information */}
-                        <View style={styles.routeItem}>
-                            <View style={styles.dot}>
+        <TouchableOpacity style={styles.cardButton} onPress={() => { navigate.navigate('TripInfo', { trip }) }}>
+            <View style={styles.cardContainer}>
+                <View style={styles.route}>
+                    {/* Departure Information */}
+                    <View style={styles.routeItem}>
+                        <View style={styles.dot}>
 
-                                <View style={styles.line}></View>
-                            </View>
-                            <View>
-                                <Text style={styles.city}>{trip.departure.city}</Text>
-                                <Text style={styles.time}>{trip.departure.time}</Text>
-                            </View>
+                            <View style={styles.line}></View>
                         </View>
-                        {/* Destination Information */}
-                        <View style={styles.routeItem}>
-                            <View style={styles.dot}></View>
-                            <View>
-                                <Text style={styles.city}>{trip.destination.city}</Text>
-                                <Text style={styles.time}>{trip.destination.time}</Text>
-                            </View>
+                        <View>
+                            <Text style={styles.city}>{trip.departure.city}</Text>
+                            <Text style={styles.time}>{trip.departure.time}</Text>
                         </View>
                     </View>
-                    <View style={styles.information}>
+                    {/* Destination Information */}
+                    <View style={styles.routeItem}>
+                        <View style={styles.dot}></View>
                         <View>
-                            <View style={styles.priceContainer}>
-                                <Text style={styles.price}>{`${trip.price}€`}</Text>
-                            </View>
-                            <View style={styles.seatContainer}>
-                                <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
-                                <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.informationItem}>
-                            <View>
-                                <Text style={styles.name}>{trip.driver.name}</Text>
-                                <View style={styles.ratingContainer}>
-                                    <icons.AntDesign name='star' size={12} />
-                                    <Text style={styles.rating}>{trip.driver.rating}</Text>
-                                </View>
-                            </View>
-                            <Image
-                                source={require('../../assets/images/driver.png')}
-                                style={{ height: 50, width: 50, borderRadius: 50 }}
-                            />
+                            <Text style={styles.city}>{trip.destination.city}</Text>
+                            <Text style={styles.time}>{trip.destination.time}</Text>
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+                <View style={styles.information}>
+                    <View>
+                        <View style={styles.priceContainer}>
+                            <Text style={styles.price}>{`${trip.price}€`}</Text>
+                        </View>
+                        <View style={styles.seatContainer}>
+                            <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                            <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.informationItem}>
+                        <View>
+                            <Text style={styles.name}>{trip.driver.name}</Text>
+                            <View style={styles.ratingContainer}>
+                                <icons.AntDesign name='star' size={12} />
+                                <Text style={styles.rating}>{trip.driver.rating}</Text>
+                            </View>
+                        </View>
+                        <Image
+                            source={require('../../assets/images/driver.png')}
+                            style={{ height: 50, width: 50, borderRadius: 50 }}
+                        />
+                    </View>
+                </View>
+            </View>
+        </TouchableOpacity>
     );
 };
 
