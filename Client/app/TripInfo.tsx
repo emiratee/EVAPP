@@ -88,7 +88,7 @@ const DriverInformation = ({ driver }) => {
           </View>
           <View style={driver_style.servicesItem}>
             <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.child_seat ? 'Has a child seat' : 'Has no child seat'}</Text>
+            <Text style={driver_style.services_text}>{mockDriver.services.child_seat ? 'Has a child seat' : 'No child seat'}</Text>
           </View>
           <View style={driver_style.servicesItem}>
             <icons.MaterialIcons name='pets' size={24} />
@@ -122,6 +122,16 @@ const CarInformation = ({ driver }) => {
 
 const Request = ({ trip }) => {
   const [price, setPrice] = useState(trip.price);
+  const handlePriceChange = (value: string) => {
+    const number: number = parseFloat(value);
+    const price: number = parseFloat((trip.price * number).toFixed(2));
+    setPrice(price.toString());
+  }
+
+  const createPickerDataArray = () => {
+    return Array.from({ length: trip.seats.total }, (_, index) => index < trip.seats.available ? (index + 1).toString() : '').slice(0, trip.seats.available);
+  }
+
   return (
     <View style={request_styles.container}>
       <TouchableOpacity style={request_styles.buttonContainer}>
@@ -132,13 +142,14 @@ const Request = ({ trip }) => {
       <Picker
         style={request_styles.picker}
         selectedValue='1'
-        pickerData={['1', '2', '3', '4']}
-        onValueChange={value => { setPrice(trip.price * value) }}
+        pickerData={createPickerDataArray()}
+        onValueChange={(value: string) => { handlePriceChange(value) }}
         itemStyle={request_styles.pickerItem}
       />
     </View>
   )
 }
+
 
 export default function ModalScreen() {
   const { trip } = useRoute().params;
@@ -171,9 +182,7 @@ const request_styles = StyleSheet.create({
     height: 75,
     position: 'absolute',
     bottom: 15,
-    // borderWidth: 1.5,
-    // borderColor: '#000',
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     borderRadius: 15,
     padding: 10,
     margin: 10
@@ -183,8 +192,7 @@ const request_styles = StyleSheet.create({
     justifyContent: 'center',
     width: '75%',
     height: '100%',
-    borderWidth: 1,
-    borderColor: '#000',
+    borderColor: '#a8a8a8',
     borderRadius: 10,
     backgroundColor: '#000'
   },
@@ -197,7 +205,8 @@ const request_styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   picker: {
-    backgroundColor: '#fff',
+    flex: 1,
+    backgroundColor: '#f2f2f2',
     width: '20%',
     height: '100%'
   },
@@ -218,8 +227,7 @@ const driver_style = StyleSheet.create({
     width: '95%',
     height: 200,
     position: 'relative',
-    borderWidth: 1.5,
-    borderColor: '#000',
+    borderColor: '#a8a8a8',
     borderRadius: 15,
     padding: 10,
     margin: 10,
@@ -266,7 +274,7 @@ const driver_style = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -288,8 +296,7 @@ const styles = StyleSheet.create({
     width: '95%',
     height: 175,
     position: 'relative',
-    borderWidth: 1.5,
-    borderColor: '#000',
+    borderColor: '#a8a8a8',
     borderRadius: 15,
     padding: 10,
     margin: 10,
@@ -331,7 +338,7 @@ const styles = StyleSheet.create({
   },
   totalTime: {
     fontSize: 15,
-    fontWeight: '200',
+    fontWeight: '300',
   },
   dot: {
     backgroundColor: '#000',

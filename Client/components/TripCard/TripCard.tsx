@@ -78,8 +78,8 @@ const trips = [
         },
         price: '23',
         seats: {
-            available: 0,
-            total: 3
+            available: 1,
+            total: 5
         }
     }
 ];
@@ -177,8 +177,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 5,
         backgroundColor: '#fff',
-        borderColor: '#000',
-        borderWidth: 1,
+        borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
     },
