@@ -4,7 +4,11 @@ import { Text, View } from './Themed'
 import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
-type Props = {}
+type Props = {
+    setFakeCars: any,
+    fakeCars: any,
+    setAddNewCar:any
+}
 
 const AddNewCar = (props: Props) => {
     const [newModel, setNewModel] = useState('')
@@ -92,13 +96,17 @@ const AddNewCar = (props: Props) => {
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
-                        console.log({
-                            newModel, newColor, newLicencePlates, newNumberOfSeats
-                        })
-
+                        props.setAddNewCar(false);
+                        props.setFakeCars((prev) => [...prev, {
+                            model: newModel,
+                            color: newColor,
+                            licence_plates: newLicencePlates,
+                            seats: newNumberOfSeats,
+                            id: props.fakeCars[props.fakeCars.length - 1].id + 1
+                        }])
                     }}
                 >
-                    <Text >Create a trip</Text>
+                    <Text >Add a car</Text>
                 </TouchableOpacity>
             </View>
 
