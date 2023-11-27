@@ -18,8 +18,8 @@ type Props = {}
 
 const t2 = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-    
-    const mockData = useMockData()
+
+    const { fakeCars, setFakeCars, setTrips, trips } = useMockData()
 
 
     const [seatPrice, setSeatPrice] = useState<string>("")
@@ -41,7 +41,7 @@ const t2 = (props: Props) => {
     const [numberOfSeats, setNumberOfSeats] = useState(0);
 
     const styles = getDynamicStyles(iconColor);
-    const [fakeCars, setFakeCars] = useState<types.TCar[]>(mockData.fakeCars)
+
 
 
 
@@ -60,17 +60,32 @@ const t2 = (props: Props) => {
         setSeatPrice(formattedInput);
     }
 
-    const [departure, setDeparture] = useState("")
-    const [destination, setDestination] = useState("")
+    const [departure, setDeparture] = useState({})
+    const [destination, setDestination] = useState({})
 
     const handleSubmit = () => {
-        const submitForm = {
+        const submitForm2 = {
             id: Math.random(),
-            departure: departure,
-            destination: destination,
+            departure: {
+                city: departure.city,
+                address: departure.address,
+                time: '12:30'
+            },
+            destination: {
+                city: destination.city,
+                address: destination.address,
+                time: '15:30'
+            },
+            driver: {
+                name: 'Vladislav',
+                rating: '2,3'
+            },
             date: moment(date).format('YYYY-MM-DD'),
             departureTime: '12:30',
             arrivalTime: '15:30',
+            trip: {
+                total_time:'3:00',
+            },
             seats: {
                 available: numberOfSeats,
                 total: selectedCar.seats
@@ -84,10 +99,17 @@ const t2 = (props: Props) => {
                 comments: commentsValue,
             },
             selectedCar,
-            pricePerSeat: seatPrice
+            price: seatPrice
+
+
 
         }
+    
 
+
+
+        console.log(submitForm2)
+        setTrips([...trips, submitForm2])
         // console.log(submitForm)
 
     }

@@ -52,83 +52,49 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
     })
     const [trips, setTrips] = useState([
         {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
+            arrivalTime: "15:30",
+            date: "2023-11-28",
+            departure:  {
+              address: "Stresemannstraße 123, 10963 Berlin, Germany",
+              city: "Berlin",
+              time: "12:30",
             },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
+            departureTime: "12:30",
+            destination:  {
+              address: "C/ d'Àvila, 27, 08005 Barcelona, Spain",
+              city: "Barcelona",
+              time: "15:30",
             },
-            trip: {
-                total_time: '3:30',
-                stops: [
-                    {
-                        city: 'Lüneburg',
-                        arrival_time: '14:45'
-                    }
-                ],
+            driver:  {
+              name: "Vladislav",
+              rating: "2,3",
             },
-            driver: {
-                name: 'Vladislav',
-                rating: '2,3'
+            id: 0.231312,
+            price: "10",
+            seats:  {
+              available: 6,
+              total: 5,
             },
-            price: '18',
-            seats: {
-                available: 3,
-                total: 5
-            }
-        },
-        {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
+            selectedCar:  {
+              color: "Red",
+              id: 1,
+              licence_plates: "XXX-777",
+              model: "Audi A4",
+              seats: 5,
             },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
+            services:  {
+              alcoholToggled: false,
+              childSeatToggled: false,
+              comments: "here is a comment",
+              luggageToggled: true,
+              petsToggled: true,
+              smokingToggled: true,
             },
-            trip: {
-                total_time: '3:30'
+            trip:  {
+              total_time: "3:00",
             },
-            driver: {
-                name: 'Erik',
-                rating: '4,9'
-            },
-            price: '14.30',
-            seats: {
-                available: 1,
-                total: 3
-            }
-        },
-        {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
-            },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
-            },
-            trip: {
-                total_time: '3:30'
-            },
-            driver: {
-                name: 'Oguz',
-                rating: '4,1'
-            },
-            price: '23',
-            seats: {
-                available: 1,
-                total: 5
-            }
-        }
+          }
+          
     ])
 
     const [fakeCars, setFakeCars] = useState([

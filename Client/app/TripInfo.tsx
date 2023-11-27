@@ -70,21 +70,21 @@ const DriverInformation = ({ trip, driver }) => {
         </View>
       </View>
       <View style={driver_style.carContainer}>
-        <Text style={driver_style.carName}>{driver.car.model}</Text>
+        <Text style={driver_style.carName}>{trip.selectedCar.model}</Text>
         <View style={driver_style.carInformation}>
           <View style={driver_style.carInformationItem}>
             <Text style={driver_style.carInformationItemText}>Color:</Text>
-            <Text style={driver_style.carInformationItemValue}>{driver.car.color}</Text>
+            <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.color}</Text>
           </View>
           <View style={driver_style.carInformationItem}>
-            <Text style={driver_style.carInformationItemText}>Seats:</Text>
-            <Text style={driver_style.carInformationItemValue}>{driver.car.seats}</Text>
+            <Text style={driver_style.carInformationItemText}>Free Seats:</Text>
+            <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.seats}</Text>
           </View>
         </View>
         <View style={driver_style.carInformation}>
           <View style={driver_style.carInformationItem}>
             <Text style={driver_style.carInformationItemText}>Number plate:</Text>
-            <Text style={driver_style.carInformationItemValue}>{driver.car.number_plate}</Text>
+            <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.licence_plates}</Text>
           </View>
           <View style={driver_style.carInformationItem}>
             <Text style={driver_style.carInformationItemText}>Seats available:</Text>
@@ -98,29 +98,29 @@ const DriverInformation = ({ trip, driver }) => {
           <View style={driver_style.serviceInformationLeft}>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialCommunityIcons name='smoking' size={24} />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.smoking ? 'Smoking allowed' : 'No smoking'}</Text>
+              <Text style={driver_style.serviceInformationItemText}>{trip.services.smokingToggled ? 'Smoking allowed' : 'No smoking'}</Text>
             </View>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.child_seat ? 'Has a child seat' : 'No child seat'}</Text>
+              <Text style={driver_style.serviceInformationItemText}>{trip.services.childSeatToggled ? 'Has a child seat' : 'No child seat'}</Text>
             </View>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialIcons name='pets' size={24} />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.pets ? 'Pets allowed' : 'No pets'}</Text>
+              <Text style={driver_style.serviceInformationItemText}>{trip.services.petsToggled ? 'Pets allowed' : 'No pets'}</Text>
             </View>
             <View style={driver_style.serviceInformationItem}>
               <icons.FontAwesome5 name='wine-bottle' size={24} />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.child_seat ? 'Alcohol allowed' : 'No alcohol'}</Text>
+              <Text style={driver_style.serviceInformationItemText}>{trip.services.alcoholToggled ? 'Alcohol allowed' : 'No alcohol'}</Text>
             </View>
           </View>
           <View style={driver_style.serviceInformationRight}>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialIcons name='luggage' size={24} />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.luggage ? 'Luggage allowed' : 'No luggage'}</Text>
+              <Text style={driver_style.serviceInformationItemText}>{trip.services.luggageToggled ? 'Luggage allowed' : 'No luggage'}</Text>
             </View>
             <View style={[driver_style.serviceInformationItem, { marginTop: 10 }]}>
               <icons.MaterialIcons name="insert-comment" size={24} color="black" style={{ marginBottom: 75 }} />
-              <Text style={driver_style.serviceInformationCommentText}>{driver.services.comment}</Text>
+              <Text style={driver_style.serviceInformationCommentText}>{trip.services.comments}</Text>
             </View>
           </View>
         </View>

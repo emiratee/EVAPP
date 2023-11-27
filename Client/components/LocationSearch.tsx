@@ -38,12 +38,22 @@ const LocationSearch = (props: Props) => {
             }
             disableScroll={true}
             placeholder='Search'
+            fetchDetails={true}
             onPress={(data, details = null) => {
+                if (details) {
+                    // Extracting address and city from the details
+                    const address = details.formatted_address;
+                    const city = details.address_components.find(component =>
+                      component.types.includes("locality")
+                    )?.long_name;
+                    props.onPress({address, city});
+
+                    console.log(`Address: ${address}, City: ${city}`);
+                  }
                 // 'details' is provided when fetchDetails = true
                 // console.log(data, details);
-                props.onPress(data.description);
-                console.log(data, 'DATA')
-                console.log(details, 'Details')
+                // console.log(data, 'DATA')
+                // console.log(details, 'Details')
 
             }}
             query={{
