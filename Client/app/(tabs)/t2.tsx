@@ -4,16 +4,21 @@ import { Switch, useColorScheme, TextInput } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
 import { Text, View } from '../../components/Themed';
-import { API_URL } from '@env'
+import { Overlay } from '@rneui/themed';
+import AddNewCar from '../../components/AddNewCar';
+
+
+import LocationSearch from '../../components/LocationSearch';
 
 
 type Props = {}
 
 const t2 = (props: Props) => {
+    const [addNewCar, setAddNewCar] = useState<boolean>(false)
 
-    const [seatPrice, setSeatPrice] = useState("")
 
-    // console.log(API_URL)
+
+    const [seatPrice, setSeatPrice] = useState<string>("")
 
     const [smokingToggled, setSmokingToggled] = useState<boolean>(false)
     const [childSeatToggled, setChildSeatToggled] = useState<boolean>(false)
@@ -26,9 +31,9 @@ const t2 = (props: Props) => {
 
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
 
+
+
     const styles = getDynamicStyles(iconColor);
-    const ab = API_URL
-    console.log(API_URL)
     const fakeCars = [
         {
             id: 1,
@@ -54,7 +59,7 @@ const t2 = (props: Props) => {
 
 
     ]
-    const handlePriceChange = (text) => {
+    const handlePriceChange = (text: string) => {
         let newText = text.replace(/,/g, '.');
 
         // Check if the newText has more than one dot
@@ -73,9 +78,30 @@ const t2 = (props: Props) => {
 
 
         <ScrollView
+            keyboardShouldPersistTaps={'handled'}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
+        // <View
+        // style={styles.container}>
+
         >
+            <Overlay
+                isVisible={addNewCar}
+                onBackdropPress={() => { setAddNewCar(false) }}
+                animationType="fade">
+                <AddNewCar />
+            </Overlay>
+
+            <View style={styles.parameters}>
+                <LocationSearch />
+
+
+
+            </View>
+
+
+
+
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
@@ -170,7 +196,7 @@ const t2 = (props: Props) => {
                     ListFooterComponent={
                         <TouchableOpacity
                             style={styles.addNewCar}
-                            onPress={() => { }}
+                            onPress={() => setAddNewCar(true)}
                         >
                             <icons.FontAwesome name='plus' size={28} color={iconColor} />
                         </TouchableOpacity>
@@ -200,10 +226,16 @@ const t2 = (props: Props) => {
 
                 </View>
             </View>
-            <TouchableOpacity >
+            <TouchableOpacity
+                style={styles.btn}
+                onPress={() => {
+                    console.log({
+                        seatPrice, smokingToggled, petsToggled, alcoholToggled, luggageToggled, childSeatToggled, commentsValue, selectedCar
+                    })
+                }}
+            >
                 <Text >Create a trip</Text>
             </TouchableOpacity>
-
         </ScrollView>
 
     )
@@ -214,7 +246,10 @@ const getDynamicStyles = (textColor: string) => {
 
     return StyleSheet.create({
         btn: {
-
+            backgroundColor: 'red',
+            alignItems: 'center',
+            padding: 20,
+            borderRadius: 10
         },
         container: {
             padding: 10,
