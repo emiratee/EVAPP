@@ -30,7 +30,7 @@ const mockDriver = {
     pets: false,
     alcohol: false,
     luggage: true,
-    comment: 'I like driving under influence' //25 char max!
+    comment: 'Fix me!!!' //Fix sizing
   }
 }
 
@@ -277,15 +277,17 @@ const driver_style = StyleSheet.create({
   },
   services: {
     flex: 1,
-    flexDirection: 'row'
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   services_left: {
-    width: '50%',
-    gap: 20
+    gap: 20,
+    maxWidth: '60%'
   },
   services_right: {
     gap: 20,
-    maxWidth: '85%'
+    maxWidth: '60%'
   },
   servicesItem: {
     flex: 1,
