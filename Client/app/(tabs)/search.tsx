@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { View, ScrollView ,Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { GOOGLE_MAPS_API_KEY } from "@env";
-import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons'; 
+// import { GOOGLE_MAPS_API_KEY } from "@env";
+import * as icons from '@expo/vector-icons'; 
 // import { NavigationContainer } from '@react-navigation/native';
 
 // TODO: Fix issue with Google Places Autocomplete && how the resetting form is carried
 const SearchForm: React.FC = () => {
-  const [currentLocation, setCurrentLocation] = useState({});
+  const [currentLocation, setCurrentLocation] = useState('');
   const [desiredLocation, setDesiredLocation] = useState('');
   
   const [date, setDate] = useState(new Date());
@@ -35,7 +35,7 @@ const SearchForm: React.FC = () => {
   };
 
 
-  // TODO: Modofy the handleSubmit according to the BE
+  // TODO: Modify the handleSubmit according to the BE
   const handleSubmit = () => {
     setIsLoading(true); // set loading to true to show the spinner
 
@@ -49,9 +49,6 @@ const SearchForm: React.FC = () => {
     // save formData to an object for now
     console.log('Form Data:', formData);
 
-    // set the flag to true to trigger the form reset
-    setResetForm(true);
-
     // simulate a delay (e.g., 2000 milliseconds) before resetting the form
     setTimeout(() => {
       setIsLoading(false); // Set loading to false to hide the spinner
@@ -62,15 +59,13 @@ const SearchForm: React.FC = () => {
     // navigation.navigate('OtherTab');
 
     // clear form values
-    if (resetForm) {
-      setCurrentLocation('');
-      setDesiredLocation('');
-      setDate(new Date());
-      setNumberOfPeople(0);
+    // if (resetForm) {
+    //   setCurrentLocation('');
+    //   setDesiredLocation('');
+    //   setDate(new Date());
+    //   setNumberOfPeople(0);
   
-      // reset the flag
-      setResetForm(false);
-    }
+    // }
   };
 
 
@@ -83,73 +78,69 @@ const SearchForm: React.FC = () => {
         source={require('../../assets/images/evapp.jpeg')}
       />
 
-     
-      <View style={styles.locationInput}>
-        <MaterialIcons name="location-on" size={24} color="black" />
-        <GooglePlacesAutocomplete
-          styles={{
-            container: {
-              flex: 1,
-            },
-            textInput: {
-              height: 50,
-              fontSize: 18,
-              paddingTop: 10,
-            }
-          }}
-          placeholder='Where from?'
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            // setCurrentLocation(data.description);
-            console.log(data, details);
-
-          }}
-
-          // enablePoweredByContainer={false}
-          // minLength={2}
-          query={{
-            key: GOOGLE_MAPS_API_KEY,
-            language: 'en',
-          }}
-          // nearbyPlacesAPI='GooglePlacesSearch'
-          // debounce={400}
-        />
-
-      </View>
-
+      <View style={styles.parameters}>
+        <View style={[styles.parameter, { flexDirection: 'column', gap: 2, borderWidth: 1, borderColor: 'black', padding: 10 }]}>
       
-     
-      <View style={styles.locationInput}>
-        <MaterialIcons name="location-searching" size={24} color="black" />
-        <GooglePlacesAutocomplete
-          styles={{
-            container: {
-              flex: 1,
-            },
-            textInput: {
-              height: 50,
-              fontSize: 18,
-              paddingTop: 10,
-            },
-          }}
-          placeholder='Where to?'
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            // setDesiredLocation(data details);
-          }}
-          query={{
-            key: GOOGLE_MAPS_API_KEY,
-            language: 'en',
-          }}
-          nearbyPlacesAPI='GooglePlacesSearch'
-          debounce={400}
-        />
+          <View style={[styles.iconContainer, { alignSelf: 'flex-start'}]}>
+              <icons.MaterialIcons name='location-on' size={24} color='black' />
+              <Text style={styles.label}>From: </Text>
+          </View>
+          <View style={{ width: '100%' }}>
+            <GooglePlacesAutocomplete
+              styles={{
+                textInput: {
+                  borderBottomWidth: 1,
+                  fontSize: 18,
+                }
+              }}
+              placeholder='Search'
+              minLength={2}
+              onPress={(data, details = null) => {
+                setCurrentLocation(data.description);
+              }}
+              query={{
+                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
+                // key: GOOGLE_MAPS_API_KEY,
+                language: 'en',
+              }}
+              disableScroll={true}
+              enablePoweredByContainer={false}
+            />
+          </View>
 
+            
+
+          <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+              <icons.MaterialIcons name='location-searching' size={24} color='black' />
+              <Text style={styles.label}>To: </Text>
+          </View>
+          <View style={{ width: '100%' }}>
+            <GooglePlacesAutocomplete
+              styles={{
+                textInput: {
+                  borderBottomWidth: 1,
+                  fontSize: 18,
+                }
+              }}
+              placeholder='Search'
+              minLength={2}
+              onPress={(data, details = null) => {
+                setDesiredLocation(data.description);
+              }}
+              query={{
+                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
+                // key: GOOGLE_MAPS_API_KEY,
+                language: 'en',
+              }}
+              disableScroll={true}
+              enablePoweredByContainer={false}
+            />
+          </View>
+        </View>
       </View>
-
+     
 
       <View style={styles.doubleSectionContainer}>
-       
         <View style={styles.sectionContainer}>
           <TouchableOpacity onPress={showDatePicker} style={styles.textInput}>
             <DateTimePickerModal
@@ -159,17 +150,16 @@ const SearchForm: React.FC = () => {
               onCancel={hideDatePicker}
               minimumDate={new Date()} // Set the minimum date to today
             />
-            <FontAwesome name="calendar" size={24} color="black" />
+            <icons.FontAwesome name="calendar" size={24} color="black" />
             <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
            </TouchableOpacity>
         </View>
 
-
         <View style={styles.sectionContainer}>
           <View style={styles.textInput}>
-            <Ionicons name="ios-people" size={24} color="black" />
+            <icons.Ionicons name="ios-people" size={24} color="black" />
             <RNPickerSelect
-              // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
+              // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submit
               onValueChange={(value) => setNumberOfPeople(value)} 
               items={[
                   { label: '1', value: 1 },
@@ -196,50 +186,19 @@ const SearchForm: React.FC = () => {
                 },
               }}
             />
-          </View>
-        </View>
+          </View> 
+        </View> 
       </View>
 
-      
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
       {isLoading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
           <Text style={styles.buttonText}>Let's go</Text>
         )}
-
       </TouchableOpacity>
 
-
-      {/* <GooglePlacesAutocomplete
-          styles={{
-            container: {
-              flex: 1,
-            },
-            textInput: {
-              height: 50,
-              fontSize: 18,
-              paddingTop: 10,
-            }
-          }}
-          placeholder='Where from?'
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            // setCurrentLocation(data.description);
-            console.log(data, details);
-
-          }}
-          listViewDisplayed='auto'
-          enablePoweredByContainer={false}
-          // minLength={2}
-          query={{
-            key: GOOGLE_MAPS_API_KEY,
-            language: 'en',
-          }}
-          nearbyPlacesAPI='GooglePlacesSearch'
-          // debounce={400}
-        /> */}
-    </ScrollView>
+  </ScrollView>
   );
 };
 
@@ -274,15 +233,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  locationInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 60,
-    borderWidth: 1,
-    borderColor: '#000',
-    marginBottom: 10,
-    paddingHorizontal: 10, 
-  },
   textInput: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -298,6 +248,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 10,
   },
   sectionContainer: {
     flexDirection: 'column',
@@ -306,7 +257,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#000',
-    borderRadius: 80,
+    borderRadius: 50,
     marginHorizontal: 60,
     marginVertical: 20,
     padding: 15,
@@ -316,8 +267,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'normal',
     color: '#fff',
-
-  }
+  },
+  parameter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // borderWidth: 1,
+    // borderRadius: 10,
+    // padding: 10,
+    borderColor: '#a8a8a8'
+  },
+  iconContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10
+  },
+  parameters: {
+      gap: 5,
+      borderRadius: 10,
+      // borderWidth: 1,
+      borderColor: '#a8a8a8',
+      // padding: 5,
+      marginBottom: 10
+  },
 });
 
 export default SearchForm;
