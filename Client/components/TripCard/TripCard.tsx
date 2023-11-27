@@ -28,10 +28,10 @@ const trips = [
             name: 'Vladislav',
             rating: '2,3'
         },
-        price: '18.00',
+        price: '18',
         seats: {
-            available: 4,
-            total: 4
+            available: 3,
+            total: 5
         }
     },
     {
@@ -76,10 +76,10 @@ const trips = [
             name: 'Oguz',
             rating: '4,1'
         },
-        price: '23.00',
+        price: '23',
         seats: {
-            available: 0,
-            total: 3
+            available: 1,
+            total: 5
         }
     }
 ];
@@ -177,8 +177,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 5,
         backgroundColor: '#fff',
-        borderColor: '#000',
-        borderWidth: 1,
+        borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
     },

@@ -1,16 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import TripCard from '../../components/TripCard/TripCard';
 
-type Props = {}
-
-const t3 = (props: Props) => {
+export default function t3() {
   return (
-    <View>
-      <Text>t3</Text>
-    </View>
-  )
+    <TripCard />
+  );
 }
-
-export default t3
-
-const styles = StyleSheet.create({})
