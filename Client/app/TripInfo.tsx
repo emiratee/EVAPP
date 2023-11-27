@@ -22,7 +22,7 @@ const mockDriver = {
     model: 'Audi A4',
     color: 'Black',
     seats: 4,
-    license_plate: 'SO-SI-6969'
+    number_plate: 'SO-SI-6969'
   },
   services: {
     smoking: false,
@@ -68,10 +68,10 @@ const LocationInformation = ({ trip }) => {
   )
 }
 
-const DriverInformation = ({ driver }) => {
+const DriverInformation = ({ trip, driver }) => {
   return (
     <View style={driver_style.container}>
-      <View style={driver_style.profileContainer}>
+      <View style={driver_style.header}>
         <View style={driver_style.profile}>
           <View>
             <Text style={driver_style.profileName}>{driver.account.name}</Text>
@@ -88,6 +88,33 @@ const DriverInformation = ({ driver }) => {
           </View>
         </View>
       </View>
+
+
+      <View style={driver_style.carContainer}>
+        <Text style={driver_style.carName}>{driver.car.model}</Text>
+        <View style={driver_style.carInformation}>
+            <View style={driver_style.carInformationItem}>
+              <Text style={driver_style.carInformationItemText}>Color:</Text>
+              <Text style={driver_style.carInformationItemValue}>{driver.car.color}</Text>
+            </View>
+            <View style={driver_style.carInformationItem}>
+              <Text style={driver_style.carInformationItemText}>Seats:</Text>
+              <Text style={driver_style.carInformationItemValue}>{driver.car.seats}</Text>
+            </View>
+        </View>
+        <View style={driver_style.carInformation}>
+            <View style={driver_style.carInformationItem}>
+              <Text style={driver_style.carInformationItemText}>Number plate:</Text>
+              <Text style={driver_style.carInformationItemValue}>{driver.car.number_plate}</Text>
+            </View>
+            <View style={driver_style.carInformationItem}>
+              <Text style={driver_style.carInformationItemText}>Seats available:</Text>
+              <Text style={driver_style.carInformationItemValue}>{trip.seats.available}</Text>
+            </View>
+        </View>
+      </View>
+
+
       <View style={driver_style.services}>
         <View style={driver_style.services_left}>
           <View style={driver_style.servicesItem}>
@@ -122,9 +149,25 @@ const DriverInformation = ({ driver }) => {
   )
 }
 
-const CarInformation = ({ driver }) => {
+const CarInformation = ({ trip, driver }) => {
   return (
-    <Text>Hi</Text>
+    <View style={car_styles.container}>
+      <View style={car_styles.header}>
+        <View style={car_styles.carModel}>
+          <Text style={car_styles.carName}>{driver.car.model}</Text>
+          <Text style={car_styles.carColor}>{`(${driver.car.color})`}</Text>
+        </View>
+        <View style={car_styles.carSeats}>
+          <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+          <Text>{`${trip.seats.available}/${trip.seats.total} seats available`}</Text>
+        </View>
+      </View>
+      <View style={car_styles.information}>
+        <View>
+
+        </View>
+      </View>
+    </View>
   )
 }
 
@@ -169,8 +212,8 @@ export default function ModalScreen() {
         renderItem={({ item }) => (
           <>
             <LocationInformation trip={item} />
-            <DriverInformation driver={mockDriver} />
-            <CarInformation driver={mockDriver} />
+            <DriverInformation trip={trip} driver={mockDriver} />
+            <CarInformation trip={trip} driver={mockDriver} />
           </>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -180,6 +223,50 @@ export default function ModalScreen() {
     </View>
   );
 }
+
+const car_styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '95%',
+    height: 200,
+    position: 'relative',
+    borderColor: '#a8a8a8',
+    borderRadius: 15,
+    padding: 10,
+    margin: 10,
+    marginTop: 10,
+    marginBottom: 10
+  },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  carModel: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 5
+  },
+  carName: {
+    fontSize: 22,
+    fontWeight: 'bold'
+  },
+  carColor: {
+    fontSize: 15,
+    fontWeight: '600'
+  },
+  carSeats: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  information: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
+  }
+})
 
 const request_styles = StyleSheet.create({
   container: {
@@ -232,7 +319,7 @@ const driver_style = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: '95%',
-    height: 200,
+    height: 450,
     position: 'relative',
     borderColor: '#a8a8a8',
     borderRadius: 15,
@@ -241,14 +328,15 @@ const driver_style = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
-  profileContainer: {
+  header: {
     width: '100%'
   },
   profile: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 10
+    gap: 10,
+    marginBottom: 10
   },
   profileName: {
     fontSize: 22,
@@ -274,6 +362,39 @@ const driver_style = StyleSheet.create({
   name: {
     fontSize: 22,
     fontWeight: '600'
+  },
+  carContainer: {
+    width: '100%',
+    height: 130,
+    backgroundColor: '#f2f2f2',
+    borderColor: '#a8a8a8',
+    borderRadius: 15,
+    padding: 10
+  },
+  carName: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  carInformation: {
+    backgroundColor: '#f2f2f2',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginBottom: 10
+  },
+  carInformationItem: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: 5,
+    backgroundColor: '#f2f2f2',
+  },
+  carInformationItemText: {
+    fontSize: 13,
+    fontStyle: 'italic'
+  },
+  carInformationItemValue: {
+    fontSize: 14,
+    fontWeight: 'bold'
   },
   services: {
     flex: 1,
