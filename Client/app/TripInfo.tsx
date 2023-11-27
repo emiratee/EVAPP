@@ -12,7 +12,7 @@ const mockDriver = {
     member_since: '23rd, Feb. 2023'
   },
   trips: {
-    amount: 31
+    total: 31
   },
   rating: {
     total: 29,
@@ -71,13 +71,21 @@ const LocationInformation = ({ trip }) => {
 const DriverInformation = ({ driver }) => {
   return (
     <View style={driver_style.container}>
-      <View style={driver_style.information}>
+      <View style={driver_style.profileContainer}>
         <View style={driver_style.profile}>
-          <Text style={driver_style.name}>{driver.account.name}</Text>
-          <Image
-            source={require('../assets/images/driver.png')}
-            style={{ height: 45, width: 45, borderRadius: 50 }}
-          />
+          <View>
+            <Text style={driver_style.profileName}>{driver.account.name}</Text>
+          </View>
+          <View style={driver_style.profileInformation}>
+            <View style={driver_style.rating}>
+              <Text style={driver_style.ratingText}>{`${driver.rating.total}/${driver.trips.total} reviews • ${driver.rating.average}`}</Text>
+              <icons.AntDesign name='star' size={12} />
+            </View>
+            <Image
+              source={require('../assets/images/driver.png')}
+              style={{ height: 40, width: 40, borderRadius: 50 }}
+            />
+          </View>
         </View>
       </View>
       <View style={driver_style.services}>
@@ -223,7 +231,6 @@ const driver_style = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
     width: '95%',
     height: 200,
     position: 'relative',
@@ -234,15 +241,35 @@ const driver_style = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
+  profileContainer: {
+    width: '100%'
+  },
+  profile: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10
+  },
+  profileName: {
+    fontSize: 22,
+    fontWeight: 'bold'
+  },
+  profileInformation: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10
+  },
+  rating: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 5
+  },
+  ratingText: {
+    fontWeight: '600'
+  },
   information: {
     width: '100%',
     height: 45
-  },
-  profile: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   name: {
     fontSize: 22,
