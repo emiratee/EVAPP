@@ -6,16 +6,20 @@ import CarPreview from '../../components/CarPreview';
 import { Text, View } from '../../components/Themed';
 import { Overlay } from '@rneui/themed';
 import AddNewCar from '../../components/AddNewCar';
-
+import * as types from '../../types/types'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import RNPickerSelect from 'react-native-picker-select';
 
 import LocationSearch from '../../components/LocationSearch';
-
-
+import moment from 'moment';
+import { useMockData } from '../../mockData';
 type Props = {}
+
 
 const t2 = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-
+    
+    const mockData = useMockData()
 
 
     const [seatPrice, setSeatPrice] = useState<string>("")
@@ -32,33 +36,15 @@ const t2 = (props: Props) => {
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
 
 
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [numberOfSeats, setNumberOfSeats] = useState(0);
 
     const styles = getDynamicStyles(iconColor);
-    const fakeCars = [
-        {
-            id: 1,
-            model: 'Audi A4',
-            color: 'Red',
-            seats: '5',
-            licence_plates: 'XXX-777',
-        },
-        {
-            id: 2,
-            model: 'Audi A2',
-            color: 'Purple',
-            seats: '5',
-            licence_plates: 'YYY-777',
-        },
-        {
-            id: 3,
-            model: 'Audi A6',
-            color: 'Black',
-            seats: '5',
-            licence_plates: 'XXX-778',
-        }
+    const [fakeCars, setFakeCars] = useState<types.TCar[]>(mockData.fakeCars)
 
 
-    ]
+
     const handlePriceChange = (text: string) => {
         let newText = text.replace(/,/g, '.');
 
@@ -74,30 +60,141 @@ const t2 = (props: Props) => {
         setSeatPrice(formattedInput);
     }
 
+    const [departure, setDeparture] = useState("")
+    const [destination, setDestination] = useState("")
+
+    const handleSubmit = () => {
+        const submitForm = {
+            id: Math.random(),
+            departure: departure,
+            destination: destination,
+            date: moment(date).format('YYYY-MM-DD'),
+            departureTime: '12:30',
+            arrivalTime: '15:30',
+            seats: {
+                available: numberOfSeats,
+                total: selectedCar.seats
+            },
+            services: {
+                smokingToggled,
+                childSeatToggled,
+                petsToggled,
+                alcoholToggled,
+                luggageToggled,
+                comments: commentsValue,
+            },
+            selectedCar,
+            pricePerSeat: seatPrice
+
+        }
+
+        // console.log(submitForm)
+
+    }
+
+
     return (
 
 
         <ScrollView
-            keyboardShouldPersistTaps={'handled'}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
-        // <View
-        // style={styles.container}>
-
+            keyboardShouldPersistTaps={'handled'}
         >
             <Overlay
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar />
+                <AddNewCar setFakeCars={setFakeCars} fakeCars={fakeCars} setAddNewCar={setAddNewCar} />
             </Overlay>
 
-            {/* <View style={styles.parameters}>
-                <LocationSearch />
+            <View style={styles.parameters}>
+                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                        <icons.MaterialIcons name='location-on' size={24} color={iconColor} />
+                        <Text>From: </Text>
+                    </View>
+                    <View
+                        style={{ width: '100%' }}>
+                        <LocationSearch onPress={setDeparture} />
+                    </View>
+                    <View
+                        style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                        <icons.MaterialIcons name='location-searching' size={24} color={iconColor} />
+                        <Text>To: </Text>
+                    </View>
+                    <View
+                        style={{ width: '100%' }}>
+                        <LocationSearch onPress={setDestination} />
+                    </View>
 
 
 
-            </View> */}
+
+                </View>
+                <View style={styles.parameter}>
+                    <TouchableOpacity onPress={() => setDatePickerVisibility(true)} style={[styles.input, { width: '45%', }]}>
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            mode="date"
+                            onConfirm={(selectedDate: Date) => {
+                                setDatePickerVisibility(false)
+
+                                if (selectedDate) {
+                                    setDate(selectedDate);
+                                }
+
+                            }
+                            }
+                            onCancel={() => setDatePickerVisibility(false)}
+                            minimumDate={new Date()} // Set the minimum date to today
+                        />
+                        <icons.FontAwesome name="calendar" size={24} color="black" />
+                        <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
+                    </TouchableOpacity>
+
+                    {/* todo forgot to add time */}
+
+
+                    <View style={[styles.input, { width: '45%', }]}>
+                        <icons.Ionicons name="ios-people" size={24} color="black" />
+                        <RNPickerSelect
+                            onValueChange={(value) => { setNumberOfSeats(value) }}
+                            style={{
+                                inputIOS: {
+                                    fontSize: 18,
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 10,
+                                    paddingRight: 55,
+                                },
+                                inputAndroid: {
+                                    fontSize: 18,
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 10,
+                                    paddingRight: 55,
+                                },
+                            }}
+                            placeholder={{}}
+
+                            items={[
+                                { label: '1', value: 1 },
+                                { label: '2', value: 2 },
+                                { label: '3', value: 3 },
+                                { label: '4', value: 4 },
+                                { label: '5', value: 5 },
+                                { label: '6', value: 6 },
+                            ]}
+                        />
+
+                        <Text style={styles.label}>{numberOfSeats}</Text>
+                    </View>
+
+
+                </View>
+
+
+
+            </View>
 
 
 
@@ -228,11 +325,7 @@ const t2 = (props: Props) => {
             </View>
             <TouchableOpacity
                 style={styles.btn}
-                onPress={() => {
-                    console.log({
-                        seatPrice, smokingToggled, petsToggled, alcoholToggled, luggageToggled, childSeatToggled, commentsValue, selectedCar
-                    })
-                }}
+                onPress={handleSubmit}
             >
                 <Text >Create a trip</Text>
             </TouchableOpacity>
@@ -245,11 +338,17 @@ export default t2
 const getDynamicStyles = (textColor: string) => {
 
     return StyleSheet.create({
+        label: {
+            fontSize: 18,
+            textAlign: 'center',
+
+        },
         btn: {
             backgroundColor: 'red',
             alignItems: 'center',
             padding: 20,
-            borderRadius: 10
+            borderRadius: 10,
+            marginBottom: 20
         },
         container: {
             padding: 10,
@@ -284,7 +383,11 @@ const getDynamicStyles = (textColor: string) => {
             padding: 10,
             borderRadius: 10,
             borderColor: '#a8a8a8',
-            color: textColor
+            color: textColor,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            // textAlign: 'center',
         },
 
         currency: {

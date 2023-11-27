@@ -51,7 +51,9 @@ const getDynamicStyles = () => {
             borderColor: '#a8a8a8',
             height: 100,
             width: 100,
-            marginRight: 10
+            marginRight: 10,
+            justifyContent:'space-between'
+
         },
         selected: {
             borderWidth: 1,

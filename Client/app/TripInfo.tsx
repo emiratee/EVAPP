@@ -6,37 +6,16 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
+import { useMockData } from '../mockData';
 
-const mockDriver = {
-  account: {
-    name: 'Erik L.',
-    member_since: '23rd, Feb. 2023'
-  },
-  trips: {
-    total: 31
-  },
-  rating: {
-    total: 29,
-    average: 4.9
-  },
-  car: {
-    model: 'Audi A4',
-    color: 'Black',
-    seats: 4,
-    number_plate: 'SO-SI-6969'
-  },
-  services: {
-    smoking: false,
-    child_seat: false,
-    pets: false,
-    alcohol: false,
-    luggage: true,
-    comment: 'I like driving under influence' //max 90
-  }
-}
+
 
 
 const LocationInformation = ({ trip }) => {
+
+
+
+
   return (
     <View style={styles.locationContainer}>
       <View style={styles.timeContainer}>
@@ -209,6 +188,8 @@ const Request = ({ trip }) => {
 
 export default function ModalScreen() {
   const { trip } = useRoute().params;
+  const {mockDriver, setMockDriver} = useMockData()
+
 
   return (
     <View style={styles.container}>
