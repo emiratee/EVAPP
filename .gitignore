@@ -1,2 +1,3 @@
-Client/.env
-
+# local env files
+.env
+types

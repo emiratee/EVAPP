@@ -5,8 +5,8 @@
   "elements": [
     {
       "type": "rectangle",
-      "version": 112,
-      "versionNonce": 310220474,
+      "version": 105,
+      "versionNonce": 880428136,
       "isDeleted": false,
       "id": "sbjUXRC2OmuVB6pdSuhLZ",
       "fillStyle": "hachure",
@@ -808,7 +808,7 @@
       "containerId": null,
       "originalText": "location B",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "text",
@@ -3059,7 +3059,7 @@
       "containerId": null,
       "originalText": "loaction a",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -3153,7 +3153,7 @@
       "containerId": null,
       "originalText": "date",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "text",
@@ -3189,7 +3189,7 @@
       "containerId": null,
       "originalText": "location b",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -3254,7 +3254,7 @@
       "containerId": null,
       "originalText": "seats available",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -3319,7 +3319,7 @@
       "containerId": null,
       "originalText": "time",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -5517,7 +5517,7 @@
       "containerId": null,
       "originalText": "login",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -6053,7 +6053,7 @@
       "containerId": null,
       "originalText": "history",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -6394,7 +6394,7 @@
       "containerId": null,
       "originalText": "location A",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "text",
@@ -6430,7 +6430,7 @@
       "containerId": null,
       "originalText": "location B",
       "lineHeight": 1.25,
-      "baseline": 17
+      "baseline": 18
     },
     {
       "type": "rectangle",
@@ -6606,7 +6606,7 @@
       "containerId": null,
       "originalText": "driver\n********\navailable seats",
       "lineHeight": 1.25,
-      "baseline": 67
+      "baseline": 68
     },
     {
       "type": "text",
