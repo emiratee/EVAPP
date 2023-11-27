@@ -24,7 +24,7 @@ const LocationSearch = (props: Props) => {
                 console.log(data, details);
             }}
             query={{
-                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
+                // key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
                 language: 'en',
             }}
         />

@@ -92,12 +92,12 @@ const t2 = (props: Props) => {
                 <AddNewCar />
             </Overlay>
 
-            <View style={styles.parameters}>
+            {/* <View style={styles.parameters}>
                 <LocationSearch />
 
 
 
-            </View>
+            </View> */}
 
 
 
