@@ -1,31 +1,32 @@
-// Import necessary libraries and components
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
-import {GOOGLE_MAPS_API_KEY} from "@env";
-
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import { View, ScrollView ,Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GOOGLE_MAPS_API_KEY } from "@env";
+import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons'; 
+// import { NavigationContainer } from '@react-navigation/native';
 
-// Define the functional component
-const TravelForm: React.FC = () => {
-  // State to hold the selected locations, date, and number of people
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const [desiredLocation, setDesiredLocation] = useState(null);
+// TODO: Fix issue with Google Places Autocomplete && how the resetting form is carried
+const SearchForm: React.FC = () => {
+  const [currentLocation, setCurrentLocation] = useState({});
+  const [desiredLocation, setDesiredLocation] = useState('');
+  
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [numberOfPeople, setNumberOfPeople] = useState('');
+  const [numberOfPeople, setNumberOfPeople] = useState(0);
+  const [resetForm, setResetForm] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
 
-
+  
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-
   const handleConfirm = (selectedDate: Date) => {
     hideDatePicker();
     if (selectedDate) {
@@ -33,107 +34,219 @@ const TravelForm: React.FC = () => {
     }
   };
 
-  
 
-  // Function to handle form submission
+  // TODO: Modofy the handleSubmit according to the BE
   const handleSubmit = () => {
-    // Process the form data (you can customize this part based on your needs)
-    console.log('Current Location:', currentLocation);
-    console.log('Desired Location:', desiredLocation);
-    console.log('Travel Date:', moment(date).format('YYYY-MM-DD'));
-    console.log('Number of People:', numberOfPeople);
+    setIsLoading(true); // set loading to true to show the spinner
+
+    const formData = {
+      currentLocation,
+      desiredLocation,
+      date: moment(date).format('YYYY-MM-DD'),
+      numberOfPeople,
+    };
+
+    // save formData to an object for now
+    console.log('Form Data:', formData);
+
+    // set the flag to true to trigger the form reset
+    setResetForm(true);
+
+    // simulate a delay (e.g., 2000 milliseconds) before resetting the form
+    setTimeout(() => {
+      setIsLoading(false); // Set loading to false to hide the spinner
+      setResetForm(true); // Set the flag to trigger the form reset
+    }, 2000);
+
+    // navigate to another tab -> Erik's tab: Available options
+    // navigation.navigate('OtherTab');
+
+    // clear form values
+    if (resetForm) {
+      setCurrentLocation('');
+      setDesiredLocation('');
+      setDate(new Date());
+      setNumberOfPeople(0);
+  
+      // reset the flag
+      setResetForm(false);
+    }
   };
 
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>EVAPP</Text>
       <Text style={styles.subtitle}>Welcome to EVAPP, please select your travel destination!</Text>
       <Image
         style={styles.image}
         source={require('../../assets/images/evapp.jpeg')}
       />
-      {/* Current Location Input */}
-      <TextInput style={styles.locationInput} placeholder="  Current location"></TextInput>
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        onPress={(data, details = null) => {
-          // 'details' contains additional information about the selected place.
-          setCurrentLocation(details);
-        }}
-        query={{
-          key: GOOGLE_MAPS_API_KEY,
-          language: 'en',
-        }}
-        currentLocation={true}
-        currentLocationLabel="Current Location"
-      />
 
-      {/* Desired Location Input */}
-      <TextInput style={styles.locationInput} placeholder="  Desired location"></TextInput>
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        onPress={(data, details = null) => {
-          // 'details' contains additional information about the selected place.
-          setDesiredLocation(details);
-        }}
-        query={{
-          key: process.env('GOOGLE_MAPS_API_KEY'),
-          language: 'en',
-        }}
-      />
+     
+      <View style={styles.locationInput}>
+        <MaterialIcons name="location-on" size={24} color="black" />
+        <GooglePlacesAutocomplete
+          styles={{
+            container: {
+              flex: 1,
+            },
+            textInput: {
+              height: 50,
+              fontSize: 18,
+              paddingTop: 10,
+            }
+          }}
+          placeholder='Where from?'
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            // setCurrentLocation(data.description);
+            console.log(data, details);
+
+          }}
+
+          // enablePoweredByContainer={false}
+          // minLength={2}
+          query={{
+            key: GOOGLE_MAPS_API_KEY,
+            language: 'en',
+          }}
+          // nearbyPlacesAPI='GooglePlacesSearch'
+          // debounce={400}
+        />
+
+      </View>
+
+      
+     
+      <View style={styles.locationInput}>
+        <MaterialIcons name="location-searching" size={24} color="black" />
+        <GooglePlacesAutocomplete
+          styles={{
+            container: {
+              flex: 1,
+            },
+            textInput: {
+              height: 50,
+              fontSize: 18,
+              paddingTop: 10,
+            },
+          }}
+          placeholder='Where to?'
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            // setDesiredLocation(data details);
+          }}
+          query={{
+            key: GOOGLE_MAPS_API_KEY,
+            language: 'en',
+          }}
+          nearbyPlacesAPI='GooglePlacesSearch'
+          debounce={400}
+        />
+
+      </View>
+
 
       <View style={styles.doubleSectionContainer}>
-        {/* Date Input */}
+       
         <View style={styles.sectionContainer}>
-          <Text style={styles.label}>Select Travel Date:</Text>
-          <TouchableOpacity onPress={showDatePicker} style={styles.datePicker}>
+          <TouchableOpacity onPress={showDatePicker} style={styles.textInput}>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+              minimumDate={new Date()} // Set the minimum date to today
+            />
+            <FontAwesome name="calendar" size={24} color="black" />
             <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            // display="spinner"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-            minimumDate={new Date()} // Set the minimum date to today
-          />
+           </TouchableOpacity>
         </View>
 
-        {/* Number of People Input */}
+
         <View style={styles.sectionContainer}>
-          <Text style={styles.label}>Select No. of People:</Text>
-          {/* <TextInput
-            style={styles.textInput}
-            keyboardType="numeric"
-            placeholder="No."
-          /> */}
           <View style={styles.textInput}>
+            <Ionicons name="ios-people" size={24} color="black" />
             <RNPickerSelect
-              onValueChange={(value) => console.log(value)}
+              // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
+              onValueChange={(value) => setNumberOfPeople(value)} 
               items={[
-                  { label: '1', value: '1' },
-                  { label: '2', value: '2' },
-                  { label: '3', value: '3' },
-                  { label: '4', value: '4' },
+                  { label: '1', value: 1 },
+                  { label: '2', value: 2 },
+                  { label: '3', value: 3 },
+                  { label: '4', value: 4 },
               ]}
               placeholder={{
                 label: '0',
-                value: '0',
+                value: 0,
+              }}
+              style={{
+                inputIOS: {
+                  fontSize: 18,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  paddingRight: 55,
+                },
+                inputAndroid: {
+                  fontSize: 18,
+                  paddingVertical: 12,
+                  paddingHorizontal: 10,
+                  paddingRight: 55,
+                },
               }}
             />
           </View>
         </View>
       </View>
 
-      {/* Submit Button */}
-      <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Let's go</Text></TouchableOpacity>
-    </View>
+      
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      {isLoading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Let's go</Text>
+        )}
+
+      </TouchableOpacity>
+
+
+      {/* <GooglePlacesAutocomplete
+          styles={{
+            container: {
+              flex: 1,
+            },
+            textInput: {
+              height: 50,
+              fontSize: 18,
+              paddingTop: 10,
+            }
+          }}
+          placeholder='Where from?'
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            // setCurrentLocation(data.description);
+            console.log(data, details);
+
+          }}
+          listViewDisplayed='auto'
+          enablePoweredByContainer={false}
+          // minLength={2}
+          query={{
+            key: GOOGLE_MAPS_API_KEY,
+            language: 'en',
+          }}
+          nearbyPlacesAPI='GooglePlacesSearch'
+          // debounce={400}
+        /> */}
+    </ScrollView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     paddingVertical: 10,
     paddingHorizontal: 30,
     backgroundColor: '#fff'
@@ -158,15 +271,28 @@ const styles = StyleSheet.create({
     padding: 0
   },
   label: {
-    fontSize: 16,
-    fontWeight: 'normal',
-    paddingVertical: 10,
+    fontSize: 18,
+    textAlign: 'center',
   },
   locationInput: {
-    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 60,
     borderWidth: 1,
     borderColor: '#000',
     marginBottom: 10,
+    paddingHorizontal: 10, 
+  },
+  textInput: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    textAlign:'center',
+    fontSize: 18,
+    padding: 10,
+    width: 152,
+    height: 60,
+    borderWidth: 1,
   },
   doubleSectionContainer: {
     flexDirection: 'row',
@@ -175,30 +301,14 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  datePicker: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#000',
-    paddingVerticla: 10,
-    paddingHorizontal: 40
-    
-  },
-  textInput: {
-    fontSize: 16,
-    textAlign:'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    width: 147,
-    height: 40,
-    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#000',
-    borderRadius: 5,
+    borderRadius: 80,
     marginHorizontal: 60,
-    marginVertical: 35,
+    marginVertical: 20,
     padding: 15,
   },
   buttonText: {
@@ -210,5 +320,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// Export the component
-export default TravelForm;
+export default SearchForm;
