@@ -28,7 +28,7 @@ const trips = [
             name: 'Vladislav',
             rating: '2,3'
         },
-        price: '18.00',
+        price: '18',
         seats: {
             available: 4,
             total: 4
@@ -76,7 +76,7 @@ const trips = [
             name: 'Oguz',
             rating: '4,1'
         },
-        price: '23.00',
+        price: '23',
         seats: {
             available: 0,
             total: 3

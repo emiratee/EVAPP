@@ -1,8 +1,10 @@
 import { useRoute } from '@react-navigation/native';
-import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Text, View } from '../components/Themed';
+import * as icons from '@expo/vector-icons';
+import { Picker } from 'react-native-wheel-pick';
 
 const mockDriver = {
   account: {
@@ -28,7 +30,7 @@ const mockDriver = {
     pets: false,
     alcohol: false,
     luggage: true,
-    comment: 'I listen to Heavy Metal on max volume'
+    comment: 'I like driving under influence' //25 char max!
   }
 }
 
@@ -78,6 +80,62 @@ const DriverInformation = ({ driver }) => {
           />
         </View>
       </View>
+      <View style={driver_style.services}>
+        <View style={driver_style.services_left}>
+          <View style={driver_style.servicesItem}>
+            <icons.MaterialCommunityIcons name='smoking' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.smoking ? 'Allows smoking' : 'No smoking'}</Text>
+          </View>
+          <View style={driver_style.servicesItem}>
+            <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.child_seat ? 'Has a child seat' : 'Has no child seat'}</Text>
+          </View>
+          <View style={driver_style.servicesItem}>
+            <icons.MaterialIcons name='pets' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.pets ? 'Allows pets' : 'No pets allowed'}</Text>
+          </View>
+        </View>
+        <View style={driver_style.services_right}>
+          <View style={driver_style.servicesItem}>
+            <icons.FontAwesome5 name='wine-bottle' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.alcohol ? 'Allows alcohol' : 'No alcohol allowed'}</Text>
+          </View>
+          <View style={driver_style.servicesItem}>
+            <icons.MaterialIcons name='luggage' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.luggage ? 'Allows luggage' : 'No luggage allowed'}</Text>
+          </View>
+          <View style={driver_style.servicesItem}>
+            <icons.MaterialIcons name='comment' size={24} />
+            <Text style={driver_style.services_text}>{mockDriver.services.comment}</Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const CarInformation = ({ driver }) => {
+  return (
+    <Text>Hi</Text>
+  )
+}
+
+const Request = ({ trip }) => {
+  const [price, setPrice] = useState(trip.price);
+  return (
+    <View style={request_styles.container}>
+      <TouchableOpacity style={request_styles.buttonContainer}>
+        <View style={request_styles.button}>
+          <Text style={request_styles.buttonText}>{parseFloat(price).toFixed(2)}€</Text>
+        </View>
+      </TouchableOpacity>
+      <Picker
+        style={request_styles.picker}
+        selectedValue='1'
+        pickerData={['1', '2', '3', '4']}
+        onValueChange={value => { setPrice(trip.price * value) }}
+        itemStyle={request_styles.pickerItem}
+      />
     </View>
   )
 }
@@ -92,21 +150,69 @@ export default function ModalScreen() {
         renderItem={({ item }) => (
           <>
             <LocationInformation trip={item} />
-            <View style={styles.horizontalLine}></View>
             <DriverInformation driver={mockDriver} />
+            <CarInformation driver={mockDriver} />
           </>
         )}
         keyExtractor={(item, index) => index.toString()}
-        style={{ width: '100%' }}
+        style={{ width: '100%', height: '100%' }}
       />
+      <Request trip={trip} />
     </View>
   );
 }
 
+const request_styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    gap: 15,
+    width: '100%',
+    height: 75,
+    position: 'absolute',
+    bottom: 15,
+    // borderWidth: 1.5,
+    // borderColor: '#000',
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 10,
+    margin: 10
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '75%',
+    height: '100%',
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 10,
+    backgroundColor: '#000'
+  },
+  button: {
+    backgroundColor: '#000',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  picker: {
+    backgroundColor: '#fff',
+    width: '20%',
+    height: '100%'
+  },
+  pickerItem: {
+    fontSize: 20,
+    height: 50,
+    color: 'black',
+    textAlign: 'center',
+  }
+});
+
 const driver_style = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     width: '95%',
@@ -117,7 +223,8 @@ const driver_style = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     margin: 10,
-    marginBottom: 25
+    marginTop: 10,
+    marginBottom: 10
   },
   information: {
     width: '100%',
@@ -132,11 +239,34 @@ const driver_style = StyleSheet.create({
   name: {
     fontSize: 22,
     fontWeight: '600'
+  },
+  services: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  services_left: {
+    width: '50%',
+    gap: 20
+  },
+  services_right: {
+    gap: 20,
+    maxWidth: '85%'
+  },
+  servicesItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5
+  },
+  services_text: {
+    fontSize: 12,
+    maxWidth: '50%'
   }
 });
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -163,7 +293,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     margin: 10,
-    marginBottom: 25
+    marginBottom: 10
   },
   timeContainer: {
     height: '100%',
