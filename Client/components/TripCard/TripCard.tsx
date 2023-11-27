@@ -6,76 +6,79 @@ import { useMockData } from '../../mockData';
 
 
 export const TripCardItem = ({ trip }) => {
-    const navigate = useNavigation();
 
     return (
-        <TouchableOpacity style={styles.cardButton} onPress={() => { navigate.navigate('TripInfo', { trip }) }}>
-            <View style={styles.cardContainer}>
-                <View style={styles.route}>
-                    {/* Departure Information */}
-                    <View style={styles.routeItem}>
-                        <View style={styles.dot}>
+        <View style={styles.cardContainer}>
+            <View style={styles.route}>
+                {/* Departure Information */}
+                <View style={styles.routeItem}>
+                    <View style={styles.dot}>
 
-                            <View style={styles.line}></View>
-                        </View>
-                        <View>
-                            <Text style={styles.city}>{trip.departure.city}</Text>
-                            <Text style={styles.time}>{trip.departure.time}</Text>
-                        </View>
+                        <View style={styles.line}></View>
                     </View>
-                    {/* Destination Information */}
-                    <View style={styles.routeItem}>
-                        <View style={styles.dot}></View>
-                        <View>
-                            <Text style={styles.city}>{trip.destination.city}</Text>
-                            <Text style={styles.time}>{trip.destination.time}</Text>
-                        </View>
+                    <View>
+                        <Text style={styles.city}>{trip.departure.city}</Text>
+                        <Text style={styles.time}>{trip.departure.time}</Text>
                     </View>
                 </View>
-                <View style={styles.information}>
+                {/* Destination Information */}
+                <View style={styles.routeItem}>
+                    <View style={styles.dot}></View>
                     <View>
-                        <View style={styles.priceContainer}>
-                            <Text style={styles.price}>{`${trip.price}€`}</Text>
-                        </View>
-                        <View style={styles.seatContainer}>
-                            <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
-                            <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.informationItem}>
-                        <View>
-                            <Text style={styles.name}>{trip.driver.name}</Text>
-                            <View style={styles.ratingContainer}>
-                                <icons.AntDesign name='star' size={12} />
-                                <Text style={styles.rating}>{trip.driver.rating}</Text>
-                            </View>
-                        </View>
-                        <Image
-                            source={require('../../assets/images/driver.png')}
-                            style={{ height: 50, width: 50, borderRadius: 50 }}
-                        />
+                        <Text style={styles.city}>{trip.destination.city}</Text>
+                        <Text style={styles.time}>{trip.destination.time}</Text>
                     </View>
                 </View>
             </View>
-        </TouchableOpacity>
+            <View style={styles.information}>
+                <View>
+                    <View style={styles.priceContainer}>
+                        <Text style={styles.price}>{`${trip.price}€`}</Text>
+                    </View>
+                    <View style={styles.seatContainer}>
+                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                        <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
+                    </View>
+                </View>
+                <View style={styles.informationItem}>
+                    <View>
+                        <Text style={styles.name}>{trip.driver.name}</Text>
+                        <View style={styles.ratingContainer}>
+                            <icons.AntDesign name='star' size={12} />
+                            <Text style={styles.rating}>{trip.driver.rating}</Text>
+                        </View>
+                    </View>
+                    <Image
+                        source={require('../../assets/images/driver.png')}
+                        style={{ height: 50, width: 50, borderRadius: 50 }}
+                    />
+                </View>
+            </View>
+        </View>
     );
 };
 
 const TripCard = () => {
 
+    const navigate = useNavigation();
+    const { trips, setTrips } = useMockData()
 
-const {trips, setTrips} = useMockData()
 
     return (
         <View style={styles.list}>
             <FlatList
                 data={trips}
                 renderItem={({ item }) => (
-                    <TripCardItem trip={item} />
+                    <TouchableOpacity style={styles.cardButton} onPress={() =>{
+                        console.log('we here', item)
+                    navigate.navigate('TripInfo', { trip:  item })}} >
+                <TripCardItem trip={item} />
+            </TouchableOpacity>
                 )}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={{ paddingHorizontal: 15 }}
-                style={{ width: '100%' }} // Ensuring FlatList takes full width
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingHorizontal: 15 }}
+            style={{ width: '100%' }} // Ensuring FlatList takes full width
+
             />
         </View>
     );

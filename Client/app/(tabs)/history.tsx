@@ -4,94 +4,16 @@ import { Text, View } from '../../components/Themed'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native';
 import * as icons from '@expo/vector-icons';
-import TripCardItem from '../../components/TripCard/TripCard'
+import { TripCardItem } from '../../components/TripCard/TripCard'
+import { useMockData } from '../../mockData';
 
 type Props = {}
 
 const history = (props: Props) => {
 
     const [index, setIndex] = useState(0)
+    const { trips, setTrips } = useMockData();
 
-    const dummyData = [
-        {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
-            },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
-            },
-            trip: {
-                total_time: '3:30',
-                stops: [
-                    {
-                        city: 'Lüneburg',
-                        arrival_time: '14:45'
-                    }
-                ],
-            },
-            driver: {
-                name: 'Vladislav',
-                rating: '2,3'
-            },
-            price: '18',
-            seats: {
-                available: 3,
-                total: 5
-            }
-        },
-        {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
-            },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
-            },
-            trip: {
-                total_time: '3:30'
-            },
-            driver: {
-                name: 'Erik',
-                rating: '4,9'
-            },
-            price: '14.30',
-            seats: {
-                available: 1,
-                total: 3
-            }
-        },
-        {
-            departure: {
-                city: 'Berlin',
-                address: 'Stresemannstraße 123c',
-                time: '12:15'
-            },
-            destination: {
-                city: 'Hamburg',
-                address: 'Bornheide 9',
-                time: '15:45'
-            },
-            trip: {
-                total_time: '3:30'
-            },
-            driver: {
-                name: 'Oguz',
-                rating: '4,1'
-            },
-            price: '23',
-            seats: {
-                available: 1,
-                total: 5
-            }
-        }
-    ]
 
 
     return (
@@ -118,17 +40,18 @@ const history = (props: Props) => {
             </Tab>
 
             <TabView value={index} onChange={setIndex} animationType="spring">
-                {/* <ScrollView>
-                    */}
-                    <Text>Receterxnt</Text> 
-                    <FlatList
-                    data={dummyData}
-                    renderItem={({ item }) => (
-                        <TripCardItem trip={item} />
-                    )}
-                    />
 
-                {/* </ScrollView> */}
+                <FlatList
+                    data={trips}
+                    renderItem={({ item }) => (
+                        <View style={styles.cardButton} >
+                            <TripCardItem trip={item} />
+                        </View>
+                    )}
+                />
+
+
+
                 <ScrollView>
                     <Text>Favorittere</Text>
                 </ScrollView>
@@ -139,4 +62,9 @@ const history = (props: Props) => {
 
 export default history
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    cardButton: {
+        width: '100%',
+        height: 175
+    },
+})

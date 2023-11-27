@@ -6,15 +6,15 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import { useMockData } from '../mockData';
+// import { useRoute } from 'expo-router';
 
 
-
-const LocationInformation = ({ trip }) => {
-
+const LocationInformation = () => {
 
 
+  const { trip } = useRoute().params;
 
-  return (
+  return ( 
     <View style={styles.locationContainer}>
       <View style={styles.timeContainer}>
         <View>
@@ -61,10 +61,10 @@ const DriverInformation = ({ trip, driver }) => {
               <icons.AntDesign name='star' size={12} />
             </View>
             <TouchableOpacity>
-            <Image
-              source={require('../assets/images/driver.png')}
-              style={{ height: 40, width: 40, borderRadius: 50 }}
-            />
+              <Image
+                source={require('../assets/images/driver.png')}
+                style={{ height: 40, width: 40, borderRadius: 50 }}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -166,8 +166,7 @@ const Request = ({ trip }) => {
 
 export default function ModalScreen() {
   const { trip } = useRoute().params;
-  const {mockDriver, setMockDriver} = useMockData()
-
+  const {mockDriver, setMockDriver} = useMockData();
 
   return (
     <View style={styles.container}>
@@ -176,7 +175,7 @@ export default function ModalScreen() {
         renderItem={({ item }) => (
           <>
             <LocationInformation trip={item} />
-            <DriverInformation trip={trip} driver={mockDriver} />
+            <DriverInformation trip={item} driver={mockDriver} />
           </>
         )}
         keyExtractor={(item, index) => index.toString()}
