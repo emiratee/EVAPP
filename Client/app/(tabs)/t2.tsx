@@ -12,13 +12,14 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
-import * as mockData from '../../mockData'
-
+import { useMockData } from '../../mockData';
 type Props = {}
+
 
 const t2 = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-
+    
+    const mockData = useMockData()
 
 
     const [seatPrice, setSeatPrice] = useState<string>("")

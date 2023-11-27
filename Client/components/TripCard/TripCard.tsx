@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react
 import * as icons from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { useNavigation } from 'expo-router';
-import * as mockData from '../../mockData'
+import { useMockData } from '../../mockData';
 
 
 const TripCardItem = ({ trip }) => {
@@ -63,8 +63,8 @@ const TripCardItem = ({ trip }) => {
 
 const TripCard = () => {
 
-const [trips, setTrips] = useState(mockData.trips)
 
+const {trips, setTrips} = useMockData()
 
     return (
         <View style={styles.list}>

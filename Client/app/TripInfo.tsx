@@ -5,7 +5,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
-import * as mockData from '../mockData'
+import { useMockData } from '../mockData';
+
 
 
 const LocationInformation = ({ trip }) => {
@@ -165,7 +166,8 @@ const Request = ({ trip }) => {
 
 export default function ModalScreen() {
   const { trip } = useRoute().params;
-  const [mockDriver, setMockDriver] = useState(mockData.mockDriver)
+  const {mockDriver, setMockDriver} = useMockData()
+
 
   return (
     <View style={styles.container}>
