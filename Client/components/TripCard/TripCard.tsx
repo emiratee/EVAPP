@@ -1,88 +1,9 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as icons from '@expo/vector-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from 'expo-router';
+import * as mockData from '../../mockData'
 
-const trips = [
-    {
-        departure: {
-            city: 'Berlin',
-            address: 'Stresemannstraße 123c',
-            time: '12:15'
-        },
-        destination: {
-            city: 'Hamburg',
-            address: 'Bornheide 9',
-            time: '15:45'
-        },
-        trip: {
-            total_time: '3:30',
-            stops: [
-                {
-                    city: 'Lüneburg',
-                    arrival_time: '14:45'
-                }
-            ],
-        },
-        driver: {
-            name: 'Vladislav',
-            rating: '2,3'
-        },
-        price: '18',
-        seats: {
-            available: 3,
-            total: 5
-        }
-    },
-    {
-        departure: {
-            city: 'Berlin',
-            address: 'Stresemannstraße 123c',
-            time: '12:15'
-        },
-        destination: {
-            city: 'Hamburg',
-            address: 'Bornheide 9',
-            time: '15:45'
-        },
-        trip: {
-            total_time: '3:30'
-        },
-        driver: {
-            name: 'Erik',
-            rating: '4,9'
-        },
-        price: '14.30',
-        seats: {
-            available: 1,
-            total: 3
-        }
-    },
-    {
-        departure: {
-            city: 'Berlin',
-            address: 'Stresemannstraße 123c',
-            time: '12:15'
-        },
-        destination: {
-            city: 'Hamburg',
-            address: 'Bornheide 9',
-            time: '15:45'
-        },
-        trip: {
-            total_time: '3:30'
-        },
-        driver: {
-            name: 'Oguz',
-            rating: '4,1'
-        },
-        price: '23',
-        seats: {
-            available: 1,
-            total: 5
-        }
-    }
-];
 
 const TripCardItem = ({ trip }) => {
     const navigate = useNavigation();
@@ -141,6 +62,10 @@ const TripCardItem = ({ trip }) => {
 };
 
 const TripCard = () => {
+
+const [trips, setTrips] = useState(mockData.trips)
+
+
     return (
         <View style={styles.list}>
             <FlatList
