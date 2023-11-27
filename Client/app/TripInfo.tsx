@@ -88,86 +88,64 @@ const DriverInformation = ({ trip, driver }) => {
           </View>
         </View>
       </View>
-
-
       <View style={driver_style.carContainer}>
         <Text style={driver_style.carName}>{driver.car.model}</Text>
         <View style={driver_style.carInformation}>
-            <View style={driver_style.carInformationItem}>
-              <Text style={driver_style.carInformationItemText}>Color:</Text>
-              <Text style={driver_style.carInformationItemValue}>{driver.car.color}</Text>
-            </View>
-            <View style={driver_style.carInformationItem}>
-              <Text style={driver_style.carInformationItemText}>Seats:</Text>
-              <Text style={driver_style.carInformationItemValue}>{driver.car.seats}</Text>
-            </View>
+          <View style={driver_style.carInformationItem}>
+            <Text style={driver_style.carInformationItemText}>Color:</Text>
+            <Text style={driver_style.carInformationItemValue}>{driver.car.color}</Text>
+          </View>
+          <View style={driver_style.carInformationItem}>
+            <Text style={driver_style.carInformationItemText}>Seats:</Text>
+            <Text style={driver_style.carInformationItemValue}>{driver.car.seats}</Text>
+          </View>
         </View>
         <View style={driver_style.carInformation}>
-            <View style={driver_style.carInformationItem}>
-              <Text style={driver_style.carInformationItemText}>Number plate:</Text>
-              <Text style={driver_style.carInformationItemValue}>{driver.car.number_plate}</Text>
+          <View style={driver_style.carInformationItem}>
+            <Text style={driver_style.carInformationItemText}>Number plate:</Text>
+            <Text style={driver_style.carInformationItemValue}>{driver.car.number_plate}</Text>
+          </View>
+          <View style={driver_style.carInformationItem}>
+            <Text style={driver_style.carInformationItemText}>Seats available:</Text>
+            <Text style={driver_style.carInformationItemValue}>{trip.seats.available}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={driver_style.serviceContainer}>
+        <Text style={driver_style.serviceTitle}>Services</Text>
+        <View style={driver_style.serviceTable}>
+          <View style={driver_style.serviceInformation}>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.MaterialCommunityIcons name='smoking' size={24} />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.smoking ? 'Smoking allowed' : 'No smoking'}</Text>
             </View>
-            <View style={driver_style.carInformationItem}>
-              <Text style={driver_style.carInformationItemText}>Seats available:</Text>
-              <Text style={driver_style.carInformationItemValue}>{trip.seats.available}</Text>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.child_seat ? 'Has a child seat' : 'No child seat'}</Text>
             </View>
-        </View>
-      </View>
-
-
-      <View style={driver_style.services}>
-        <View style={driver_style.services_left}>
-          <View style={driver_style.servicesItem}>
-            <icons.MaterialCommunityIcons name='smoking' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.smoking ? 'Allows smoking' : 'No smoking'}</Text>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.MaterialIcons name='pets' size={24} />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.pets ? 'Pets allowed' : 'No pets'}</Text>
+            </View>
           </View>
-          <View style={driver_style.servicesItem}>
-            <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.child_seat ? 'Has a child seat' : 'No child seat'}</Text>
-          </View>
-          <View style={driver_style.servicesItem}>
-            <icons.MaterialIcons name='pets' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.pets ? 'Allows pets' : 'No pets allowed'}</Text>
-          </View>
-        </View>
-        <View style={driver_style.services_right}>
-          <View style={driver_style.servicesItem}>
-            <icons.FontAwesome5 name='wine-bottle' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.alcohol ? 'Allows alcohol' : 'No alcohol allowed'}</Text>
-          </View>
-          <View style={driver_style.servicesItem}>
-            <icons.MaterialIcons name='luggage' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.luggage ? 'Allows luggage' : 'No luggage allowed'}</Text>
-          </View>
-          <View style={driver_style.servicesItem}>
-            <icons.MaterialIcons name='comment' size={24} />
-            <Text style={driver_style.services_text}>{mockDriver.services.comment}</Text>
+          <View style={driver_style.serviceInformation}>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.FontAwesome5 name='wine-bottle' size={24} />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.child_seat ? 'Alcohol allowed' : 'No alcohol'}</Text>
+            </View>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.MaterialIcons name='luggage' size={24} />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.luggage ? 'Luggage allowed' : 'No luggage'}</Text>
+            </View>
+            <View style={driver_style.serviceInformationItem}>
+              <icons.MaterialIcons name="insert-comment" size={24} color="black" />
+              <Text style={driver_style.serviceInformationItemText}>{driver.services.comment}</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
-  )
-}
-
-const CarInformation = ({ trip, driver }) => {
-  return (
-    <View style={car_styles.container}>
-      <View style={car_styles.header}>
-        <View style={car_styles.carModel}>
-          <Text style={car_styles.carName}>{driver.car.model}</Text>
-          <Text style={car_styles.carColor}>{`(${driver.car.color})`}</Text>
-        </View>
-        <View style={car_styles.carSeats}>
-          <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
-          <Text>{`${trip.seats.available}/${trip.seats.total} seats available`}</Text>
-        </View>
-      </View>
-      <View style={car_styles.information}>
-        <View>
-
-        </View>
-      </View>
-    </View>
+    </View >
   )
 }
 
@@ -213,7 +191,6 @@ export default function ModalScreen() {
           <>
             <LocationInformation trip={item} />
             <DriverInformation trip={trip} driver={mockDriver} />
-            <CarInformation trip={trip} driver={mockDriver} />
           </>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -223,50 +200,6 @@ export default function ModalScreen() {
     </View>
   );
 }
-
-const car_styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    width: '95%',
-    height: 200,
-    position: 'relative',
-    borderColor: '#a8a8a8',
-    borderRadius: 15,
-    padding: 10,
-    margin: 10,
-    marginTop: 10,
-    marginBottom: 10
-  },
-  header: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  carModel: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 5
-  },
-  carName: {
-    fontSize: 22,
-    fontWeight: 'bold'
-  },
-  carColor: {
-    fontSize: 15,
-    fontWeight: '600'
-  },
-  carSeats: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  information: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
-  }
-})
 
 const request_styles = StyleSheet.create({
   container: {
@@ -369,7 +302,8 @@ const driver_style = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     borderColor: '#a8a8a8',
     borderRadius: 15,
-    padding: 10
+    padding: 10,
+    marginBottom: 20
   },
   carName: {
     fontSize: 20,
@@ -396,30 +330,41 @@ const driver_style = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold'
   },
-  services: {
-    flex: 1,
+  serviceContainer: {
     width: '100%',
+    height: 200,
+    backgroundColor: '#f2f2f2',
+    borderColor: '#a8a8a8',
+    borderRadius: 15,
+    padding: 10
+  },
+  serviceTitle: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  serviceTable: {
+    backgroundColor: '#f2f2f2',
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    gap: 40
   },
-  services_left: {
-    gap: 20,
-    maxWidth: '60%'
+  serviceInformation: {
+    backgroundColor: '#f2f2f2',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    marginTop: 10
   },
-  services_right: {
-    gap: 20,
-    maxWidth: '60%'
-  },
-  servicesItem: {
-    flex: 1,
-    flexDirection: 'row',
+  serviceInformationItem: {
     alignItems: 'center',
-    gap: 5
+    flexDirection: 'row',
+    gap: 5,
+    backgroundColor: '#f2f2f2',
+    marginBottom: 10
   },
-  services_text: {
-    fontSize: 12,
-    maxWidth: '50%'
-  }
+  serviceInformationItemText: {
+    fontSize: 13,
+    fontStyle: 'italic'
+  },
 });
 
 const styles = StyleSheet.create({
