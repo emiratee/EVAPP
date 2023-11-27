@@ -30,8 +30,8 @@ const trips = [
         },
         price: '18',
         seats: {
-            available: 4,
-            total: 4
+            available: 3,
+            total: 5
         }
     },
     {

@@ -30,7 +30,7 @@ const mockDriver = {
     pets: false,
     alcohol: false,
     luggage: true,
-    comment: 'Fix me!!!' //Fix sizing
+    comment: 'I like driving under influence' //max 90
   }
 }
 
@@ -81,10 +81,12 @@ const DriverInformation = ({ trip, driver }) => {
               <Text style={driver_style.ratingText}>{`${driver.rating.total}/${driver.trips.total} reviews • ${driver.rating.average}`}</Text>
               <icons.AntDesign name='star' size={12} />
             </View>
+            <TouchableOpacity>
             <Image
               source={require('../assets/images/driver.png')}
               style={{ height: 40, width: 40, borderRadius: 50 }}
             />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -111,11 +113,10 @@ const DriverInformation = ({ trip, driver }) => {
           </View>
         </View>
       </View>
-
       <View style={driver_style.serviceContainer}>
         <Text style={driver_style.serviceTitle}>Services</Text>
         <View style={driver_style.serviceTable}>
-          <View style={driver_style.serviceInformation}>
+          <View style={driver_style.serviceInformationLeft}>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialCommunityIcons name='smoking' size={24} />
               <Text style={driver_style.serviceInformationItemText}>{driver.services.smoking ? 'Smoking allowed' : 'No smoking'}</Text>
@@ -128,22 +129,27 @@ const DriverInformation = ({ trip, driver }) => {
               <icons.MaterialIcons name='pets' size={24} />
               <Text style={driver_style.serviceInformationItemText}>{driver.services.pets ? 'Pets allowed' : 'No pets'}</Text>
             </View>
-          </View>
-          <View style={driver_style.serviceInformation}>
             <View style={driver_style.serviceInformationItem}>
               <icons.FontAwesome5 name='wine-bottle' size={24} />
               <Text style={driver_style.serviceInformationItemText}>{driver.services.child_seat ? 'Alcohol allowed' : 'No alcohol'}</Text>
             </View>
+          </View>
+          <View style={driver_style.serviceInformationRight}>
             <View style={driver_style.serviceInformationItem}>
               <icons.MaterialIcons name='luggage' size={24} />
               <Text style={driver_style.serviceInformationItemText}>{driver.services.luggage ? 'Luggage allowed' : 'No luggage'}</Text>
             </View>
-            <View style={driver_style.serviceInformationItem}>
-              <icons.MaterialIcons name="insert-comment" size={24} color="black" />
-              <Text style={driver_style.serviceInformationItemText}>{driver.services.comment}</Text>
+            <View style={[driver_style.serviceInformationItem, { marginTop: 10 }]}>
+              <icons.MaterialIcons name="insert-comment" size={24} color="black" style={{ marginBottom: 75 }} />
+              <Text style={driver_style.serviceInformationCommentText}>{driver.services.comment}</Text>
             </View>
           </View>
         </View>
+      </View>
+      <View style={driver_style.contactContainer}>
+        <TouchableOpacity style={driver_style.contactButton}>
+          <Text style={driver_style.contactText}>Contact driver</Text>
+        </TouchableOpacity>
       </View>
     </View >
   )
@@ -178,7 +184,6 @@ const Request = ({ trip }) => {
     </View>
   )
 }
-
 
 export default function ModalScreen() {
   const { trip } = useRoute().params;
@@ -252,7 +257,7 @@ const driver_style = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     width: '95%',
-    height: 450,
+    height: 510,
     position: 'relative',
     borderColor: '#a8a8a8',
     borderRadius: 15,
@@ -348,10 +353,16 @@ const driver_style = StyleSheet.create({
     justifyContent: 'space-evenly',
     gap: 40
   },
-  serviceInformation: {
+  serviceInformationLeft: {
     backgroundColor: '#f2f2f2',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+    marginTop: 10
+  },
+  serviceInformationRight: {
+    backgroundColor: '#f2f2f2',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     marginTop: 10
   },
   serviceInformationItem: {
@@ -365,6 +376,33 @@ const driver_style = StyleSheet.create({
     fontSize: 13,
     fontStyle: 'italic'
   },
+  serviceInformationCommentText: {
+    fontSize: 13,
+    fontStyle: 'italic',
+    width: 100,
+    height: 100,
+  },
+  contactContainer: {
+    width: '100%',
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#f2f2f2',
+    borderColor: '#a8a8a8',
+    borderRadius: 15,
+  },
+  contactButton: {
+    height: 50,
+    width: '60%',
+    backgroundColor: '#000',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contactText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: 'bold'
+  }
 });
 
 const styles = StyleSheet.create({
