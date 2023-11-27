@@ -5,7 +5,7 @@ import { useNavigation } from 'expo-router';
 import { useMockData } from '../../mockData';
 
 
-const TripCardItem = ({ trip }) => {
+export const TripCardItem = ({ trip }) => {
     const navigate = useNavigation();
 
     return (
