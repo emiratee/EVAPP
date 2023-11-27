@@ -5,6 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
+import Bill from '../components/Bill';
 
 const mockDriver = {
   account: {
@@ -33,6 +34,7 @@ const mockDriver = {
     comment: 'I like driving under influence' //max 90
   }
 }
+
 
 const LocationInformation = ({ trip }) => {
   return (
@@ -157,30 +159,50 @@ const DriverInformation = ({ trip, driver }) => {
 
 const Request = ({ trip }) => {
   const [price, setPrice] = useState(trip.price);
+  const [isPickerVisible, setIsPickerVisible] = useState(true);
+  const [text, setText] = useState(`${parseFloat(price).toFixed(2)}€`);
+  const [seats, setSeats] = useState(1);
+
   const handlePriceChange = (value: string) => {
     const number: number = parseFloat(value);
     const price: number = parseFloat((trip.price * number).toFixed(2));
     setPrice(price.toString());
+    setText(`${price.toFixed(2)}€`);
+    setSeats(number)
   }
 
   const createPickerDataArray = () => {
     return Array.from({ length: trip.seats.total }, (_, index) => index < trip.seats.available ? (index + 1).toString() : '').slice(0, trip.seats.available);
   }
 
+
+  const handleButtonClick = () => {
+    // additional logic to execute when the button is clicked
+    setIsPickerVisible(false);
+    setText('Pay now');
+  }
+
   return (
     <View style={request_styles.container}>
-      <TouchableOpacity style={request_styles.buttonContainer}>
+      <TouchableOpacity style={
+        [request_styles.buttonContainer,
+        !isPickerVisible && { width: '95%', marginLeft: '2.5%' }
+        ]} onPress={handleButtonClick}>
         <View style={request_styles.button}>
-          <Text style={request_styles.buttonText}>{parseFloat(price).toFixed(2)}€</Text>
+          <Text style={request_styles.buttonText}>{text}</Text>
         </View>
       </TouchableOpacity>
-      <Picker
+
+        {!isPickerVisible && ( <Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} /> )}
+      
+      
+       {isPickerVisible && ( <Picker
         style={request_styles.picker}
         selectedValue='1'
         pickerData={createPickerDataArray()}
         onValueChange={(value: string) => { handlePriceChange(value) }}
         itemStyle={request_styles.pickerItem}
-      />
+      /> )}
     </View>
   )
 }
@@ -218,7 +240,8 @@ const request_styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     borderRadius: 15,
     padding: 10,
-    margin: 10
+    margin: 10,
+    zIndex: 999
   },
   buttonContainer: {
     alignItems: 'center',
@@ -248,7 +271,14 @@ const request_styles = StyleSheet.create({
     height: 50,
     color: 'black',
     textAlign: 'center',
-  }
+  },
+  additionalView: {
+    backgroundColor: '#f2f2f2',
+    borderColor: '#a8a8a8',
+    borderRadius: 15,
+    padding: 10,
+    marginTop: 10,
+  },
 });
 
 const driver_style = StyleSheet.create({
@@ -264,7 +294,7 @@ const driver_style = StyleSheet.create({
     padding: 10,
     margin: 10,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 100
   },
   header: {
     width: '100%'

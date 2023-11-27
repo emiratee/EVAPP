@@ -54,7 +54,7 @@ const trips = [
         },
         price: '14.30',
         seats: {
-            available: 1,
+            available: 2,
             total: 3
         }
     },
