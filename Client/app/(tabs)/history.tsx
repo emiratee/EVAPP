@@ -14,8 +14,6 @@ const history = (props: Props) => {
     const [index, setIndex] = useState(0)
     const { trips, setTrips } = useMockData();
 
-
-
     return (
         <>
             <Tab
