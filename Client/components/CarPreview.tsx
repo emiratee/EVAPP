@@ -30,7 +30,7 @@ const CarPreview = (props: Props) => {
                 <Text>{props.item.seats}</Text>
                 <icons.MaterialCommunityIcons name='seat-passenger' size={18} />
             </View>
-            <Text>{props.item.licence_plates}</Text>
+            <Text>{props.item.licence_plate}</Text>
 
 
 

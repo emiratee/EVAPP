@@ -5,16 +5,16 @@ import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 
 type Props = {
-    setFakeCars: any,
-    fakeCars: any,
-    setAddNewCar:any
+    setMockUsers: any,
+    setAddNewCar: any,
+    mockUsers: any
 }
 
 const AddNewCar = (props: Props) => {
     const [newModel, setNewModel] = useState('')
     const [newColor, setNewColor] = useState('')
     const [newLicencePlates, setNewLicencePlates] = useState('')
-    const [newNumberOfSeats, setNewNumberOfSeats] = useState(0)
+    const [newNumberOfSeats, setNewNumberOfSeats] = useState(1)
 
 
 
@@ -79,11 +79,10 @@ const AddNewCar = (props: Props) => {
                             inputAndroid: styles.input,
                         }}
                         placeholder={{
-                            label: '0',
-                            value: 0,
+                            label: '1',
+                            value: 1,
                         }}
                         items={[
-                            { label: '1', value: 1 },
                             { label: '2', value: 2 },
                             { label: '3', value: 3 },
                             { label: '4', value: 4 },
@@ -96,14 +95,22 @@ const AddNewCar = (props: Props) => {
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
-                        props.setAddNewCar(false);
-                        props.setFakeCars((prev) => [...prev, {
+                        const formData = {
                             model: newModel,
                             color: newColor,
-                            licence_plates: newLicencePlates,
+                            licence_plate: newLicencePlates,
                             seats: newNumberOfSeats,
-                            id: props.fakeCars[props.fakeCars.length - 1].id + 1
-                        }])
+                            id: Math.random().toString()
+                        }
+                        props.setAddNewCar(false);
+
+                        props.setMockUsers((allDrivers) => allDrivers.map(driver => {
+                            if (driver.id === props.mockUsers.id) {
+                                return { ...driver, cars: [...driver.cars, formData] };
+                            }
+                            return driver;
+                        }));
+
                     }}
                 >
                     <Text >Add a car</Text>
@@ -111,7 +118,7 @@ const AddNewCar = (props: Props) => {
             </View>
 
 
-        </View>
+        </View >
     )
 }
 
