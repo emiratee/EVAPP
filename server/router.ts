@@ -10,5 +10,6 @@ router.get('/trips', tripController.getFilteredTrips);
 
 //User account
 router.post('/user/account/register', userController.postRegister);
+router.get('/user/account/:driverId', userController.getDriver)
 
 export default router;

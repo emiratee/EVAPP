@@ -8,6 +8,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../utils/auth';
+import { getFilteredTrips } from '../../utils/apiService';
 
 
 const SearchForm: React.FC = () => {
@@ -38,7 +39,7 @@ const SearchForm: React.FC = () => {
 
 
     // TODO: Modify the handleSubmit according to the BE
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsLoading(true); // set loading to true to show the spinner
 
         const formData = {
@@ -47,10 +48,12 @@ const SearchForm: React.FC = () => {
             date: moment(date).format('YYYY-MM-DD'),
             numberOfPeople,
         };
+        
+        const response = await getFilteredTrips(formData.departure, formData.destination, formData.date, formData.numberOfPeople);
+        if (response) {
+            navigate.navigate('TripCardRedirect', { response });
+        }
 
-        // save formData to an object for now
-        console.log('Form Data:', formData);
-        navigate.navigate('two', { formData }) //  Link to t3
 
         // simulate a delay (e.g., 2000 milliseconds) before resetting the form
         setTimeout(() => {
@@ -92,11 +95,14 @@ const SearchForm: React.FC = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    let country = details.address_components.find(component =>
+                                    city && setDeparture(prev => ({ ...prev, city }));
+
+                                    const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    city && setDeparture(city);
+                                    country && setDeparture(prev => ({ ...prev, country }));
                                 }
+
                             }}
                             query={{
                                 key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
@@ -131,12 +137,15 @@ const SearchForm: React.FC = () => {
                                     let city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    let country = details.address_components.find(component =>
+                                    city && setDestination(prev => ({ ...prev, city }));
+
+                                    const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    city && setDestination(city);
+                                    country && setDestination(prev => ({ ...prev, country }));
                                 }
                             }}
+
                             query={{
                                 key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
                                 // key: GOOGLE_MAPS_API_KEY,
