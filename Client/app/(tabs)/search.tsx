@@ -7,9 +7,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-// import { NavigationContainer } from '@react-navigation/native';
 
-// TODO: Fix issue with Google Places Autocomplete && how the resetting form is carried
+
 const SearchForm: React.FC = () => {
     const [departure, setDeparture] = useState<string>('');
     const [destination, setDestination] = useState('');
@@ -45,26 +44,13 @@ const SearchForm: React.FC = () => {
 
         // save formData to an object for now
         console.log('Form Data:', formData);
-        navigate.navigate('two', { formData })
-        //  Link to t3
+        navigate.navigate('two', { formData }) //  Link to t3
 
         // simulate a delay (e.g., 2000 milliseconds) before resetting the form
         setTimeout(() => {
-            setIsLoading(false); // Set loading to false to hide the spinner
-            setResetForm(true); // Set the flag to trigger the form reset
+            setIsLoading(false); // set loading to false to hide the spinner
+            setResetForm(true); // set the flag to trigger the form reset
         }, 2000);
-
-        // navigate to another tab -> Erik's tab: Available options
-        // navigation.navigate('OtherTab');
-
-        // clear form values
-        // if (resetForm) {
-        //   setDeparture('');
-        //   setDestination('');
-        //   setDate(new Date());
-        //   setNumberOfPeople(0);
-
-        // }
     };
 
 
