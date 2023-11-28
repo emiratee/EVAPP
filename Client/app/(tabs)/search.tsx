@@ -7,7 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../utils/auth';
+import { useAuth } from '../../utils/auth';
 import { getFilteredTrips } from '../../utils/apiService';
 
 

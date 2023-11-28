@@ -59,12 +59,8 @@ const LocationSearch = (props: Props) => {
 
                     props.onPress({ address, city , country});
 
-                    console.log(`Address: ${address}, City: ${city}`);
                 }
-                // 'details' is provided when fetchDetails = true
-                // console.log(data, details);
-                // console.log(data, 'DATA')
-                // console.log(details, 'Details')
+
 
             }}
             query={{

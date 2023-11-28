@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const carSchema = new mongoose.Schema({
-    _id: {
-        type: String
-    },
+    // _id: {
+    //     type: String
+    // },
     model: {
         type: String,
         required: true
@@ -20,9 +20,13 @@ const carSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    __v: {
-        type: String
-    }
+    // __v: {
+    //     type: String
+    // }
 });
 
 export { carSchema };
+
+const Car = mongoose.model('Car', carSchema);
+
+export default Car;

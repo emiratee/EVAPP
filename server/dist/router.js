@@ -14,4 +14,8 @@ router.get('/trips', tripController_js_1.default.getFilteredTrips);
 //User account
 router.post('/user/account/register', userController_js_1.default.postRegister);
 router.get('/user/account/:driverId', userController_js_1.default.getDriver);
+router.put('/user/account/cars', userController_js_1.default.putCar);
+router.put('/user/account/tripsAsDriver', userController_js_1.default.putTripsAsDriver);
+//need also route to assign trip to user
+router.get('/user/account', userController_js_1.default.getUser);
 exports.default = router;

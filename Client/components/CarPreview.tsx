@@ -15,7 +15,7 @@ const CarPreview = (props: Props) => {
     const [isSelected, setIsSelected] = useState<boolean>(props.selectedCar?.id === props.item.id)
     const styles = getDynamicStyles();
     useEffect(() => {
-        props.selectedCar?.id === props.item.id ? setIsSelected(true) : setIsSelected(false);
+        props.selectedCar?._id === props.item._id ? setIsSelected(true) : setIsSelected(false);
     }, [props.selectedCar])
 
     return (

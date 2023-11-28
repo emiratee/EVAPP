@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Car_1 = require("./Car");
 const mongoose = require('mongoose');
 const tripSchema = new mongoose.Schema({
-    _id: {
-        type: String
-    },
+    // _id: {
+    //     type: String
+    // },
     departure: {
         country: {
             type: String,
@@ -81,9 +81,9 @@ const tripSchema = new mongoose.Schema({
             type: Boolean,
             required: true
         },
-        comment: {
+        comments: {
             type: String,
-            required: true
+            // required: true
         }
     },
     car: {
@@ -94,7 +94,7 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    driverId: {
+    driverID: {
         type: String,
         required: true
     },
@@ -106,9 +106,9 @@ const tripSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    __v: {
-        type: String
-    }
+    // __v: {
+    //     type: String
+    // }
 });
 const Trip = mongoose.model('Trips', tripSchema);
 exports.default = Trip;

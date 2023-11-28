@@ -14,21 +14,8 @@ const postCreate = async (req, res) => {
         const validUser = (0, userUtils_js_1.validateUser)(req);
         if (!validUser)
             return res.status(401).json({ error: "Authentication failed" });
-        const { departure, destination, date, totalTime, seats, services, car, price, driverId, passengerIDs, successful } = req.body;
-        await Trip_js_1.default.insertMany({
-            departure,
-            destination,
-            date,
-            totalTime,
-            seats,
-            services,
-            car,
-            price,
-            driverId,
-            passengerIDs,
-            successful
-        });
-        return res.status(201).json({ stauts: 201, message: 'Successfully created trip' });
+        const newTrip = await Trip_js_1.default.insertMany([req.body]);
+        return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     }
     catch (error) {
         console.error(error);
@@ -52,7 +39,7 @@ const getFilteredTrips = async (req, res) => {
         const trips = await Trip_js_1.default.find(params);
         let formedTrips = [];
         for (const trip of trips) {
-            const driver = await userController_js_1.default.getDriver(trip.driverId);
+            const driver = await userController_js_1.default.getDriver(trip.driverID);
             formedTrips.push({ trip, driver });
         }
         return res.status(200).json({ trips: formedTrips });

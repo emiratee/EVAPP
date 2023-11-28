@@ -12,13 +12,15 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
-import { useMockData } from '../utils/mockData';
+import { useMockData } from '../../utils/mockData';
+import { useAuth } from '../../utils/auth';
+import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 type Props = {}
 
 
-const t2 = (props: Props) => {
+const addTrip = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-
+    const { user, token } = useAuth()
     const { setTrips, trips, mockUsers, setMockUsers } = useMockData()
 
 
@@ -30,7 +32,7 @@ const t2 = (props: Props) => {
     const [alcoholToggled, setAlcoholToggled] = useState<boolean>(false)
     const [luggageToggled, setLuggageToggled] = useState<boolean>(false)
     const [commentsValue, setCommentsValue] = useState<string>('')
-    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(mockUsers[0].cars.length && mockUsers[0].cars[0] || null)
+    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user.cars.length && user.cars[0] || null)
 
 
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
@@ -97,11 +99,10 @@ const t2 = (props: Props) => {
                         });
                     });
                     averageDuration = totalDuration / data.routes.length;
-                    console.log(`Average Route Time (in seconds): ${averageDuration}`);
                 }).then(() => {
 
-                    const submitForm: types.TTrip = {
-                        id: Math.random().toString(),
+                    const submitForm: types.TTrip | any = {
+
                         departure: {
                             country: departure.country,
                             city: departure.city,
@@ -109,7 +110,7 @@ const t2 = (props: Props) => {
                             time: moment(time).format('HH:mm')
                         },
                         destination: {
-                            country: departure.country,
+                            country: destination.country,
                             city: destination.city,
                             address: destination.address,
                             time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm')
@@ -131,20 +132,26 @@ const t2 = (props: Props) => {
                             luggage: luggageToggled,
                             comments: commentsValue,
                         },
-                        selectedCar,
+                        car: selectedCar,
                         price: seatPrice,
-                        driverID: mockUsers[0].id,
+                        driverID: user.userId,
                         passengersIDs: [],
-                        succesful: false
+                        successful: false
                     }
 
-                    setTrips([...trips, submitForm])
-                    // refactor when server comes?
-                    setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
-                        user.id === mockUsers[0].id
-                            ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
-                            : user
-                    )));
+
+                    addNewTrip(submitForm, token).then(data => {
+                        putTripsAsDriver({ _id: data.trip._id }, token)
+                    })
+
+
+                    // setTrips([...trips, submitForm])
+                    // // refactor when server comes?
+                    // setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
+                    //     user.id === user.id
+                    //         ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
+                    //         : user
+                    // )));
 
 
 
@@ -187,7 +194,7 @@ const t2 = (props: Props) => {
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setMockUsers={setMockUsers} setAddNewCar={setAddNewCar} mockUsers={mockUsers[0]} />
+                <AddNewCar setMockUsers={setMockUsers} setAddNewCar={setAddNewCar} mockUsers={user} />
             </Overlay>
 
             <View style={styles.parameters}>
@@ -284,7 +291,7 @@ const t2 = (props: Props) => {
                     </View>
                     <RNPickerSelect
                         // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
-                        key={selectedCar && selectedCar.id}
+                        key={selectedCar && selectedCar._id}
                         onValueChange={(value) => { setNumberOfSeats(value) }}
                         style={{
                             inputIOS: styles.input,
@@ -386,7 +393,7 @@ const t2 = (props: Props) => {
             <View style={styles.parameters}>
 
                 <FlatList
-                    data={mockUsers[0] && mockUsers[0].cars}
+                    data={user && user.cars}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) => <CarPreview
@@ -440,7 +447,7 @@ const t2 = (props: Props) => {
     )
 }
 
-export default t2
+export default addTrip
 const getDynamicStyles = (textColor: string) => {
 
     return StyleSheet.create({

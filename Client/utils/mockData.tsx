@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import React from 'react'
-import * as Types from '../../types/types'
+import * as Types from '../types/types'
 
 type MockDataType = {
     mockUsers: Types.TUser[];

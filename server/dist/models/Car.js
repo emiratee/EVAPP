@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.carSchema = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const carSchema = new mongoose_1.default.Schema({
-    _id: {
-        type: String
-    },
+    // _id: {
+    //     type: String
+    // },
     model: {
         type: String,
         required: true
@@ -25,8 +25,10 @@ const carSchema = new mongoose_1.default.Schema({
         type: String,
         required: true
     },
-    __v: {
-        type: String
-    }
+    // __v: {
+    //     type: String
+    // }
 });
 exports.carSchema = carSchema;
+const Car = mongoose_1.default.model('Car', carSchema);
+exports.default = Car;

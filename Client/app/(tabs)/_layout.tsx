@@ -77,7 +77,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="t2"
+                name="addTrip"
                 options={{
                     title: 'Add a trip',
                     tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,

@@ -4,7 +4,7 @@ import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
 import { Text, View } from '../../components/Themed'
 import { Link } from 'expo-router';
-import { useAuth } from '../utils/auth';
+import { useAuth } from '../../utils/auth';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 

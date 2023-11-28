@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Car_1 = require("./Car");
 const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
-    _id: {
-        type: String
-    },
+    // _id: { 
+    //     type: String
+    // },
     userId: {
         type: String,
         required: true
@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    driverId: {
-        type: String,
-        required: true
-    },
+    // driverId: {
+    //     type: String,
+    //     required: true
+    // }, 
     cars: [Car_1.carSchema],
     passengerRating: {
         totalReviews: {
@@ -77,9 +77,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    __v: {
-        type: String
-    }
+    // __v: {
+    //     type: String
+    // }
 });
 const User = mongoose.model('User', userSchema);
 exports.default = User;
