@@ -19,7 +19,7 @@ type Props = {}
 const t2 = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
 
-    const { fakeCars, setFakeCars, setTrips, trips, mockUsers, setMockUsers } = useMockData()
+    const { setTrips, trips, mockUsers, setMockUsers } = useMockData()
 
 
     const [seatPrice, setSeatPrice] = useState<string>("")
@@ -66,55 +66,93 @@ const t2 = (props: Props) => {
     const [destination, setDestination] = useState({})
 
     const handleSubmit = () => {
+
+
+
+        //calcualte approx time how much it will take, after move to if statement
+
+
+
+
+
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
         });
 
 
-        if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours')) ) {
-            const submitForm: types.TTrip = {
-                id: Math.random().toString(),
-                departure: {
-                    city: departure.city,
-                    address: departure.address,
-                    time: '12:30'
-                },
-                destination: {
-                    city: destination.city,
-                    address: destination.address,
-                    time: '15:30'
-                },
 
-                date: moment(date).format('YYYY-MM-DD'),
+        if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
 
-                total_time: '3:00',
-                seats: {
-                    available: numberOfSeats,
-                    total: selectedCar.seats
-                },
-                services: {
-                    smoking: smokingToggled,
-                    childSeat: childSeatToggled,
-                    pets: petsToggled,
-                    alcohol: alcoholToggled,
-                    luggage: luggageToggled,
-                    comments: commentsValue,
-                },
-                selectedCar,
-                price: seatPrice,
-                driverID: mockUsers[0].id,
-                passengersIDs: [],
-                succesful: false
-            }
+            let averageDuration = 0
 
-            setTrips([...trips, submitForm])
-            // refactor when server comes?
-            setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
-                user.id === mockUsers[0].id
-                    ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
-                    : user
-            )));
+
+            fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${departure.city}&destination=${destination.city}&key=AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM`)
+                .then(response => response.json())
+                .then(data => {
+                    let totalDuration = 0;
+                    data.routes.forEach(route => {
+                        route.legs.forEach(leg => {
+                            totalDuration += leg.duration.value; // duration in seconds
+                        });
+                    });
+                    averageDuration = totalDuration / data.routes.length;
+                    console.log(`Average Route Time (in seconds): ${averageDuration}`);
+                }).then(() => {
+
+                    const submitForm: types.TTrip = {
+                        id: Math.random().toString(),
+                        departure: {
+                            city: departure.city,
+                            address: departure.address,
+                            time: moment(time).format('HH:mm')
+                        },
+                        destination: {
+                            city: destination.city,
+                            address: destination.address,
+                            time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm')
+                        },
+
+                        date: moment(date).format('YYYY-MM-DD'),
+
+                        total_time: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
+
+                        seats: {
+                            available: numberOfSeats,
+                            total: selectedCar.seats
+                        },
+                        services: {
+                            smoking: smokingToggled,
+                            childSeat: childSeatToggled,
+                            pets: petsToggled,
+                            alcohol: alcoholToggled,
+                            luggage: luggageToggled,
+                            comments: commentsValue,
+                        },
+                        selectedCar,
+                        price: seatPrice,
+                        driverID: mockUsers[0].id,
+                        passengersIDs: [],
+                        succesful: false
+                    }
+
+                    setTrips([...trips, submitForm])
+                    // refactor when server comes?
+                    setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
+                        user.id === mockUsers[0].id
+                            ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
+                            : user
+                    )));
+
+
+
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+
+
+
 
         } else {
             Alert.alert('Missing fields', 'Please fill in all mandatory fields');

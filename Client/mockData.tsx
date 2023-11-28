@@ -3,8 +3,6 @@ import React from 'react'
 import * as Types from './types/types'
 
 type MockDataType = {
-    fakeCars: Types.TCar[];
-    setFakeCars: React.Dispatch<React.SetStateAction<Types.TCar[]>>;
     mockUsers: Types.TUser[];
     setMockUsers: React.Dispatch<React.SetStateAction<Types.TUser[]>>;
     trips: Types.TTrip[];
@@ -13,8 +11,7 @@ type MockDataType = {
 
 
 const defaultMockDataContext: MockDataType = {
-    fakeCars: [],
-    setFakeCars: () => { },
+
     setMockUsers: () => { },
     mockUsers: [],
     setTrips: () => { },
@@ -106,20 +103,11 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
 
     ])
 
-    const [fakeCars, setFakeCars] = useState<Types.TCar[]>([
-        // {
-        //     id: "123",
-        //     model: 'Audi A4',
-        //     color: 'Black',
-        //     seats: 4,
-        //     licence_plates: 'SO-SI-6969'
-        // },
-
-    ])
+ 
 
 
     return (
-        <MockDataContext.Provider value={{ fakeCars, setFakeCars, setMockUsers, mockUsers, setTrips, trips }} >
+        <MockDataContext.Provider value={{  setMockUsers, mockUsers, setTrips, trips }} >
             {children}
         </MockDataContext.Provider>
     );
