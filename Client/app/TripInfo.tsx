@@ -5,9 +5,11 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
-import { useMockData } from '../mockData';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import Bill from '../components/Bill';
+import { useMockData } from '../mockData';
+import * as Types from '../types/types'; 
+import { useRouter, useLocalSearchParams } from 'expo-router';
+
 
 const LocationInformation = () => {
     const {trip} = useRoute().params
@@ -130,44 +132,53 @@ const DriverInformation = ({ trip, driver }) => {
         </View >
     )
 }
+
+// here, we may want to pass also the navigation as a prop besides 'trip' and pass it to <Bill navigation={navigation}/> 
 const Request = ({ trip }) => {
+    const { mockUsers } = useMockData();
+
     const [price, setPrice] = useState(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState(true);
     const [text, setText] = useState(`${parseFloat(price).toFixed(2)}€`);
     const [seats, setSeats] = useState(1);
+    const [hasEnoughCredits, setHasEnoughCredits] = useState(true);
 
     const handlePriceChange = (value: string) => {
         const number: number = parseFloat(value);
         const price: number = parseFloat((trip.price * number).toFixed(2));
         setPrice(price.toString());
         setText(`${price.toFixed(2)}€`);
-        setSeats(number)
-    }
-
-    const createPickerDataArray = () => {
+        setSeats(number);
+      }
+      
+      const createPickerDataArray = () => {
         return Array.from({ length: trip.seats.total }, (_, index) => index < trip.seats.available ? (index + 1).toString() : '').slice(0, trip.seats.available);
-    }
-
-
-    const handleButtonClick = () => {
+      }
+      
+      
+      const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
+        setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
         setIsPickerVisible(false);
-        setText('Pay now');
+        setText('Request Service');
     }
 
     return (
         <View style={request_styles.container}>
             <TouchableOpacity style={
                 [request_styles.buttonContainer,
-                !isPickerVisible && { width: '95%', marginLeft: '2.5%' }
-                ]} onPress={handleButtonClick}>
+                !isPickerVisible && { width: '95%', marginLeft: '2.5%',},
+                hasEnoughCredits ? {} : request_styles.disabledButton,
+                ]} 
+                onPress={handleButtonClick}
+                disabled={!hasEnoughCredits}
+                >
                 <View style={request_styles.button}>
                     <Text style={request_styles.buttonText}>{text}</Text>
                 </View>
             </TouchableOpacity>
 
-            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} />)}
-
+            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} mockUser={mockUsers[0]} />)}
 
             {isPickerVisible && (<Picker
                 style={request_styles.picker}
@@ -228,12 +239,16 @@ const request_styles = StyleSheet.create({
         backgroundColor: '#000'
     },
     button: {
-        backgroundColor: '#000',
+        // backgroundColor: '#000',
+        backgroundColor: 'transparent',
     },
     buttonText: {
         color: '#fff',
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    disabledButton: {
+      backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
     },
     picker: {
         flex: 1,

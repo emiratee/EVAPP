@@ -1,33 +1,27 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import * as icons from '@expo/vector-icons';
-
-const mockUserCredits = {
-  name: 'Socker',
-  email: 'socker@randommail.com',
-  phoneNumber: '0123456789',
-  credits: 20
-}
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
-const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible }) => {
-  //console.log(trip, price, seats);
+const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits, mockUser }) => {
   const formattedPrice = parseFloat(price).toFixed(2);
-  const hasEnoughCredits = mockUserCredits.credits >= price;
+
+  const navigate = useNavigation();
   
   const handleButtonPress = () => {
-    // Implement logic for what happens when the button is pressed
-    // For example, you can navigate to a payment screen or show a payment modal
     setIsPickerVisible(true);
-  };
 
-  //setIsPickerVisible(true)  
+    // Navigate to another page when the Add more credits button is pressed
+    navigate.navigate('addCredits') //  Link to addCredits Page
+  };
+ 
   return (
     <View style={styles.container}>
       <View style={styles.creditsContainer}>
         <Text style={styles.title}>Credits:</Text>
-        <Text style={styles.credits}>{mockUserCredits.credits}€</Text>
+        <Text style={styles.credits}>{mockUser.credits}€</Text>
       </View>
+
       <View>
         <Text style={styles.label}>{seats}x Person á {trip.price}€ </Text>
 
@@ -36,16 +30,15 @@ const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible }) => {
           <Text style={[styles.labelCredits, {fontSize: 22, fontWeight: '200'}]}>{formattedPrice}€</Text>
         </View>
 
-        {hasEnoughCredits ? (
-          // this text below should be deleted. It was created for testing purposes
-          <Text style={[styles.label, {color: '#39ba57'}]}>You have enough credits!</Text>
-        ) : (
-          // render +Add button if user does not have enough credits
-          <TouchableOpacity onPress={handleButtonPress} style={styles.buttonContainer}>
-            <Text style={[styles.label, {color: '#d91921', fontSize: 14, bottom: 6, paddingRight: 5}]}>You don't have enough credits! Add more</Text>
-            <icons.Ionicons name='ios-add-circle' size={32} color='#d91921' />
-          </TouchableOpacity>
-        )}
+        {!hasEnoughCredits ? (
+            <TouchableOpacity onPress={handleButtonPress} style={[styles.buttonContainer, { top: 10 }]}>
+              <Text style={[styles.label, {color: '#d91921', fontSize: 14, bottom: 6, paddingRight: 5}]}>It seems you don't have enough credits.</Text>
+              <Text style={[styles.label, {color: '#d91921', fontSize: 14, bottom: 6, paddingRight: 5, fontWeight: 'bold'}]}>Add more here.</Text>
+            </TouchableOpacity>
+          ) : (
+              <Text></Text>
+          )}
+
       </View>
     </View>
   )
@@ -67,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 1, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
 
@@ -91,7 +84,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     paddingTop: 10,
-    fontStyle: 'italic'
   },
   labelCredits: {
     fontSize: 20,
