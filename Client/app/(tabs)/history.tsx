@@ -30,17 +30,17 @@ const history = (props: Props) => {
         console.log('find trips', findTrips)
 
         let upTrips = findTrips.filter(trip => {
-            return new Date(trip.date) >= new Date("2023-11-20T00:00:00.000Z")
+            return new Date(trip.date) >= new Date()
         });
 
 
         let prevTrips = findTrips.filter(trip => {
             console.log('prev-date', new Date(trip.date))
-            return new Date(trip.date) < new Date("2023-11-20T00:00:00.000Z")
+            return new Date(trip.date) < new Date()
         });
 
         console.log('uptrips', upTrips);
-        console.log(new Date("2023-11-20T00:00:00.000Z"))
+        console.log(new Date())
         console.log('prevTrips', prevTrips);
 
         setUpcomingTrips(upTrips);
@@ -86,7 +86,7 @@ const history = (props: Props) => {
                 <FlatList
                     data={previousTrips}
                     renderItem={({ item }) => (
-                        <View style={styles.cardButton} >
+                        <View style={[!item.succesful ?  styles.disablecardButton :  styles.cardButton]} >
                             <TripCardItem trip={item} />
                         </View>
                     )}
@@ -100,6 +100,12 @@ export default history
 
 const styles = StyleSheet.create({
     cardButton: {
+        width: '100%',
+        height: 175
+    },
+    disablecardButton: {
+        // backgroundColor: 'grey',
+        opacity: 0.5,
         width: '100%',
         height: 175
     },
