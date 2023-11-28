@@ -1,71 +1,65 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useMockData } from '../../mockData';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { useMockData } from '../utils/mockData';
 import { RadioButton } from 'react-native-paper';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
-
+// TODO: Add setTimeout and a spinner for a better UX. Also, include some navigation
 const addCredits: React.FC = () => {
 
     const { mockUsers } = useMockData();
-    const [selectedMethod, setSelectedMethod] = useState('Card');
+    const [selectedMethod, setSelectedMethod] = useState('');
 
     const handleSubmitButton = () => {
-        // Check if a payment method is selected
         if (selectedMethod) {
-            // Show an alert with the message 'Well done'
             Alert.alert(
                 'Yuuuhu!',
                 'Your payment was sent through successfully. ',
-                // [
-                //     { text: 'OK', onPress: () => console.log('OK Pressed') },
-                // ],
-                // { cancelable: false }
             );
         } else {
-            // If no payment method is selected, show an error alert
             Alert.alert(
                 'Error',
                 'Unfortunately, there was an issue with processing your payment. Please try with a different method.',
-                
             );
         }
+
+        setSelectedMethod('');
     };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <View style={styles.creditsBalance}>
             <Text style={styles.title}>Credit Balance: </Text>
             <Text style={styles.creditsValue}>{mockUsers[0].credits}€</Text>
         </View>
-        <Text style={styles.subtitle}>Purchase additional credits using the various payment methods shown below.</Text>
-        <Text style={[styles.title, { top: 10,}]}>Select Payment Method: </Text>
+        <Text style={[styles.subtitle, {paddingHorizontal: 15}]}>Purchase additional credits using the various payment methods shown below.</Text>
+        <Text style={[styles.title, { top: 10, paddingLeft: 15,}]}>Select Payment Method: </Text>
 
-        <ScrollView>
+        <View style={styles.scrollViewContainer}>
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
                     <Image style={styles.image} source={require('../../assets/images/VISA.png')}/>
                     <Image style={styles.image} source={require('../../assets/images/MASTERCARD.png')}/>
                 </View>
 
-                <Text style={styles.subtitle}>Card</Text>
-                <View>
+                {/* <Text style={styles.title}>Card</Text> */}
+                <View style={styles.radiusButton}>
                     <RadioButton 
                         value='Card'
                         status={ selectedMethod === 'Card' ? 'checked' : 'unchecked' }
                         onPress={() => setSelectedMethod('Card')}
+                        uncheckedColor='#000'
                         color='#000' 
                     />
                 </View>
                 
             </View>
             <View style={styles.payMethod}>
-                <View style={styles.doubleImage}>
+                <View style={[styles.doubleImage, {width: 100}]}>
                     <Image style={styles.image} source={require('../../assets/images/PAYPAL.png')}/>
                 </View>
                 
-                <Text style={styles.title}>Paypal</Text>
-                <View>
+                {/* <Text style={styles.title}>Paypal</Text> */}
+                <View style={styles.radiusButton}>
                     <RadioButton 
                         value='Paypal'
                         status={ selectedMethod === 'Paypal' ? 'checked' : 'unchecked' }
@@ -80,13 +74,15 @@ const addCredits: React.FC = () => {
                     <Image style={styles.image} source={require('../../assets/images/KLARNA.png')}/>
                 </View>
                 
-                <Text style={styles.title}>Klarna</Text>
-                <RadioButton 
-                    value='Klarna'
-                    status={ selectedMethod === 'Klarna' ? 'checked' : 'unchecked' }
-                    onPress={() => setSelectedMethod('Klarna')}
-                    color='#000' 
-                />
+                {/* <Text style={styles.title}>Klarna</Text> */}
+                <View style={styles.radiusButton}>
+                    <RadioButton 
+                        value='Klarna'
+                        status={ selectedMethod === 'Klarna' ? 'checked' : 'unchecked' }
+                        onPress={() => setSelectedMethod('Klarna')}
+                        color='#000' 
+                    />
+                </View>
                 
             </View>
             <View style={styles.payMethod}>
@@ -94,13 +90,15 @@ const addCredits: React.FC = () => {
                     <Image style={styles.image} source={require('../../assets/images/GOOGLEPAY.png')}/>
                 </View>
                 
-                <Text style={styles.title}>Google Pay</Text>
-                <RadioButton 
-                    value='Google Pay'
-                    status={ selectedMethod === 'Google Pay' ? 'checked' : 'unchecked' }
-                    onPress={() => setSelectedMethod('Google Pay')}
-                    color='#000' 
-                />
+                {/* <Text style={styles.title}>Google Pay</Text> */}
+                <View style={styles.radiusButton}>
+                    <RadioButton 
+                        value='Google Pay'
+                        status={ selectedMethod === 'Google Pay' ? 'checked' : 'unchecked' }
+                        onPress={() => setSelectedMethod('Google Pay')}
+                        color='#000' 
+                    />
+                </View>
                 
             </View>
             <View style={styles.payMethod}>
@@ -108,20 +106,22 @@ const addCredits: React.FC = () => {
                     <Image style={styles.image} source={require('../../assets/images/APPLEPAY.png')}/>
                 </View>
                 
-                <Text style={styles.title}>Apple Pay</Text>
-                <RadioButton 
-                    value='Apple Pay'
-                    status={ selectedMethod === 'Apple Pay' ? 'checked' : 'unchecked' }
-                    onPress={() => setSelectedMethod('Apple Pay')}
-                    color='#000' 
-                />
+                {/* <Text style={styles.title}>Apple Pay</Text> */}
+                <View style={styles.radiusButton}>
+                    <RadioButton 
+                        value='Apple Pay'
+                        status={ selectedMethod === 'Apple Pay' ? 'checked' : 'unchecked' }
+                        onPress={() => setSelectedMethod('Apple Pay')}
+                        color='#000' 
+                    />
+                </View>
                 
             </View>
             <TouchableOpacity style={styles.button} onPress={handleSubmitButton}>
                 <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
-        </ScrollView>
-    </View>
+        </View>
+    </ScrollView>
   )
 }
 
@@ -129,9 +129,12 @@ export default addCredits
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
-        paddingHorizontal: 30,
+        flex: 1,
+        paddingHorizontal: 10,
         paddingVertical: 10,
+    },
+    scrollViewContainer: {
+        paddingHorizontal: 10,
     },
     creditsBalance: {
         flexDirection: 'row',
@@ -143,8 +146,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowRadius: 2,
         borderRadius: 10,
-        padding: 15,
-        marginVertical: 10,
+        paddingVertical: 15,
+        margin: 10,
     },
     title: {
         fontSize: 20,
@@ -194,6 +197,7 @@ const styles = StyleSheet.create({
         top: 30, 
         backgroundColor: '#000',
         borderRadius: 50,
+        marginBottom: 90,
     },
     buttonText: {
         fontSize: 20,
@@ -201,13 +205,14 @@ const styles = StyleSheet.create({
         color: '#fff',
         paddingVertical: 20,
     },
-    // radiusButton: {
-    //     borderWidth: 2,
-    //     borderColor: '#000',
-    //     height: 35,
-    //     width: 35,
-    //     borderRadius: 50,
-    //     padding: 20,
+    radiusButton: {
+        // borderWidth: 2,
+        // borderColor: '#000',
+        backgroundColor: '#cad7df',
+        height: 35,
+        width: 35,
+        borderRadius: 50,
+        // padding: 20,
 
-    // },
+    },
 })
