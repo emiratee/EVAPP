@@ -6,7 +6,7 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
-import { useMockData } from '../mockData';
+import { useMockData } from './utils/mockData';
 import * as Types from '../types/types'; 
 import { useRouter, useLocalSearchParams } from 'expo-router';
 

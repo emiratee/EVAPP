@@ -12,7 +12,7 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
-import { useMockData } from '../../mockData';
+import { useMockData } from '../utils/mockData';
 type Props = {}
 
 

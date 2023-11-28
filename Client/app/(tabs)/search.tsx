@@ -7,9 +7,13 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../utils/auth';
 
 
 const SearchForm: React.FC = () => {
+
+
+    const {token} = useAuth();
     const [departure, setDeparture] = useState<string>('');
     const [destination, setDestination] = useState('');
 
@@ -21,6 +25,8 @@ const SearchForm: React.FC = () => {
 
 
     const navigate = useNavigation();
+
+    console.log('checking token:', token);
 
 
     const handleConfirm = (selectedDate: Date) => {
