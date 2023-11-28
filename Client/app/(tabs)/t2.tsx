@@ -103,11 +103,13 @@ const t2 = (props: Props) => {
                     const submitForm: types.TTrip = {
                         id: Math.random().toString(),
                         departure: {
+                            country: departure.country,
                             city: departure.city,
                             address: departure.address,
                             time: moment(time).format('HH:mm')
                         },
                         destination: {
+                            country: departure.country,
                             city: destination.city,
                             address: destination.address,
                             time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm')
@@ -115,7 +117,7 @@ const t2 = (props: Props) => {
 
                         date: moment(date).format('YYYY-MM-DD'),
 
-                        total_time: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
+                        totalTime: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
 
                         seats: {
                             available: numberOfSeats,

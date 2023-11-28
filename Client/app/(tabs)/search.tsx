@@ -86,6 +86,9 @@ const SearchForm: React.FC = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
+                                    let country = details.address_components.find(component =>
+                                        component.types.includes("country")
+                                    )?.long_name;
                                     city && setDeparture(city);
                                 }
                             }}
@@ -119,8 +122,11 @@ const SearchForm: React.FC = () => {
 
                             onPress={(data, details = null) => {
                                 if (details) {
-                                    const city = details.address_components.find(component =>
+                                    let city = details.address_components.find(component =>
                                         component.types.includes("locality")
+                                    )?.long_name;
+                                    let country = details.address_components.find(component =>
+                                        component.types.includes("country")
                                     )?.long_name;
                                     city && setDestination(city);
                                 }
