@@ -43,10 +43,21 @@ const LocationSearch = (props: Props) => {
                 if (details) {
                     // Extracting address and city from the details
                     const address = details.formatted_address;
-                    const city = details.address_components.find(component =>
+                    let city = details.address_components.find(component =>
                         component.types.includes("locality")
                     )?.long_name;
-                    props.onPress({ address, city });
+
+                    let country = details.address_components.find(component =>
+                        component.types.includes("country")
+                    )?.long_name;
+
+                    if (!city) {
+                        const addressParts = address.split(',');
+                        city = addressParts.length > 1 ? addressParts[addressParts.length - 2].trim() : undefined;
+                    }
+
+
+                    props.onPress({ address, city , country});
 
                     console.log(`Address: ${address}, City: ${city}`);
                 }

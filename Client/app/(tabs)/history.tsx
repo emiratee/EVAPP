@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { ScrollView } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import { TripCardItem } from '../../components/TripCard/TripCard'
-import { useMockData } from '../../mockData';
+import { useMockData } from '../utils/mockData';
 
 type Props = {}
 

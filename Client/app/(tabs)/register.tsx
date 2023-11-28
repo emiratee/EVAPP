@@ -1,14 +1,31 @@
 import { Alert, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
 import { Text, View } from '../../components/Themed'
 import { Link } from 'expo-router';
+import { useAuth } from '../utils/auth';
+
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 
 type Props = {}
 
 const register = (props: Props) => {
+    const { token, login, isAuthenticated } = useAuth();
+
+    const navigation = useNavigation();
+
+    useFocusEffect(
+        React.useCallback(() => {
+          if (isAuthenticated) {
+            navigation.navigate('search'); 
+          }
+        }, [isAuthenticated])
+      );
+    
+
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [number, setNumber] = useState('');
@@ -23,12 +40,40 @@ const register = (props: Props) => {
 
 
     const handleSubmit = () => {
+
         setErrName(name.trim() === '' ? 'Please enter name' : '');
         setErrEmail(!validateEmail(email) ? 'Please enter valid email address' : '');
         setErrPassword(
             password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
         );
-        setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '');
+
+        setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
+        if (!errName || !errEmail || !errNumber || !errPassword) {
+            const fetchData = async () => {
+                const url = 'http://localhost:3000/user/account/register/'
+                const data = { name, email, phoneNumber: number, password }
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const jsonResponse = await response.json();
+                    login(jsonResponse.token);
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+            fetchData()
+        }
+
+
+
     }
 
     const validateEmail = (email: string) => {

@@ -46,11 +46,10 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="two"
+                name="TripCardRedirect"
                 options={{
                     href: null,
-
-                    title: 'Search results/ wont be visible',
+                    title: 'Search results',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />

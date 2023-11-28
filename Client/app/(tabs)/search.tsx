@@ -7,9 +7,14 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../utils/auth';
+import { getFilteredTrips } from '../../utils/apiService';
 
 
 const SearchForm: React.FC = () => {
+
+
+    const {token} = useAuth();
     const [departure, setDeparture] = useState<string>('');
     const [destination, setDestination] = useState('');
 
@@ -22,6 +27,8 @@ const SearchForm: React.FC = () => {
 
     const navigate = useNavigation();
 
+    console.log('checking token:', token);
+
 
     const handleConfirm = (selectedDate: Date) => {
         setDatePickerVisibility(false);
@@ -32,7 +39,7 @@ const SearchForm: React.FC = () => {
 
 
     // TODO: Modify the handleSubmit according to the BE
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsLoading(true); // set loading to true to show the spinner
 
         const formData = {
@@ -41,10 +48,12 @@ const SearchForm: React.FC = () => {
             date: moment(date).format('YYYY-MM-DD'),
             numberOfPeople,
         };
+        
+        const response = await getFilteredTrips(formData.departure, formData.destination, formData.date, formData.numberOfPeople);
+        if (response) {
+            navigate.navigate('TripCardRedirect', { response });
+        }
 
-        // save formData to an object for now
-        console.log('Form Data:', formData);
-        navigate.navigate('two', { formData }) //  Link to t3
 
         // simulate a delay (e.g., 2000 milliseconds) before resetting the form
         setTimeout(() => {
@@ -86,8 +95,14 @@ const SearchForm: React.FC = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDeparture(city);
+                                    city && setDeparture(prev => ({ ...prev, city }));
+
+                                    const country = details.address_components.find(component =>
+                                        component.types.includes("country")
+                                    )?.long_name;
+                                    country && setDeparture(prev => ({ ...prev, country }));
                                 }
+
                             }}
                             query={{
                                 key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
@@ -119,12 +134,18 @@ const SearchForm: React.FC = () => {
 
                             onPress={(data, details = null) => {
                                 if (details) {
-                                    const city = details.address_components.find(component =>
+                                    let city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDestination(city);
+                                    city && setDestination(prev => ({ ...prev, city }));
+
+                                    const country = details.address_components.find(component =>
+                                        component.types.includes("country")
+                                    )?.long_name;
+                                    country && setDestination(prev => ({ ...prev, country }));
                                 }
                             }}
+
                             query={{
                                 key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
                                 // key: GOOGLE_MAPS_API_KEY,

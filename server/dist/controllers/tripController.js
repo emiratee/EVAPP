@@ -7,6 +7,7 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const userUtils_js_1 = require("../utils/userUtils.js");
 const Trip_js_1 = __importDefault(require("../models/Trip.js"));
+const userController_js_1 = __importDefault(require("./userController.js"));
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
 const postCreate = async (req, res) => {
     try {
@@ -49,7 +50,12 @@ const getFilteredTrips = async (req, res) => {
             'seats.available': { $gte: seats }
         };
         const trips = await Trip_js_1.default.find(params);
-        console.log(trips);
+        let formedTrips = [];
+        for (const trip of trips) {
+            const driver = await userController_js_1.default.getDriver(trip.driverId);
+            formedTrips.push({ trip, driver });
+        }
+        return res.status(200).json({ trips: formedTrips });
     }
     catch (error) {
         console.error(error);

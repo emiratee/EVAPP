@@ -98,7 +98,7 @@ const AddNewCar = (props: Props) => {
                         const formData = {
                             model: newModel,
                             color: newColor,
-                            licence_plate: newLicencePlates,
+                            licencePlate: newLicencePlates,
                             seats: newNumberOfSeats,
                             id: Math.random().toString()
                         }

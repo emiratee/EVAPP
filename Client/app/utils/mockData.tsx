@@ -1,20 +1,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import React from 'react'
-import * as Types from './types/types'
+import * as Types from '../../types/types'
 
 type MockDataType = {
-    fakeCars: Types.TCar[];
-    setFakeCars: React.Dispatch<React.SetStateAction<Types.TCar[]>>;
     mockUsers: Types.TUser[];
-    setMockUsers: React.Dispatch<React.SetStateAction<Types.TUser>>;
+    setMockUsers: React.Dispatch<React.SetStateAction<Types.TUser[]>>;
     trips: Types.TTrip[];
     setTrips: React.Dispatch<React.SetStateAction<Types.TTrip[]>>;
 }
 
 
 const defaultMockDataContext: MockDataType = {
-    fakeCars: [],
-    setFakeCars: () => { },
+
     setMockUsers: () => { },
     mockUsers: [],
     setTrips: () => { },
@@ -28,7 +25,7 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
         {
             id: '234',
             name: 'Erik L.',
-            member_since: '23rd, Feb. 2023',
+            memberSince: '23rd, Feb. 2023',
             email: 'erik@gmail.com',
             phoneNumber: '35326234112',
             password: '123456',
@@ -38,8 +35,15 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
                     model: 'Audi A4',
                     color: 'Black',
                     seats: 4,
-                    licence_plate: 'SO-SI-6969'
-                }
+                    licencePlate: 'SO-SI-6969'
+                },
+                {
+                    id: "1234",
+                    model: 'Audi A5',
+                    color: 'Red',
+                    seats: 2,
+                    licencePlate: 'XXX-6969'
+                },
             ],
             passengerRating: {
                 totalReviews: 10,
@@ -53,24 +57,26 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
             },
             tripsAsDriverIDs: ["123"],
             tripsAsPasangerIDs: [],
-            credits:'20.00'
+            credits: '20.00'
         }
     ])
     const [trips, setTrips] = useState<Types.TTrip[]>([
         {
             id: "123",
             departure: {
+                country: "Germany",
                 city: "Berlin",
                 address: "Stresemannstraße 123, 10963 Berlin, Germany",
                 time: "12:30",
             },
             destination: {
+                country: "Germany",
                 address: "C/ d'Àvila, 27, 08005 Barcelona, Spain",
                 city: "Barcelona",
                 time: "15:30",
             },
             date: "2023-11-28",
-            total_time: "3:00",
+            totalTime: "3:00",
 
             seats: {
                 available: 2,
@@ -89,7 +95,7 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
                 model: 'Audi A4',
                 color: 'Black',
                 seats: 4,
-                licence_plate: 'SO-SI-6969'
+                licencePlate: 'SO-SI-6969'
             },
             price: "10.25",
             driverID: "234",
@@ -99,20 +105,11 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
 
     ])
 
-    const [fakeCars, setFakeCars] = useState<Types.TCar[]>([
-        // {
-        //     id: "123",
-        //     model: 'Audi A4',
-        //     color: 'Black',
-        //     seats: 4,
-        //     licence_plates: 'SO-SI-6969'
-        // },
 
-    ])
 
 
     return (
-        <MockDataContext.Provider value={{ fakeCars, setFakeCars, setMockUsers, mockUsers, setTrips, trips }} >
+        <MockDataContext.Provider value={{ setMockUsers, mockUsers, setTrips, trips }} >
             {children}
         </MockDataContext.Provider>
     );
