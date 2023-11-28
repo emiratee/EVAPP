@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
 import TripCard from '../../components/TripCard/TripCard';
 
-export default function t3() {
+export default function SearchResult() {
   return (
-    <Text>Hi</Text>
+    <TripCard />
   );
 }

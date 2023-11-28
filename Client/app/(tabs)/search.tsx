@@ -6,10 +6,12 @@ import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons'; 
+import { useNavigation } from 'expo-router';
 // import { NavigationContainer } from '@react-navigation/native';
 
 // TODO: Fix issue with Google Places Autocomplete && how the resetting form is carried
 const SearchForm: React.FC = () => {
+  const navigate = useNavigation();
   const [currentLocation, setCurrentLocation] = useState('');
   const [desiredLocation, setDesiredLocation] = useState('');
   
@@ -48,12 +50,14 @@ const SearchForm: React.FC = () => {
 
     // save formData to an object for now
     console.log('Form Data:', formData);
+    navigate.navigate('t3', { trip: formData })
 
     // simulate a delay (e.g., 2000 milliseconds) before resetting the form
-    setTimeout(() => {
-      setIsLoading(false); // Set loading to false to hide the spinner
-      setResetForm(true); // Set the flag to trigger the form reset
-    }, 2000);
+    // setTimeout(() => {
+    //   setIsLoading(false); // Set loading to false to hide the spinner
+    //   setResetForm(true); // Set the flag to trigger the form reset
+    // }, 2000);
+
 
     // navigate to another tab -> Erik's tab: Available options
     // navigation.navigate('OtherTab');

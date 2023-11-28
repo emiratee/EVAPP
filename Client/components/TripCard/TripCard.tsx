@@ -8,12 +8,14 @@ const trips = [
         departure: {
             city: 'Berlin',
             address: 'Stresemannstraße 123c',
-            time: '12:15'
+            time: '12:15',
+            date: '2023-11-29'
         },
         destination: {
             city: 'Hamburg',
             address: 'Bornheide 9',
-            time: '15:45'
+            time: '15:45',
+            date: '2023-11-29'
         },
         trip: {
             total_time: '3:30',
@@ -28,7 +30,7 @@ const trips = [
             name: 'Vladislav',
             rating: '2,3'
         },
-        price: '18',
+        price: 18,
         seats: {
             available: 3,
             total: 5
@@ -38,12 +40,14 @@ const trips = [
         departure: {
             city: 'Berlin',
             address: 'Stresemannstraße 123c',
-            time: '12:15'
+            time: '12:15',
+            date: '2023-11-29'
         },
         destination: {
             city: 'Hamburg',
             address: 'Bornheide 9',
-            time: '15:45'
+            time: '15:45',
+            date: '2023-11-29'
         },
         trip: {
             total_time: '3:30'
@@ -62,12 +66,14 @@ const trips = [
         departure: {
             city: 'Berlin',
             address: 'Stresemannstraße 123c',
-            time: '12:15'
+            time: '12:15',
+            date: '2023-11-29'
         },
         destination: {
             city: 'Hamburg',
             address: 'Bornheide 9',
-            time: '15:45'
+            time: '15:45',
+            date: '2023-11-29'
         },
         trip: {
             total_time: '3:30'
@@ -141,6 +147,8 @@ const TripCardItem = ({ trip }) => {
 };
 
 const TripCard = () => {
+    //Make backend request based on cities, date, current time, seats,
+    //use as data for flatlist
     return (
         <View style={styles.list}>
             <FlatList
@@ -150,7 +158,7 @@ const TripCard = () => {
                 )}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingHorizontal: 15 }}
-                style={{ width: '100%' }} // Ensuring FlatList takes full width
+                style={{ width: '100%' }}
             />
         </View>
     );

@@ -264,7 +264,7 @@ const driver_style = StyleSheet.create({
     padding: 10,
     margin: 10,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 100
   },
   header: {
     width: '100%'
