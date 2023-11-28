@@ -1,8 +1,9 @@
 import React from 'react';
+import { Text } from '../../components/Themed';
 import TripCard from '../../components/TripCard/TripCard';
 
 export default function t3() {
-  return (
-    <TripCard />
-  );
+    return (
+        <Text>Messages</Text>
+    );
 }
