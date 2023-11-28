@@ -6,7 +6,7 @@ type MockDataType = {
     fakeCars: Types.TCar[];
     setFakeCars: React.Dispatch<React.SetStateAction<Types.TCar[]>>;
     mockUsers: Types.TUser[];
-    setMockUsers: React.Dispatch<React.SetStateAction<Types.TUser>>;
+    setMockUsers: React.Dispatch<React.SetStateAction<Types.TUser[]>>;
     trips: Types.TTrip[];
     setTrips: React.Dispatch<React.SetStateAction<Types.TTrip[]>>;
 }
@@ -39,7 +39,14 @@ export const MockDataProvider = ({ children }: { children: React.ReactNode }) =>
                     color: 'Black',
                     seats: 4,
                     licence_plate: 'SO-SI-6969'
-                }
+                },
+                {
+                    id: "1234",
+                    model: 'Audi A5',
+                    color: 'Red',
+                    seats: 2,
+                    licence_plate: 'XXX-6969'
+                },
             ],
             passengerRating: {
                 totalReviews: 10,

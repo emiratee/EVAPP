@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
+import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Switch, useColorScheme, TextInput } from 'react-native'
 import * as icons from '@expo/vector-icons';
@@ -30,14 +30,16 @@ const t2 = (props: Props) => {
     const [alcoholToggled, setAlcoholToggled] = useState<boolean>(false)
     const [luggageToggled, setLuggageToggled] = useState<boolean>(false)
     const [commentsValue, setCommentsValue] = useState<string>('')
-    const [selectedCar, setSelectedCar] = useState<any>(null)
+    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(mockUsers[0].cars.length && mockUsers[0].cars[0] || null)
 
 
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
 
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isTimePickerVisible, setIsTimePickerVisible] = useState(false);
     const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
     const [numberOfSeats, setNumberOfSeats] = useState(1);
 
     const styles = getDynamicStyles(iconColor);
@@ -64,52 +66,75 @@ const t2 = (props: Props) => {
     const [destination, setDestination] = useState({})
 
     const handleSubmit = () => {
-        const submitForm2 = {
-            id: Math.random().toString(),
-            departure: {
-                city: departure.city,
-                address: departure.address,
-                time: '12:30'
-            },
-            destination: {
-                city: destination.city,
-                address: destination.address,
-                time: '15:30'
-            },
-            
-            date: moment(date).format('YYYY-MM-DD'),
-  
-            total_time: '3:00',
-            seats: {
-                available: numberOfSeats,
-                total: selectedCar.seats
-            },
-            services: {
-                smoking: smokingToggled,
-                childSeat: childSeatToggled,
-                pets: petsToggled,
-                alcohol: alcoholToggled,
-                luggage: luggageToggled,
-                comments: commentsValue,
-            },
-            selectedCar,
-            price: seatPrice,
-            driverID: mockUsers[0].id,
-            passengersIDs: [],
-            succesful: false
+        const combinedDateTime = moment(date).set({
+            hour: moment(time).hour(),
+            minute: moment(time).minute()
+        });
+
+
+        if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours')) ) {
+            const submitForm: types.TTrip = {
+                id: Math.random().toString(),
+                departure: {
+                    city: departure.city,
+                    address: departure.address,
+                    time: '12:30'
+                },
+                destination: {
+                    city: destination.city,
+                    address: destination.address,
+                    time: '15:30'
+                },
+
+                date: moment(date).format('YYYY-MM-DD'),
+
+                total_time: '3:00',
+                seats: {
+                    available: numberOfSeats,
+                    total: selectedCar.seats
+                },
+                services: {
+                    smoking: smokingToggled,
+                    childSeat: childSeatToggled,
+                    pets: petsToggled,
+                    alcohol: alcoholToggled,
+                    luggage: luggageToggled,
+                    comments: commentsValue,
+                },
+                selectedCar,
+                price: seatPrice,
+                driverID: mockUsers[0].id,
+                passengersIDs: [],
+                succesful: false
+            }
+
+            setTrips([...trips, submitForm])
+            // refactor when server comes?
+            setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
+                user.id === mockUsers[0].id
+                    ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
+                    : user
+            )));
+
+        } else {
+            Alert.alert('Missing fields', 'Please fill in all mandatory fields');
         }
 
-
-
-
-        console.log(submitForm2)
-        //todo add to driver trips (assign trip id to driver)
-        setTrips([...trips, submitForm2])
-        // console.log(submitForm)
-
     }
+    const [seatOptions, setSeatOptions] = useState<{ label: string; value: number }[]>([]);
 
+    useEffect(() => {
+        if (selectedCar) {
 
+            const seats = selectedCar.seats;
+            const newSeatOptions = [];
+            for (let i = 2; i <= seats; i++) {
+                newSeatOptions.push({ label: `${i}`, value: i });
+            }
+            setSeatOptions(newSeatOptions);
+        };
+        setNumberOfSeats(1); // Reset number of seats when selected car changes
+    }, [selectedCar])
     return (
 
 
@@ -157,10 +182,12 @@ const t2 = (props: Props) => {
                             onConfirm={(selectedDate: Date) => {
                                 setDatePickerVisibility(false)
 
-                                if (selectedDate) {
-                                    setDate(selectedDate);
-                                }
 
+                                setDate(selectedDate);
+
+                                setTimeout(() => {
+                                    setIsTimePickerVisible(true);
+                                }, 500)
                             }
                             }
                             onCancel={() => setDatePickerVisibility(false)}
@@ -170,43 +197,65 @@ const t2 = (props: Props) => {
                         <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
                     </TouchableOpacity>
 
+
+                    <TouchableOpacity onPress={() => setIsTimePickerVisible(true)} style={[styles.input, { width: '45%', }]}>
+                        <DateTimePickerModal
+                            isVisible={isTimePickerVisible}
+                            mode="time"
+                            onConfirm={(selectedTime: Date) => {
+                                setIsTimePickerVisible(false)
+                                setTime(selectedTime);
+
+                                const combinedDateTime = moment(date).set({
+                                    hour: moment(selectedTime).hour(),
+                                    minute: moment(selectedTime).minute()
+                                });
+
+                                if (combinedDateTime.isBefore(moment().add(2, 'hours'))) {
+                                    Alert.alert('Invalid Selection', 'You cannot select a date/time less than 2 hours in the future.');
+                                } else {
+                                    // Proceed with valid date and time
+                                }
+
+
+
+
+
+
+                            }
+                            }
+                            onCancel={() => setIsTimePickerVisible(false)}
+                        // minimumDate={new Date()} 
+                        />
+                        <icons.FontAwesome5 name="clock" size={24} color="black" />
+                        <Text style={styles.label}>{moment(time).format('HH:mm')}</Text>
+                    </TouchableOpacity>
                     {/* todo forgot to add time */}
 
 
-                    <View style={[styles.input, { width: '45%', }]}>
-                        <icons.Ionicons name="ios-people" size={24} color="black" />
-                        <RNPickerSelect
-                            onValueChange={(value) => { setNumberOfSeats(value) }}
-                            style={{
-                                inputIOS: {
-                                    fontSize: 18,
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    paddingRight: 55,
-                                },
-                                inputAndroid: {
-                                    fontSize: 18,
-                                    paddingVertical: 12,
-                                    paddingHorizontal: 10,
-                                    paddingRight: 55,
-                                },
-                            }}
-                            placeholder={{}}
 
-                            items={[
-                                { label: '1', value: 1 },
-                                { label: '2', value: 2 },
-                                { label: '3', value: 3 },
-                                { label: '4', value: 4 },
-                                { label: '5', value: 5 },
-                                { label: '6', value: 6 },
-                            ]}
-                        />
 
-                        <Text style={styles.label}>{numberOfSeats}</Text>
+                </View>
+
+                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                        <icons.Ionicons name="ios-people" size={24} color={iconColor} />
+                        <Text>Number of seats: </Text>
                     </View>
-
-
+                    <RNPickerSelect
+                        // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
+                        key={selectedCar && selectedCar.id}
+                        onValueChange={(value) => { setNumberOfSeats(value) }}
+                        style={{
+                            inputIOS: styles.input,
+                            inputAndroid: styles.input,
+                        }}
+                        placeholder={{
+                            label: '1',
+                            value: 1,
+                        }}
+                        items={seatOptions}
+                    />
                 </View>
 
 
