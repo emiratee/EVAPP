@@ -13,4 +13,5 @@ router.post('/trip/create', tripController_js_1.default.postCreate);
 router.get('/trips', tripController_js_1.default.getFilteredTrips);
 //User account
 router.post('/user/account/register', userController_js_1.default.postRegister);
+router.get('/user/account/:driverId', userController_js_1.default.getDriver);
 exports.default = router;

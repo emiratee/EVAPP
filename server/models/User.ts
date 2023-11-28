@@ -1,3 +1,4 @@
+import { trusted } from "mongoose";
 import { carSchema } from "./Car";
 const mongoose = require('mongoose');
 
@@ -43,6 +44,10 @@ const userSchema = new mongoose.Schema({
             type: Number,
             required: true
         }
+    },
+    driverId: {
+        type: String,
+        required: true
     },
     driverRating: {
         totalReviews: {

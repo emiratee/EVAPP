@@ -49,6 +49,24 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
+const getDriver = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { driverId } = req.params;
+        if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
+
+        const driver = await User.findOne({ driverId });
+        if (!driver) return res.status(400).json({ error: "No driver with this ID" });
+        
+        const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
+        
+        return res.status(200).json({ driver: filteredDriver });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 export default {
-    postRegister
+    postRegister,
+    getDriver
 }

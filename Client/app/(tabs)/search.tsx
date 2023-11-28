@@ -47,13 +47,11 @@ const SearchForm: React.FC = () => {
             date: moment(date).format('YYYY-MM-DD'),
             numberOfPeople,
         };
-
-        // save formData to an object for now
-        console.log('Form Data:', formData);
-        navigate.navigate('two', { formData }) //  Link to t3
-
+        
         const response = await getFilteredTrips(formData.departure, formData.destination, formData.date, formData.numberOfPeople);
-        console.log(response);
+        if (response) {
+            navigate.navigate('TripCardRedirect', { response });
+        }
 
 
         // simulate a delay (e.g., 2000 milliseconds) before resetting the form

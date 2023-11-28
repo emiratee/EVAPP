@@ -1,18 +1,13 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
-import { useNavigation, Link } from 'expo-router';
-import { useMockData } from '../../app/utils/mockData';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation} from 'expo-router';
+import { getDriver } from '../../utils/apiService';
 
 
-export const TripCardItem = ({ trip }) => {
-    const { mockUsers } = useMockData()
-
-    const driver = mockUsers.find(user => user.id === trip.driverID)
-
-
-
+export const TripCardItem = ({ trip, driver }) => {
+    console.log(driver);
+    
     return (
         <View style={styles.cardContainer}>
             <View style={styles.route}>
@@ -47,13 +42,13 @@ export const TripCardItem = ({ trip }) => {
                     </View>
                 </View>
                 <View style={styles.informationItem}>
-                    <View>
+                    {/* <View>
                         <Text style={styles.name}>{driver && driver.name}</Text>
                         <View style={styles.ratingContainer}>
                             <icons.AntDesign name='star' size={12} />
                             <Text style={styles.rating}>{driver && driver.driverRating.averageRating}</Text>
                         </View>
-                    </View>
+                    </View> */}
                     <Image
                         source={require('../../assets/images/driver.png')}
                         style={{ height: 50, width: 50, borderRadius: 50 }}
@@ -64,58 +59,22 @@ export const TripCardItem = ({ trip }) => {
     );
 };
 
-const TripCard = ({ formData }) => {
-
-    const { trips, setTrips } = useMockData()
-    const { date, departure, destination, numberOfPeople } = formData
-    // 
-    console.log()
-    const [availableTrips, setAvailableTrips] = useState([])
-    useEffect(() => {
-        let available = trips.filter(trip => {
-
-
-            if (
-                date === trip.date
-                && trip.destination.city === destination
-                && trip.departure.city === departure
-                && trip.seats.available >= numberOfPeople
-            ) return trip
-        })
-        if (!available.length) {
-            available = trips.filter(trip => {
-
-
-                if (date === trip.date && trip.departure.city === departure
-                ) return trip
-            })
-        }
-        setAvailableTrips(available)
-    }, [trips, formData])
-    // console.log(availableTrips)
-    const navigate = useNavigation();
-
-    //filter trips by departure / destination / date / capacity
+const TripCard = ({ response }) => {
+    const navigate = useNavigation();        
     return (
         <View style={styles.list}>
             <FlatList
-                data={availableTrips}
-                renderItem={({ item }) => (
+                data={response.trips}
+                renderItem={({ item }) => (                    
                     <TouchableOpacity style={styles.cardButton} onPress={() => {
-                        // console.log('we here', item)
-                        // navigate.navigate('TripInfo', { trip: item })
-
                         navigate.navigate('TripInfo', { trip: item })
                     }} >
-
                         <TripCardItem trip={item} />
-
                     </TouchableOpacity >
                 )}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={{ paddingHorizontal: 15 }}
-                style={{ width: '100%' }} // Ensuring FlatList takes full width
-
+                style={{ width: '100%' }}
             />
         </View >
     );

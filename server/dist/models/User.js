@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     },
+    driverId: {
+        type: String,
+        required: true
+    },
     driverRating: {
         totalReviews: {
             type: Number,
