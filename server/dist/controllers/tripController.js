@@ -49,7 +49,7 @@ const getFilteredTrips = async (req, res) => {
             'seats.available': { $gte: seats }
         };
         const trips = await Trip_js_1.default.find(params);
-        console.log(trips);
+        return res.status(200).json({ trips });
     }
     catch (error) {
         console.error(error);
