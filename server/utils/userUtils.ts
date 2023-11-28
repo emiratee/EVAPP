@@ -5,7 +5,7 @@ import User from '../models/User';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-export function validateUser(req: Request) {
+export async function validateUser(req: Request): Promise<Boolean> {
     try {
         const { authorization } = req.headers;
         if (!authorization) return false;
@@ -13,7 +13,8 @@ export function validateUser(req: Request) {
         const userId = tokenToUserId(authorization);
         if (!userId) return false;
 
-        const user = User.findOne({ userId });
+        const user = await User.findOne({ userId });
+
         if (!user) return false;
 
         return true;
@@ -25,10 +26,9 @@ export function validateUser(req: Request) {
 export function tokenToUserId(token: string) {
     const SECRET_KEY = process.env.SECRET_KEY!;
     try {
-        const decodedToken = jwt.verify(token, SECRET_KEY) as { userId: string }; //Verify the token with the secret key
-        return decodedToken.userId; //Return the user_id from the token payload
+        const decodedToken = jwt.verify(token, SECRET_KEY) as { userId: string };
+        return decodedToken.userId;
     } catch (error) {
-        //console.error(error);
         return undefined;
     }
 }

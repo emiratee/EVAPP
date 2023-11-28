@@ -6,7 +6,7 @@ const tripSchema = new mongoose.Schema({
         type: String
     },
     departure: {
-        land: {
+        country: {
             type: String,
             required: true
         },
@@ -24,7 +24,7 @@ const tripSchema = new mongoose.Schema({
         }
     },
     destination: {
-        land: {
+        country: {
             type: String,
             required: true
         },
@@ -48,6 +48,16 @@ const tripSchema = new mongoose.Schema({
     totalTime: {
         type: String,
         required: true
+    },
+    seats: {
+        available: {
+            type: Number,
+            required: true
+        },
+        total: {
+            type: Number,
+            required: true
+        }
     },
     services: {
         smoking: {
@@ -100,6 +110,6 @@ const tripSchema = new mongoose.Schema({
     }
 });
 
-const Trip = mongoose.model('Trip', tripSchema);
+const Trip = mongoose.model('Trips', tripSchema);
 
 export default Trip;
