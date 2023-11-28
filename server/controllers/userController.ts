@@ -25,6 +25,7 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             email,
             phoneNumber,
             memberSince: Date.now(),
+            driverId: '12345',
             cars: [],
             passengerRating: {
                 totalReviews: 0,
@@ -49,20 +50,19 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-const getDriver = async (req: Request, res: Response): Promise<any> => {
+const getDriver = async (driverId): Promise<any> => {
     try {
-        const { driverId } = req.params;
-        if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
+        //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
 
         const driver = await User.findOne({ driverId });
-        if (!driver) return res.status(400).json({ error: "No driver with this ID" });
+        //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
         
         const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
         
-        return res.status(200).json({ driver: filteredDriver });
+        return filteredDriver;
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        //res.status(500).json({ error: "Internal server error" });
     }
 }
 

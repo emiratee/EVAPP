@@ -1,9 +1,7 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as icons from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigation} from 'expo-router';
-import { getDriver } from '../../utils/apiService';
-
 
 export const TripCardItem = ({ trip, driver }) => {
     console.log(driver);
@@ -42,13 +40,13 @@ export const TripCardItem = ({ trip, driver }) => {
                     </View>
                 </View>
                 <View style={styles.informationItem}>
-                    {/* <View>
-                        <Text style={styles.name}>{driver && driver.name}</Text>
+                    <View>
+                        <Text style={styles.name}>{driver.name}</Text>
                         <View style={styles.ratingContainer}>
                             <icons.AntDesign name='star' size={12} />
-                            <Text style={styles.rating}>{driver && driver.driverRating.averageRating}</Text>
+                            <Text style={styles.rating}>{driver.driverRating.averageRating}</Text>
                         </View>
-                    </View> */}
+                    </View>
                     <Image
                         source={require('../../assets/images/driver.png')}
                         style={{ height: 50, width: 50, borderRadius: 50 }}
@@ -59,7 +57,7 @@ export const TripCardItem = ({ trip, driver }) => {
     );
 };
 
-const TripCard = ({ response }) => {
+const TripCard = ({ response }) => {    
     const navigate = useNavigation();        
     return (
         <View style={styles.list}>
@@ -67,9 +65,9 @@ const TripCard = ({ response }) => {
                 data={response.trips}
                 renderItem={({ item }) => (                    
                     <TouchableOpacity style={styles.cardButton} onPress={() => {
-                        navigate.navigate('TripInfo', { trip: item })
+                        navigate.navigate('TripInfo', { trip: item.trip, driver: item.driver })
                     }} >
-                        <TripCardItem trip={item} />
+                        <TripCardItem trip={item.trip} driver={item.driver} />
                     </TouchableOpacity >
                 )}
                 keyExtractor={(item, index) => index.toString()}

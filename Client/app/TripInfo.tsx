@@ -6,13 +6,10 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
-import { useMockData } from './utils/mockData';
-import * as Types from '../types/types'; 
-import { useRouter, useLocalSearchParams } from 'expo-router';
 
 
 const LocationInformation = () => {
-    const {trip} = useRoute().params
+    const { trip } = useRoute().params
     return (
         <View style={styles.locationContainer}>
             <View style={styles.timeContainer}>
@@ -69,21 +66,21 @@ const DriverInformation = ({ trip, driver }) => {
                 </View>
             </View>
             <View style={driver_style.carContainer}>
-                <Text style={driver_style.carName}>{trip.selectedCar.model}</Text>
+                <Text style={driver_style.carName}>{trip.car.model}</Text>
                 <View style={driver_style.carInformation}>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Color:</Text>
-                        <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.color}</Text>
+                        <Text style={driver_style.carInformationItemValue}>{trip.car.color}</Text>
                     </View>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Seats:</Text>
-                        <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.seats}</Text>
+                        <Text style={driver_style.carInformationItemValue}>{trip.car.seats}</Text>
                     </View>
                 </View>
                 <View style={driver_style.carInformation}>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Number plate:</Text>
-                        <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.licencePlate}</Text>
+                        <Text style={driver_style.carInformationItemValue}>{trip.car.licencePlate}</Text>
                     </View>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Seats available:</Text>
@@ -119,7 +116,7 @@ const DriverInformation = ({ trip, driver }) => {
                         </View>
                         <View style={[driver_style.serviceInformationItem, { marginTop: 10 }]}>
                             <icons.MaterialIcons name="insert-comment" size={24} color="black" style={{ marginBottom: 75 }} />
-                            <Text style={driver_style.serviceInformationCommentText}>{trip.services.comments}</Text>
+                            <Text style={driver_style.serviceInformationCommentText}>{trip.services.comments || 'No comment'}</Text>
                         </View>
                     </View>
                 </View>
@@ -149,14 +146,14 @@ const Request = ({ trip }) => {
         setPrice(price.toString());
         setText(`${price.toFixed(2)}€`);
         setSeats(number);
-      }
-      
-      const createPickerDataArray = () => {
+    }
+
+    const createPickerDataArray = () => {
         return Array.from({ length: trip.seats.total }, (_, index) => index < trip.seats.available ? (index + 1).toString() : '').slice(0, trip.seats.available);
-      }
-      
-      
-      const handleButtonClick = () => {
+    }
+
+
+    const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
         setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
         setIsPickerVisible(false);
@@ -167,12 +164,12 @@ const Request = ({ trip }) => {
         <View style={request_styles.container}>
             <TouchableOpacity style={
                 [request_styles.buttonContainer,
-                !isPickerVisible && { width: '95%', marginLeft: '2.5%',},
+                !isPickerVisible && { width: '95%', marginLeft: '2.5%', },
                 hasEnoughCredits ? {} : request_styles.disabledButton,
-                ]} 
+                ]}
                 onPress={handleButtonClick}
                 disabled={!hasEnoughCredits}
-                >
+            >
                 <View style={request_styles.button}>
                     <Text style={request_styles.buttonText}>{text}</Text>
                 </View>
@@ -191,11 +188,7 @@ const Request = ({ trip }) => {
     )
 }
 export default function ModalScreen() {
-    const { trip } = useRoute().params;
-    const { mockUsers, setMockUsers } = useMockData();
-
-    const driver = mockUsers.find(user => user.id === trip.driverID)
-
+    const { trip, driver } = useRoute().params;
 
     return (
         <View style={styles.container}>
@@ -248,7 +241,7 @@ const request_styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     disabledButton: {
-      backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
+        backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
     },
     picker: {
         flex: 1,

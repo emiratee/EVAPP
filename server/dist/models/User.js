@@ -30,36 +30,36 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cars: [Car_1.carSchema],
-    passengerRating: {
-        totalReviews: {
-            type: Number,
-            required: true
-        },
-        totalRating: {
-            type: Number,
-            required: true
-        },
-        averageRating: {
-            type: Number,
-            required: true
-        }
-    },
     driverId: {
         type: String,
         required: true
     },
-    driverRating: {
+    cars: [Car_1.carSchema],
+    passengerRating: {
         totalReviews: {
-            type: Number,
+            type: String,
             required: true
         },
         totalRating: {
-            type: Number,
+            type: String,
             required: true
         },
         averageRating: {
-            type: Number,
+            type: String,
+            required: true
+        }
+    },
+    driverRating: {
+        totalReviews: {
+            type: String,
+            required: true
+        },
+        totalRating: {
+            type: String,
+            required: true
+        },
+        averageRating: {
+            type: String,
             required: true
         }
     },
@@ -73,18 +73,6 @@ const userSchema = new mongoose.Schema({
             type: String
         }
     ],
-    // trips: {
-    //     driver: [
-    //         {
-    //             type: String
-    //         }
-    //     ],
-    //     passenger: [
-    //         {
-    //             type: String
-    //         }
-    //     ]
-    // },
     credits: {
         type: String,
         required: true

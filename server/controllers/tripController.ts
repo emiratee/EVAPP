@@ -3,6 +3,7 @@ import path from 'path'
 import dotenv from "dotenv";
 import { validateUser } from '../utils/userUtils.js';
 import Trip from '../models/Trip.js';
+import userController from './userController.js'
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
@@ -49,7 +50,12 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         };
 
         const trips = await Trip.find(params);
-        return res.status(200).json({ trips })
+        let formedTrips: [] = [];
+        for (const trip of trips) {
+            const driver = await userController.getDriver(trip.driverId);
+            formedTrips.push({ trip, driver });
+        }
+        return res.status(200).json({ trips: formedTrips })
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal server error" });
