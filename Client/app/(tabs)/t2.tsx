@@ -19,7 +19,7 @@ type Props = {}
 const t2 = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
 
-    const { fakeCars, setFakeCars, setTrips, trips } = useMockData()
+    const { fakeCars, setFakeCars, setTrips, trips, mockUsers, setMockUsers } = useMockData()
 
 
     const [seatPrice, setSeatPrice] = useState<string>("")
@@ -38,7 +38,7 @@ const t2 = (props: Props) => {
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState(new Date());
-    const [numberOfSeats, setNumberOfSeats] = useState(0);
+    const [numberOfSeats, setNumberOfSeats] = useState(1);
 
     const styles = getDynamicStyles(iconColor);
 
@@ -65,7 +65,7 @@ const t2 = (props: Props) => {
 
     const handleSubmit = () => {
         const submitForm2 = {
-            id: Math.random(),
+            id: Math.random().toString(),
             departure: {
                 city: departure.city,
                 address: departure.address,
@@ -76,39 +76,34 @@ const t2 = (props: Props) => {
                 address: destination.address,
                 time: '15:30'
             },
-            driver: {
-                name: 'Vladislav',
-                rating: '2,3'
-            },
+            
             date: moment(date).format('YYYY-MM-DD'),
-            departureTime: '12:30',
-            arrivalTime: '15:30',
-            trip: {
-                total_time:'3:00',
-            },
+  
+            total_time: '3:00',
             seats: {
                 available: numberOfSeats,
                 total: selectedCar.seats
             },
             services: {
-                smokingToggled,
-                childSeatToggled,
-                petsToggled,
-                alcoholToggled,
-                luggageToggled,
+                smoking: smokingToggled,
+                childSeat: childSeatToggled,
+                pets: petsToggled,
+                alcohol: alcoholToggled,
+                luggage: luggageToggled,
                 comments: commentsValue,
             },
             selectedCar,
-            price: seatPrice
-
-
-
+            price: seatPrice,
+            driverID: mockUsers[0].id,
+            passengersIDs: [],
+            succesful: false
         }
-    
+
 
 
 
         console.log(submitForm2)
+        //todo add to driver trips (assign trip id to driver)
         setTrips([...trips, submitForm2])
         // console.log(submitForm)
 
@@ -127,7 +122,7 @@ const t2 = (props: Props) => {
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setFakeCars={setFakeCars} fakeCars={fakeCars} setAddNewCar={setAddNewCar} />
+                <AddNewCar setMockUsers={setMockUsers} setAddNewCar={setAddNewCar} mockUsers={mockUsers[0]} />
             </Overlay>
 
             <View style={styles.parameters}>
@@ -302,7 +297,7 @@ const t2 = (props: Props) => {
             <View style={styles.parameters}>
 
                 <FlatList
-                    data={fakeCars}
+                    data={mockUsers[0] && mockUsers[0].cars}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) => <CarPreview

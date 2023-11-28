@@ -48,7 +48,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="two"
                 options={{
-                    // href: null,
+                    href: null,
 
                     title: 'Search results/ wont be visible',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
@@ -71,7 +71,7 @@ export default function TabLayout() {
 
             
             <Tabs.Screen
-                name="t1"
+                name="search"
                 options={{
                     title: 'Search',
                     tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
@@ -92,7 +92,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="t4"
+                name="history"
                 options={{
                     title: 'History',
                     tabBarIcon: ({ color }) => <TabBarIcon name="history" color={color} />,

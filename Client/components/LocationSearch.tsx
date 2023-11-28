@@ -44,12 +44,12 @@ const LocationSearch = (props: Props) => {
                     // Extracting address and city from the details
                     const address = details.formatted_address;
                     const city = details.address_components.find(component =>
-                      component.types.includes("locality")
+                        component.types.includes("locality")
                     )?.long_name;
-                    props.onPress({address, city});
+                    props.onPress({ address, city });
 
                     console.log(`Address: ${address}, City: ${city}`);
-                  }
+                }
                 // 'details' is provided when fetchDetails = true
                 // console.log(data, details);
                 // console.log(data, 'DATA')
