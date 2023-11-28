@@ -5,7 +5,8 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
-import { MockDataProvider } from '../mockData';
+import { MockDataProvider } from './utils/mockData';
+import { AuthProvider } from './utils/auth'
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -48,14 +49,16 @@ function RootLayoutNav() {
     const colorScheme = useColorScheme();
 
     return (
-        <MockDataProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                    <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-                    <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
-                </Stack>
-            </ThemeProvider>
-        </MockDataProvider>
+        <AuthProvider>
+            <MockDataProvider>
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                    <Stack>
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+                        <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
+                    </Stack>
+                </ThemeProvider>
+            </MockDataProvider>
+        </AuthProvider>
     );
 }

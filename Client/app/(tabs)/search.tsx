@@ -7,9 +7,13 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 // import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../utils/auth';
 
 
 const SearchForm: React.FC = () => {
+
+
+    const {token} = useAuth();
     const [departure, setDeparture] = useState<string>('');
     const [destination, setDestination] = useState('');
 
@@ -21,6 +25,8 @@ const SearchForm: React.FC = () => {
 
 
     const navigate = useNavigation();
+
+    console.log('checking token:', token);
 
 
     const handleConfirm = (selectedDate: Date) => {
@@ -86,6 +92,9 @@ const SearchForm: React.FC = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
+                                    let country = details.address_components.find(component =>
+                                        component.types.includes("country")
+                                    )?.long_name;
                                     city && setDeparture(city);
                                 }
                             }}
@@ -119,8 +128,11 @@ const SearchForm: React.FC = () => {
 
                             onPress={(data, details = null) => {
                                 if (details) {
-                                    const city = details.address_components.find(component =>
+                                    let city = details.address_components.find(component =>
                                         component.types.includes("locality")
+                                    )?.long_name;
+                                    let country = details.address_components.find(component =>
+                                        component.types.includes("country")
                                     )?.long_name;
                                     city && setDestination(city);
                                 }

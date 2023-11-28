@@ -6,7 +6,7 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
-import { useMockData } from '../mockData';
+import { useMockData } from './utils/mockData';
 import * as Types from '../types/types'; 
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
@@ -20,7 +20,7 @@ const LocationInformation = () => {
                     <Text style={styles.time}>{trip.departure.time}</Text>
                 </View>
                 <View>
-                    <Text style={styles.totalTime}>{trip.total_time}</Text>
+                    <Text style={styles.totalTime}>{trip.totalTime}</Text>
                 </View>
                 <View>
                     <Text style={styles.time}>{trip.destination.time}</Text>
@@ -83,7 +83,7 @@ const DriverInformation = ({ trip, driver }) => {
                 <View style={driver_style.carInformation}>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Number plate:</Text>
-                        <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.licence_plate}</Text>
+                        <Text style={driver_style.carInformationItemValue}>{trip.selectedCar.licencePlate}</Text>
                     </View>
                     <View style={driver_style.carInformationItem}>
                         <Text style={driver_style.carInformationItemText}>Seats available:</Text>

@@ -3,22 +3,24 @@ export type TCar = {
     model: string,
     color: string,
     seats: number,
-    licence_plate: string
+    licencePlate: string
 }
 export type TTrip = {
     id: string,
     departure: {
+        country: string,
         city: string,
         address: string,
         time: string
     },
     destination: {
+        country: string,
         city: string,
         address: string,
         time: string
     },
     date: string,
-    total_time: string,
+    totalTime: string,
     seats: {
         available: number,
         total: number
@@ -41,7 +43,7 @@ export type TTrip = {
 export type TUser = {
     id: string,
     name: string,
-    member_since: string,
+    memberSince: string,
     email: string,
     phoneNumber: string,
     password: string,

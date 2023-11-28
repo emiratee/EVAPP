@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react
 import * as icons from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { useNavigation, Link } from 'expo-router';
-import { useMockData } from '../../mockData';
+import { useMockData } from '../../app/utils/mockData';
 import { useRoute } from '@react-navigation/native';
 
 
