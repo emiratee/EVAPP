@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       };
     
     useEffect(() => {
-
+        // logout()
         getData();
         
     }, [])

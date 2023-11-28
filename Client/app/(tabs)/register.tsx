@@ -1,16 +1,30 @@
 import { Alert, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
 import { Text, View } from '../../components/Themed'
 import { Link } from 'expo-router';
 import { useAuth } from '../utils/auth';
 
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+
 
 type Props = {}
 
 const register = (props: Props) => {
-    const { token, login } = useAuth();
+    const { token, login, isAuthenticated } = useAuth();
+
+    const navigation = useNavigation();
+
+    useFocusEffect(
+        React.useCallback(() => {
+          if (isAuthenticated) {
+            navigation.navigate('search'); 
+          }
+        }, [isAuthenticated])
+      );
+    
+
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -50,10 +64,7 @@ const register = (props: Props) => {
                         throw new Error('Network response was not ok');
                     }
                     const jsonResponse = await response.json();
-                    console.log(jsonResponse); // Process the response dat
                     login(jsonResponse.token);
-
-                    console.log(token)
                 } catch (error) {
                     console.log(error)
                 }
