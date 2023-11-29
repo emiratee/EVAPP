@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../utils/auth';
 
 
 const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits, mockUser }) => {
   const formattedPrice = parseFloat(price).toFixed(2);
-
+  const {user} = useAuth();
   const navigate = useNavigation();
   
   const handleButtonPress = () => {
@@ -18,7 +19,8 @@ const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredi
     <View style={styles.container}>
       <View style={styles.creditsContainer}>
         <Text style={styles.title}>Credits:</Text>
-        <Text style={styles.credits}>{mockUser.credits}€</Text>
+        <Text style={styles.credits}>{mockUser.credits}€</Text> 
+        {/* //user.credits.available */}
       </View>
 
       <View>
