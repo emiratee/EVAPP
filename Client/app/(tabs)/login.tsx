@@ -2,14 +2,15 @@ import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { Text, View } from '../../components/Themed'
 import { TextInput } from 'react-native-gesture-handler'
-import { Link } from 'expo-router'
+import { Link, useFocusEffect, useNavigation } from 'expo-router'
+import { postLogin } from '../../utils/apiService';
+import { useAuth } from '../../utils/auth'
 
 type Props = {}
 
 const login = (props: Props) => {
 
-  const dummyEmail = 'test@g.com'
-  const dummyPass = 'test'
+  const { login, isAuthenticated } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,14 +18,31 @@ const login = (props: Props) => {
   const [errEmail, setErrEmail] = useState('');
   const [errPassword, setErrPassword] = useState('');
 
-  const handleSubmit = () => {
-    setErrEmail(email.trim() === '' ? 'Please enter e-mail' : '');
-    setErrPassword(password.trim()==='' ? 'Please enter password': '');
+  const navigation = useNavigation();
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isAuthenticated) {
+        navigation.navigate('search');
+      }
+    }, [isAuthenticated])
+  );
 
-    if(email.toLowerCase() === dummyEmail.toLowerCase() && password === dummyPass){
-      Alert.alert('Successful login')
-    } else {
-      Alert.alert('worng username or password')
+  const handleSubmit = async () => {
+    setErrEmail(email.trim() === '' ? 'Please enter e-mail' : '');
+    setErrPassword(password.trim() === '' ? 'Please enter password' : '');
+
+
+    if (!errPassword && !errEmail) {
+
+      const response = await postLogin(email.trim(), password.trim());
+
+      if (response.token) {
+        login(response.token)
+      } else {
+        alert(response.error);
+        setEmail('')
+        setPassword('');
+      }
     }
   }
 

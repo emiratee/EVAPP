@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
 import { Text, View } from '../../components/Themed'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import { TripCardItem } from '../../components/TripCard/TripCard'
@@ -12,7 +12,42 @@ type Props = {}
 const history = (props: Props) => {
 
     const [index, setIndex] = useState(0)
-    const { trips, setTrips } = useMockData();
+    const { trips, mockUsers } = useMockData();
+
+    const [upcomingTrips, setUpcomingTrips] = useState([]);
+    const [previousTrips, setPreviousTrips] = useState([]);
+
+    const tripsToEvaluate = [...mockUsers[0].tripsAsDriverIDs, ...mockUsers[0].tripsAsPasangerIDs]
+    const date = Date.now();
+
+    useEffect(() => {
+
+        console.log(tripsToEvaluate);
+        //find trip info
+        let findTrips = tripsToEvaluate.map(trip => {
+            return trips.find(el => el.id === trip)
+        });
+        console.log('find trips', findTrips)
+
+        let upTrips = findTrips.filter(trip => {
+            return new Date(trip.date) >= new Date()
+        });
+
+
+        let prevTrips = findTrips.filter(trip => {
+            console.log('prev-date', new Date(trip.date))
+            return new Date(trip.date) < new Date()
+        });
+
+        console.log('uptrips', upTrips);
+        console.log(new Date())
+        console.log('prevTrips', prevTrips);
+
+        setUpcomingTrips(upTrips);
+        setPreviousTrips(prevTrips);
+    }, [trips]);
+
+    // console.log(upcomingTrips, previousTrips)
 
     return (
         <>
@@ -40,7 +75,7 @@ const history = (props: Props) => {
             <TabView value={index} onChange={setIndex} animationType="spring">
 
                 <FlatList
-                    data={trips}
+                    data={upcomingTrips}
                     renderItem={({ item }) => (
                         <View style={styles.cardButton} >
                             <TripCardItem trip={item} />
@@ -48,11 +83,14 @@ const history = (props: Props) => {
                     )}
                 />
 
-
-
-                <ScrollView>
-                    <Text>Favorittere</Text>
-                </ScrollView>
+                <FlatList
+                    data={previousTrips}
+                    renderItem={({ item }) => (
+                        <View style={[!item.succesful ?  styles.disablecardButton :  styles.cardButton]} >
+                            <TripCardItem trip={item} />
+                        </View>
+                    )}
+                />
             </TabView>
         </>
     )
@@ -62,6 +100,12 @@ export default history
 
 const styles = StyleSheet.create({
     cardButton: {
+        width: '100%',
+        height: 175
+    },
+    disablecardButton: {
+        // backgroundColor: 'grey',
+        opacity: 0.5,
         width: '100%',
         height: 175
     },
