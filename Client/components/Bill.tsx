@@ -11,9 +11,8 @@ const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredi
   const handleButtonPress = () => {
     setIsPickerVisible(true);
 
-    // Navigate to another page when the Add more credits button is pressed
-    navigate.navigate('addCredits') //  Link to addCredits Page
-  };
+    navigate.navigate('addCredits') 
+  }
  
   return (
     <View style={styles.container}>
