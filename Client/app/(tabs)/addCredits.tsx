@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView, ActivityIndicator, TextInput } from 'react-native';
-import { useMockData } from '../../utils/mockData';
+import { useAuth } from '../../utils/auth';
 import { RadioButton } from 'react-native-paper';
 
-// TODO: Add setTimeout and a spinner for a better UX. Also, include some navigation
 const addCredits: React.FC = () => {
 
-    const { mockUsers } = useMockData();
+    const { user } = useAuth();
+
     const [selectedMethod, setSelectedMethod] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [creditsAmount, setCreditsAmount] = useState('');
-
-    const handleSelectAmount = (amount: string) => {
-        
-    };
 
     const handleSubmitButton = async () => {
         setIsLoading(true); 
@@ -22,8 +18,8 @@ const addCredits: React.FC = () => {
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         if (selectedMethod && creditsAmount !== '' && Number(creditsAmount) > 0) {
-            const currentCredits = parseFloat(mockUsers[0].credits);
-            mockUsers[0].credits = (currentCredits + Number(creditsAmount)).toFixed(2);
+            const currentCredits = parseFloat(user.credits.available);
+            user.credits.available = (currentCredits + Number(creditsAmount)).toFixed(2);
 
             Alert.alert(
                 'Yuuuhu!',
@@ -36,7 +32,6 @@ const addCredits: React.FC = () => {
             );
         }
 
-         
          setTimeout(() => {
             setIsLoading(false);
             setSelectedMethod('');
@@ -44,35 +39,70 @@ const addCredits: React.FC = () => {
         }, 2000);
     };
 
+    const handleSelectAmount = (amount: string) => {
+        setCreditsAmount((prevAmount) => {
+            return prevAmount === amount ? '' : amount; 
+        });
+    };
+
   return (
     <ScrollView style={styles.container}>
         <View style={styles.creditsBalance}>
             <Text style={styles.title}>Credit Balance: </Text>
-            <Text style={styles.creditsValue}>{mockUsers[0].credits}€</Text>
+            <Text style={styles.creditsValue}>{user.credits.available}€</Text>
         </View>
-        <Text style={[styles.subtitle, {paddingHorizontal: 15}]}>Purchase additional credits using the various payment methods shown below.</Text>
+        <Text style={[styles.subtitle, {paddingHorizontal: 15, marginBottom: 10}]}>Purchase additional credits using the various payment methods shown below.</Text>
        
-        <Text style={[styles.title, { top: 10, paddingLeft: 15,}]}>Add Credits: </Text>
+
+       {/* CREDITS FORM */}
+        <Text style={[styles.title, { paddingLeft: 15,}]}>Add Credits: </Text>
         <View style={styles.shadowContainer}>
             <TextInput 
                 style={styles.creditsInput}
                 placeholder="Add credits amount"
-                keyboardType="numeric" // Allow only numeric input
+                keyboardType="numeric"
                 value={creditsAmount}
                 onChangeText={(text) => setCreditsAmount(text)}
             >
             </TextInput>
-            <View style={styles.container}>
+            <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 0,}]}>
                 <TouchableOpacity style={styles.creditsButton}>
-                    <Text style={styles.creditsButtonText}>5€</Text>
+                    <Text 
+                    style={styles.creditsButtonText}
+                    onPress={() => handleSelectAmount('5')}
+                    >
+                        5€
+                    </Text>
                 </TouchableOpacity>
-                <TouchableOpacity></TouchableOpacity>
-                <TouchableOpacity></TouchableOpacity>
-                <TouchableOpacity></TouchableOpacity>
+                <TouchableOpacity style={styles.creditsButton}>
+                    <Text 
+                    style={styles.creditsButtonText}
+                    onPress={() => handleSelectAmount('10')}
+                    >
+                        10€
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.creditsButton}>
+                    <Text 
+                    style={styles.creditsButtonText}
+                    onPress={() => handleSelectAmount('20')}
+                    >
+                        20€
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.creditsButton}>
+                    <Text 
+                    style={styles.creditsButtonText}
+                    onPress={() => handleSelectAmount('50')}
+                    >
+                        50€
+                    </Text>
+                </TouchableOpacity>
             </View>
         </View>
         
-        <Text style={[styles.title, { top: 10, paddingLeft: 15,}]}>Select Payment Method: </Text>
+        {/* PAYMENT METHODS */}
+        <Text style={[styles.title, {top: 10, paddingLeft: 15,}]}>Select Payment Method: </Text>
         <View style={styles.payContainer}>
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
@@ -122,7 +152,7 @@ const addCredits: React.FC = () => {
             </View>
 
             <View style={styles.payMethod}>
-                <View style={styles.doubleImage}>
+                <View style={[styles.doubleImage, {paddingLeft: 6}]}>
                     <Image style={styles.image} source={require('../../assets/images/GOOGLEPAY.png')}/>
                 </View>
                 {/* <Text style={styles.title}>Google Pay</Text> */}
@@ -137,7 +167,7 @@ const addCredits: React.FC = () => {
             </View>
 
             <View style={styles.payMethod}>
-                <View style={styles.doubleImage}>
+                <View style={[styles.doubleImage, {paddingLeft: 6}]}>
                     <Image style={styles.image} source={require('../../assets/images/APPLEPAY.png')}/>
                 </View>
                 {/* <Text style={styles.title}>Apple Pay</Text> */}
@@ -175,17 +205,19 @@ const styles = StyleSheet.create({
     shadowContainer: {
         flex: 1,
         flexDirection: 'column',
-        // justifyContent: 'space-between',
-        // alignItems: 'center',
+        justifyContent: 'space-between',
         backgroundColor: '#fff',
         borderRadius: 10, 
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0 },
         shadowOpacity: 0.4,
         shadowRadius: 2,
+        padding: 15,
+        margin: 10,
+        gap: 10,
     },
     payContainer: {
-        padding: 10,
+        paddingHorizontal: 10,
     },
     creditsBalance: {
         flexDirection: 'row',
@@ -251,41 +283,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         borderRadius: 50,
         marginBottom: 90,
+        height: 60,
     },
     buttonText: {
         fontSize: 20,
         fontWeight: '600',
         color: '#fff',
-        paddingVertical: 20,
+        paddingVertical: 10,
     },
     radiusButton: {
-        backgroundColor: '#cad7df',
+        backgroundColor: '#e0e0e0', //  backgroundColor: '#cad7df',
         height: 35,
         width: 35,
         borderRadius: 50,
-        shadowColor: '#000',
-        shadowOffset: { width: 1, height: 0 },
-        shadowOpacity: 0.4,
-        shadowRadius: 2,
     },
     creditsButton: {
         paddingVertical: 5,
         paddingHorizontal: 15,
-        borderWidth: 1,
-        borderColor: '#000',
         borderRadius: 50,
-        width: 65,
+        width: 70,
+        backgroundColor: '#8573c7',
 
     },
     creditsButtonText: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '500',
         textAlign: 'center',
+        color: '#fff',
     },
     creditsInput: {
         padding: 10,
-        borderWidth: 1,
-        borderColor: '#000',
         borderRadius: 10,
-    }
+        backgroundColor: '#ededed',
+        fontSize: 16,
+    },
 })
