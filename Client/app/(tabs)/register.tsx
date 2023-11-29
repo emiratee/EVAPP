@@ -7,7 +7,7 @@ import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-
+import { postRegister } from '../../utils/apiService'
 
 type Props = {}
 
@@ -18,12 +18,12 @@ const register = (props: Props) => {
 
     useFocusEffect(
         React.useCallback(() => {
-          if (isAuthenticated) {
-            navigation.navigate('search'); 
-          }
+            if (isAuthenticated) {
+                navigation.navigate('search');
+            }
         }, [isAuthenticated])
-      );
-    
+    );
+
 
 
     const [name, setName] = useState('');
@@ -49,30 +49,11 @@ const register = (props: Props) => {
 
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
         if (!errName || !errEmail || !errNumber || !errPassword) {
-            const fetchData = async () => {
-                const url = 'http://localhost:3000/user/account/register/'
-                const data = { name, email, phoneNumber: number, password }
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    })
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const jsonResponse = await response.json();
-                    login(jsonResponse.token);
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-            fetchData()
+            const data = { name, email, phoneNumber: number, password }
+            postRegister(data).then(data => {
+                login(data.token)
+            })
         }
-
-
 
     }
 
