@@ -14,8 +14,10 @@ router.post('/user/account/login', userController.postLogin);
 router.get('/user/account/:driverId', userController.getDriver)
 router.put('/user/account/cars', userController.putCar)
 router.put('/user/account/tripsAsDriver', userController.putTripsAsDriver)
+router.put('/user/account/creditsAvailable', userController.putAvailableCredits)
+router.put('/user/account/creditsOnHold', userController.putOnHoldCredits)
 //need also route to assign trip to user
-
+ 
 router.get('/user/account', userController.getUser)
 
 export default router;

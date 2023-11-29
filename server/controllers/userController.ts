@@ -141,7 +141,7 @@ const postLogin = async (req: Request, res: Response): Promise<any> => {
         if (!email || !password) return res.status(400).json({ error: "Credentials not provided correctly" })
 
         const user = await User.findOne({ email }); //Check if user exists
-        console.log('user',user)
+        console.log('user', user)
         if (!user) return res.status(400).json({ error: "User does not exists" });
 
         const validPassword = await bcrypt.compare(password, user.password); //Validate password from DB with the one that got provided
@@ -156,11 +156,57 @@ const postLogin = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
+const putAvailableCredits = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const validatedUser = await validateUser(req, res);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+        const currentCredits = Number(validatedUser.user.credits.available);
+        const newCredits = Number(req.body.amount)
+        await User.updateOne(
+            { userId: validatedUser.userId },
+            {
+                $set: {
+                    'credits.available': currentCredits + newCredits,
+                },
+            }
+        );
+
+        res.status(200).json({ message: 'Funds added succefully ' });
+    } catch (error) {
+        console.error("Error in putAddCredits:", error);
+        res.status(500).json({ error: "Internal server error in putAddCredits" });
+    }
+};
+const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const validatedUser = await validateUser(req, res);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+        const currentCredits = Number(validatedUser.user.credits.available);
+        const newCredits = Number(req.body.amount)
+        await User.updateOne(
+            { userId: validatedUser.userId },
+            {
+                $set: {
+                    'credits.onHold': currentCredits + newCredits,
+                },
+            }
+        );
+
+        res.status(200).json({ message: 'Funds added succefully ' });
+    } catch (error) {
+        console.error("Error in putAddCredits:", error);
+        res.status(500).json({ error: "Internal server error in putAddCredits" });
+    }
+};
+
+
 export default {
     postRegister,
     getDriver,
     getUser,
     putCar,
     putTripsAsDriver,
-    postLogin
+    putAvailableCredits,
+    putOnHoldCredits,
+    postLogin,
 }
