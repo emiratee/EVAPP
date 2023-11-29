@@ -5,10 +5,9 @@ import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { addCar } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
+import * as types from '../types/types'
 type Props = {
-    setMockUsers: any,
     setAddNewCar: any,
-    mockUsers: any
 }
 
 const AddNewCar = (props: Props) => {
@@ -73,7 +72,6 @@ const AddNewCar = (props: Props) => {
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
-                        // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
                         onValueChange={(value) => { setNewNumberOfSeats(value) }}
                         style={{
                             inputIOS: styles.input,
@@ -96,7 +94,7 @@ const AddNewCar = (props: Props) => {
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
-                        const formData = {
+                        const formData: types.TCarNoId = {
                             model: newModel,
                             color: newColor,
                             licencePlate: newLicencePlates,
