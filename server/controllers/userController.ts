@@ -170,18 +170,20 @@ const putAvailableCredits = async (req: Request, res: Response): Promise<any> =>
                 },
             }
         );
+        const updatedUser = await User.findOne({ userId: validatedUser.userId })
 
-        res.status(200).json({ message: 'Funds added succefully ' });
+        res.status(200).json({ message: 'Available Credits Changed', credits: updatedUser.credits });
     } catch (error) {
-        console.error("Error in putAddCredits:", error);
-        res.status(500).json({ error: "Internal server error in putAddCredits" });
+        console.error("Error in putAvailableCredits:", error);
+        res.status(500).json({ error: "Internal server error in putAvailableCredits" });
     }
-};
+}
+
 const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
     try {
         const validatedUser = await validateUser(req, res);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-        const currentCredits = Number(validatedUser.user.credits.available);
+        const currentCredits = Number(validatedUser.user.credits.onHold);
         const newCredits = Number(req.body.amount)
         await User.updateOne(
             { userId: validatedUser.userId },
@@ -192,10 +194,12 @@ const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
             }
         );
 
-        res.status(200).json({ message: 'Funds added succefully ' });
+        const updatedUser = await User.findOne({ userId: validatedUser.userId })
+
+        res.status(200).json({ message: 'OnHold Credits Changed ', credits: updatedUser.credits });
     } catch (error) {
-        console.error("Error in putAddCredits:", error);
-        res.status(500).json({ error: "Internal server error in putAddCredits" });
+        console.error("Error in putOnHoldCredits:", error);
+        res.status(500).json({ error: "Internal server error in putOnHoldCredits" });
     }
 };
 
