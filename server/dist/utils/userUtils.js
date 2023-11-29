@@ -20,7 +20,7 @@ async function validateUser(req) {
         const user = await User_1.default.findOne({ userId });
         if (!user)
             return false;
-        return true;
+        return { userId, user };
     }
     catch (error) {
         throw error;

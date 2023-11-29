@@ -2,9 +2,9 @@ import { carSchema } from "./Car";
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    _id: { 
-        type: String
-    },
+    // _id: { 
+    //     type: String
+    // },
     userId: {
         type: String,
         required: true
@@ -29,10 +29,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    driverId: {
-        type: String,
-        required: true
-    },
+    // driverId: {
+    //     type: String,
+    //     required: true
+    // }, 
+ 
     cars: [carSchema],
     passengerRating: {
         totalReviews: {
@@ -76,9 +77,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    __v: {
-        type: String
-    }
+    // __v: {
+    //     type: String
+    // }
 });
 
 const User = mongoose.model('User', userSchema);

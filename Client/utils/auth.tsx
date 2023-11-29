@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { getUser } from './apiService';
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -9,9 +9,17 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        if (token) {
+            getUser(token).then((data) => {
+                setUser(data)
+            })
 
+        }
+    }, [token])
     const login = (jwtToken) => {
-         AsyncStorage.setItem('jwtToken', jwtToken)
+        AsyncStorage.setItem('jwtToken', jwtToken)
             .then(() => {
                 setToken(jwtToken);
             })
@@ -33,22 +41,21 @@ export const AuthProvider = ({ children }) => {
 
     const getData = async () => {
         try {
-          const value = await AsyncStorage.getItem('jwtToken');
-          if (value !== null) {
-            // value previously stored
-            setToken(value);
-          }
+            const value = await AsyncStorage.getItem('jwtToken');
+            if (value !== null) {
+                // value previously stored
+                setToken(value);
+            }
         } catch (e) {
-          console.log(e)
+            console.log(e)
         }
-      };
-    
+    };
+
     useEffect(() => {
         // logout()
         getData();
-        
     }, [])
-    
+
 
     const isAuthenticated = !!token;
 
@@ -58,6 +65,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated,
+        user,
+        setUser
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

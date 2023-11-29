@@ -11,23 +11,11 @@ const postCreate = async (req: Request, res: Response): Promise<any> => {
     try {
         const validUser = validateUser(req);
         if (!validUser) return res.status(401).json({ error: "Authentication failed" });
-        const { departure, destination, date, totalTime, seats, services, car, price, driverId, passengerIDs, successful } = req.body;
 
-        await Trip.insertMany({
-            departure,
-            destination,
-            date,
-            totalTime,
-            seats,
-            services,
-            car,
-            price,
-            driverId,
-            passengerIDs,
-            successful
-        });
 
-        return res.status(201).json({ stauts: 201, message: 'Successfully created trip' });
+        const newTrip = await Trip.insertMany([req.body]);
+
+        return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal server error" });
@@ -52,7 +40,7 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         const trips = await Trip.find(params);
         let formedTrips: [] = [];
         for (const trip of trips) {
-            const driver = await userController.getDriver(trip.driverId);
+            const driver = await userController.getDriver(trip.driverID);
             formedTrips.push({ trip, driver });
         }
         return res.status(200).json({ trips: formedTrips })
