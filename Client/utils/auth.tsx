@@ -1,6 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from './apiService';
+import * as types from '../types/types';
+
+
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -9,15 +13,16 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<types.TUser | null>(null);
+
     useEffect(() => {
         if (token) {
             getUser(token).then((data) => {
                 setUser(data)
             })
-
         }
     }, [token])
+    
     const login = (jwtToken) => {
         AsyncStorage.setItem('jwtToken', jwtToken)
             .then(() => {
@@ -54,6 +59,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // logout()
         getData();
+       
     }, [])
 
 
