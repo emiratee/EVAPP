@@ -32,7 +32,7 @@ const addTrip = (props: Props) => {
     const [alcoholToggled, setAlcoholToggled] = useState<boolean>(false)
     const [luggageToggled, setLuggageToggled] = useState<boolean>(false)
     const [commentsValue, setCommentsValue] = useState<string>('')
-    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user.cars.length && user.cars[0] || null)
+    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user && user.cars.length && user.cars[0] || null)
 
 
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
