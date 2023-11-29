@@ -15,7 +15,7 @@ const getFilteredTrips = async (departure, destination, date, seats): Promise<an
 
 const getDriver = async (driverId): Promise<any> => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/${driverId}`);
+        const response = await fetch(`${BASE_URL}/user/${driverId}`);
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -25,7 +25,7 @@ const getDriver = async (driverId): Promise<any> => {
 
 const getUser = async (token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account`, {
+        const response = await fetch(`${BASE_URL}/user`, {
             method: 'GET',
             headers: {
                 'Authorization': `${token}`
@@ -41,7 +41,7 @@ const getUser = async (token: string) => {
 
 const addCar = async (data, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/cars`, {
+        const response = await fetch(`${BASE_URL}/user/cars`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const addNewTrip = async (data, token: string) => {
 
 const putTripsAsDriver = async (data, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/tripsAsDriver`, {
+        const response = await fetch(`${BASE_URL}/user/driver`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
