@@ -158,7 +158,7 @@ const Request = ({ trip }) => {
         // additional logic to execute when the button is clicked
         setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
         setIsPickerVisible(false);
-        setText('Request Service');
+        setText('Send request');
     }
 
     return (
@@ -242,7 +242,7 @@ const request_styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     disabledButton: {
-        backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
+        backgroundColor: '#b0aeae',
     },
     picker: {
         flex: 1,
