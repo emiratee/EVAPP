@@ -5,8 +5,11 @@ export type TCar = {
     seats: number,
     licencePlate: string
 }
+
+
+
 export type TTrip = {
-    id: string,
+    _id: string,
     departure: {
         country: string,
         city: string,
@@ -33,15 +36,17 @@ export type TTrip = {
         luggage: boolean,
         comments?: string,
     }
-    selectedCar: TCar,
+    car: TCar,
     price: string,
     driverID: string,
     passengersIDs: string[],
     successful: boolean
 
 }
+
+
 export type TUser = {
-    id: string,
+    _id: string,
     name: string,
     memberSince: string,
     email: string,
@@ -63,3 +68,7 @@ export type TUser = {
     credits: string
 
 }
+
+export type TCarNoId = Omit<TCar, '_id'>
+export type TTripNoId = Omit<TTrip, '_id'>
+export type TUserNoId = Omit<TUser, '_id'>

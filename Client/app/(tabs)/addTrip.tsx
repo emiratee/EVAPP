@@ -21,8 +21,6 @@ type Props = {}
 const addTrip = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
     const { user, token } = useAuth()
-    const { setTrips, trips, mockUsers, setMockUsers } = useMockData()
-
 
     const [seatPrice, setSeatPrice] = useState<string>("")
 
@@ -70,13 +68,6 @@ const addTrip = (props: Props) => {
     const handleSubmit = () => {
 
 
-
-        //calcualte approx time how much it will take, after move to if statement
-
-
-
-
-
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
@@ -101,8 +92,7 @@ const addTrip = (props: Props) => {
                     averageDuration = totalDuration / data.routes.length;
                 }).then(() => {
 
-                    const submitForm: types.TTrip | any = {
-
+                    const submitForm: types.TTripNoId = {
                         departure: {
                             country: departure.country,
                             city: departure.city,
@@ -194,7 +184,7 @@ const addTrip = (props: Props) => {
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setMockUsers={setMockUsers} setAddNewCar={setAddNewCar} mockUsers={user} />
+                <AddNewCar setAddNewCar={setAddNewCar} />
             </Overlay>
 
             <View style={styles.parameters}>
