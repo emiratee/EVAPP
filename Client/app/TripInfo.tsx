@@ -6,7 +6,7 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
-import { useMockData } from '../utils/mockData';
+import { useAuth } from '../utils/auth';
 
 
 const LocationInformation = () => {
@@ -132,7 +132,7 @@ const DriverInformation = ({ trip, driver }) => {
 }
 
 const Request = ({ trip }) => {
-    const { mockUsers } = useMockData();
+    const { user } = useAuth()
 
     const [price, setPrice] = useState(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState(true);
@@ -155,7 +155,8 @@ const Request = ({ trip }) => {
 
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
-        setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
+
+        setHasEnoughCredits(parseFloat(user.credits.available) >= price);
         setIsPickerVisible(false);
         setText('Send booking request');
     }
@@ -175,7 +176,7 @@ const Request = ({ trip }) => {
                 </View>
             </TouchableOpacity>
 
-            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} mockUser={mockUsers[0]} />)}
+            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
 
             {isPickerVisible && (<Picker
                 style={request_styles.picker}

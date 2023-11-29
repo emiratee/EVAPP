@@ -128,6 +128,23 @@ const postLogin = async (email: string, password: string) => {
     }
 }
 
+const putAvailableCredits = async(amount: String, token: String) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/credits/available`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ amount })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }}
+
 export {
     getFilteredTrips,
     getDriver,
@@ -136,5 +153,6 @@ export {
     addNewTrip,
     putTripsAsDriver,
     postRegister,
-    postLogin
+    postLogin,
+    putAvailableCredits
 }
