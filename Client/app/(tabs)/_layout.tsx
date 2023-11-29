@@ -62,6 +62,15 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
+            <Tabs.Screen
+                name="addCredits"
+                options={{
+                    href: null,
+
+                    title: 'Add Credits',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                }}
+            />
             
 
 {/* These on top are hidden from navbar, saved to be as reference for something for now.  */}

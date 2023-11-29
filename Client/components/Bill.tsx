@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as icons from '@expo/vector-icons';
+import { useAuth } from '../utils/auth';
 
-const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits, mockUser }) => {
+
+const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }) => {
+  const { user } = useAuth();
   const navigate = useNavigation();
   const handleButtonPress = () => {
     setIsPickerVisible(true);
@@ -15,7 +17,7 @@ const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredi
     <View style={styles.container}>
       <View style={styles.creditsContainer}>
         <Text style={styles.title}>Credits:</Text>
-        <Text style={styles.credits}>{mockUser.credits}€</Text>
+        <Text style={styles.credits}>{user.credits.available}€</Text> 
       </View>
 
       <View>
