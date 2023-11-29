@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { Text, View } from './Themed'
 import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
-
+import { addCar } from '../utils/apiService';
+import { useAuth } from '../utils/auth';
 type Props = {
     setMockUsers: any,
     setAddNewCar: any,
@@ -16,7 +17,7 @@ const AddNewCar = (props: Props) => {
     const [newLicencePlates, setNewLicencePlates] = useState('')
     const [newNumberOfSeats, setNewNumberOfSeats] = useState(1)
 
-
+    const { token, setUser } = useAuth()
 
     const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
 
@@ -100,17 +101,13 @@ const AddNewCar = (props: Props) => {
                             color: newColor,
                             licencePlate: newLicencePlates,
                             seats: newNumberOfSeats,
-                            id: Math.random().toString()
                         }
-                        props.setAddNewCar(false);
-
-                        props.setMockUsers((allDrivers) => allDrivers.map(driver => {
-                            if (driver.id === props.mockUsers.id) {
-                                return { ...driver, cars: [...driver.cars, formData] };
-                            }
-                            return driver;
-                        }));
-
+                        addCar(formData, token).then(data => {
+                            props.setAddNewCar(false);
+                            setUser((user) => (
+                                { ...user, cars: [...user.cars, data.car] }
+                            ))
+                        })
                     }}
                 >
                     <Text >Add a car</Text>

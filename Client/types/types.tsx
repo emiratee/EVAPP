@@ -1,5 +1,5 @@
 export type TCar = {
-    id: string,
+    _id: string,
     model: string,
     color: string,
     seats: number,
@@ -37,7 +37,7 @@ export type TTrip = {
     price: string,
     driverID: string,
     passengersIDs: string[],
-    succesful: boolean
+    successful: boolean
 
 }
 export type TUser = {

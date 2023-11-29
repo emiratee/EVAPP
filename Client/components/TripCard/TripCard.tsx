@@ -1,29 +1,29 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import React from 'react';
-import { useNavigation} from 'expo-router';
+import { useNavigation } from 'expo-router';
 
 export const TripCardItem = ({ trip, driver }) => {
     console.log(driver);
-    
+
     return (
         <View style={styles.cardContainer}>
-            <View style={styles.route}>
-                {/* Departure Information */}
-                <View style={styles.routeItem}>
+            <View style={styles.locationContainer}>
+                <View style={styles.dotContainer}>
                     <View style={styles.dot}>
-
                         <View style={styles.line}></View>
                     </View>
-                    <View>
+                    <View style={styles.dot}></View>
+                </View>
+                <View style={styles.addressContainer}>
+                    <View style={styles.mainContainer}>
                         <Text style={styles.city}>{trip.departure.city}</Text>
                         <Text style={styles.time}>{trip.departure.time}</Text>
                     </View>
-                </View>
-                {/* Destination Information */}
-                <View style={styles.routeItem}>
-                    <View style={styles.dot}></View>
-                    <View>
+                    <View style={styles.mainContainer}>
+                        <Text style={styles.totalTime}>{trip.totalTime}</Text>
+                    </View>
+                    <View style={styles.mainContainer}>
                         <Text style={styles.city}>{trip.destination.city}</Text>
                         <Text style={styles.time}>{trip.destination.time}</Text>
                     </View>
@@ -32,7 +32,7 @@ export const TripCardItem = ({ trip, driver }) => {
             <View style={styles.information}>
                 <View>
                     <View style={styles.priceContainer}>
-                        <Text style={styles.price}>{`${trip.price}€`}</Text>
+                        <Text style={styles.price}>{`${parseFloat(trip.price).toFixed(2)}€`}</Text>
                     </View>
                     <View style={styles.seatContainer}>
                         <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
@@ -57,13 +57,13 @@ export const TripCardItem = ({ trip, driver }) => {
     );
 };
 
-const TripCard = ({ response }) => {    
-    const navigate = useNavigation();        
+const TripCard = ({ response }) => {
+    const navigate = useNavigation();
     return (
         <View style={styles.list}>
             <FlatList
                 data={response.trips}
-                renderItem={({ item }) => (                    
+                renderItem={({ item }) => (
                     <TouchableOpacity style={styles.cardButton} onPress={() => {
                         navigate.navigate('TripInfo', { trip: item.trip, driver: item.driver })
                     }} >
@@ -81,6 +81,78 @@ const TripCard = ({ response }) => {
 export default TripCard
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#f2f2f2',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        position: 'relative',
+        width: '100%',
+        height: '100%'
+    },
+    horizontalLine: {
+        backgroundColor: '#000',
+        width: '99%',
+        alignSelf: 'center',
+        height: 1,
+    },
+    locationContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        width: '95%',
+        height: 150,
+        position: 'relative',
+        borderColor: '#a8a8a8',
+        borderRadius: 15,
+    },
+    timeContainer: {
+        height: '100%',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        paddingVertical: 2.5
+    },
+    dotContainer: {
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        height: '95%',
+        paddingTop: 10,
+        paddingHorizontal: 15
+    },
+    addressContainer: {
+        flex: 1,
+        height: '100%',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between'
+    },
+    mainContainer: {
+        flexDirection: 'column',
+    },
+    address: {
+        fontSize: 18,
+        fontWeight: '600'
+    },
+    totalTime: {
+        fontSize: 15,
+        fontWeight: '300',
+    },
+    dot: {
+        backgroundColor: '#000',
+        width: 12,
+        height: 12,
+        borderRadius: 50,
+    },
+    line: {
+        position: 'absolute',
+        backgroundColor: '#000',
+        width: 6,
+        height: 120,
+        top: 10,
+        bottom: 0,
+        left: 3,
+        zIndex: 999
+    },
     list: {
         flex: 1,
         flexDirection: 'column',
@@ -122,22 +194,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative'
-    },
-    dot: {
-        backgroundColor: '#000',
-        width: 12,
-        height: 12,
-        borderRadius: 50,
-        marginRight: 10,
-    },
-    line: {
-        position: 'absolute',
-        backgroundColor: '#000',
-        width: 6,
-        height: 100,
-        top: 10,
-        bottom: 0,
-        left: 3,
     },
     priceContainer: {
         flex: 1,
