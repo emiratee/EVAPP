@@ -1,0 +1,17 @@
+{
+  "name": "evapp",
+  "version": "1.0.0",
+  "description": "Erik is cool",
+  "main": "index.js",
+  "scripts": {
+    "dependencies": "npm run install-server-dependencies && npm run install-client-dependencies && echo \"\n\nSuccessfully installed all dependencies.\n\" && exit 1",
+    "d": "npm run dependencies",
+    "install-server-dependencies": "cd server && npm install",
+    "install-client-dependencies": "cd Client && npm install",
+    "server": "cd server && tsc && nodemon ./dist/index.js",
+    "client": "cd Client && expo start --tunnel"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
