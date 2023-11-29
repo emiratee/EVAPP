@@ -131,7 +131,6 @@ const DriverInformation = ({ trip, driver }) => {
     )
 }
 
-// here, we may want to pass also the navigation as a prop besides 'trip' and pass it to <Bill navigation={navigation}/> 
 const Request = ({ trip }) => {
     const { mockUsers } = useMockData();
 
@@ -158,7 +157,7 @@ const Request = ({ trip }) => {
         // additional logic to execute when the button is clicked
         setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
         setIsPickerVisible(false);
-        setText('Request Service');
+        setText('Send booking request');
     }
 
     return (
@@ -242,7 +241,7 @@ const request_styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     disabledButton: {
-        backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
+        backgroundColor: '#b0aeae',
     },
     picker: {
         flex: 1,
