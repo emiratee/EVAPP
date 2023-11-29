@@ -23,10 +23,9 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             userId,
             name,
             password: await bcrypt.hash(password, 10),
-            email,
+            email: email.toLowerCase(),
             phoneNumber,
             memberSince: Date.now(),
-            driverId: '12345',
             cars: [],
             passengerRating: {
                 totalReviews: 0,
@@ -40,7 +39,10 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             },
             tripsAsDriverIDs: [],
             tripsAsPassengerIDs: [],
-            credits: '0'
+            credits: {
+                available: '10',
+                onHold: '0'
+            }
         });
         const token = jwt.sign({ userId }, SECRET_KEY);
         res.status(201).json({ token });
