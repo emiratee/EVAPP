@@ -13,6 +13,7 @@ router.post('/user/account/register', userController.postRegister);
 router.post('/user/account/login', userController.postLogin);
 
 //User (get certain information about the user directly)
+router.get('/user/history', userController.getHistory)
 router.get('/user', userController.getUser);
 router.put('/user/cars', userController.putCar);
 router.get('/user/:driverId', userController.getDriver);

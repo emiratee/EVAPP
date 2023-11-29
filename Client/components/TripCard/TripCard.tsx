@@ -4,7 +4,7 @@ import React from 'react';
 import { useNavigation } from 'expo-router';
 
 export const TripCardItem = ({ trip, driver }) => {
-    console.log(driver);
+    // console.log(driver);
 
     return (
         <View style={styles.cardContainer}>

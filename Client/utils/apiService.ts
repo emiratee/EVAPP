@@ -111,7 +111,7 @@ const postRegister = async (data) => {
     }
 }
 
-const postLogin = async (email: string, password: string) => {    
+const postLogin = async (email: string, password: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/account/login`, {
             method: 'POST',
@@ -121,6 +121,22 @@ const postLogin = async (email: string, password: string) => {
             body: JSON.stringify({ email, password })
         })
         //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const getHistory = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/history`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        checkResponse(response);
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -154,5 +170,6 @@ export {
     putTripsAsDriver,
     postRegister,
     postLogin,
-    putAvailableCredits
+    putAvailableCredits,
+    getHistory
 }
