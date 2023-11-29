@@ -38,9 +38,8 @@ const SearchForm: React.FC = () => {
     };
 
 
-    // TODO: Modify the handleSubmit according to the BE
     const handleSubmit = async () => {
-        setIsLoading(true); // set loading to true to show the spinner
+        setIsLoading(true); 
 
         const formData = {
             departure,
@@ -178,7 +177,6 @@ const SearchForm: React.FC = () => {
                     <View style={styles.textInput}>
                         <icons.Ionicons name="ios-people" size={24} color="black" />
                         <RNPickerSelect
-                            // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submit
                             onValueChange={(value) => setNumberOfPeople(value)}
                             items={[
                                 // { label: '1', value: 1 },

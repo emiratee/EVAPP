@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { useMockData } from '../utils/mockData';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import { useMockData } from '../../utils/mockData';
 import { RadioButton } from 'react-native-paper';
 
 // TODO: Add setTimeout and a spinner for a better UX. Also, include some navigation
@@ -8,8 +8,13 @@ const addCredits: React.FC = () => {
 
     const { mockUsers } = useMockData();
     const [selectedMethod, setSelectedMethod] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmitButton = () => {
+    const handleSubmitButton = async () => {
+        setIsLoading(true); 
+
+        // simulate an asynchronous operation (e.g., API call) here
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         if (selectedMethod) {
             Alert.alert(
                 'Yuuuhu!',
@@ -22,7 +27,12 @@ const addCredits: React.FC = () => {
             );
         }
 
-        setSelectedMethod('');
+        
+         
+         setTimeout(() => {
+            setIsLoading(false);
+            setSelectedMethod('');
+        }, 2000);
     };
 
   return (
@@ -34,13 +44,12 @@ const addCredits: React.FC = () => {
         <Text style={[styles.subtitle, {paddingHorizontal: 15}]}>Purchase additional credits using the various payment methods shown below.</Text>
         <Text style={[styles.title, { top: 10, paddingLeft: 15,}]}>Select Payment Method: </Text>
 
-        <View style={styles.scrollViewContainer}>
+        <View style={styles.payContainer}>
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
                     <Image style={styles.image} source={require('../../assets/images/VISA.png')}/>
                     <Image style={styles.image} source={require('../../assets/images/MASTERCARD.png')}/>
                 </View>
-
                 {/* <Text style={styles.title}>Card</Text> */}
                 <View style={styles.radiusButton}>
                     <RadioButton 
@@ -50,14 +59,13 @@ const addCredits: React.FC = () => {
                         uncheckedColor='#000'
                         color='#000' 
                     />
-                </View>
-                
+                </View>   
             </View>
+
             <View style={styles.payMethod}>
                 <View style={[styles.doubleImage, {width: 100}]}>
                     <Image style={styles.image} source={require('../../assets/images/PAYPAL.png')}/>
                 </View>
-                
                 {/* <Text style={styles.title}>Paypal</Text> */}
                 <View style={styles.radiusButton}>
                     <RadioButton 
@@ -67,13 +75,12 @@ const addCredits: React.FC = () => {
                         color='#000' 
                     />
                 </View>
-                
             </View>
+
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
                     <Image style={styles.image} source={require('../../assets/images/KLARNA.png')}/>
                 </View>
-                
                 {/* <Text style={styles.title}>Klarna</Text> */}
                 <View style={styles.radiusButton}>
                     <RadioButton 
@@ -83,13 +90,12 @@ const addCredits: React.FC = () => {
                         color='#000' 
                     />
                 </View>
-                
             </View>
+
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
                     <Image style={styles.image} source={require('../../assets/images/GOOGLEPAY.png')}/>
                 </View>
-                
                 {/* <Text style={styles.title}>Google Pay</Text> */}
                 <View style={styles.radiusButton}>
                     <RadioButton 
@@ -99,13 +105,12 @@ const addCredits: React.FC = () => {
                         color='#000' 
                     />
                 </View>
-                
             </View>
+
             <View style={styles.payMethod}>
                 <View style={styles.doubleImage}>
                     <Image style={styles.image} source={require('../../assets/images/APPLEPAY.png')}/>
                 </View>
-                
                 {/* <Text style={styles.title}>Apple Pay</Text> */}
                 <View style={styles.radiusButton}>
                     <RadioButton 
@@ -115,11 +120,16 @@ const addCredits: React.FC = () => {
                         color='#000' 
                     />
                 </View>
-                
             </View>
+
             <TouchableOpacity style={styles.button} onPress={handleSubmitButton}>
-                <Text style={styles.buttonText}>Submit</Text>
+            {isLoading ? (
+                    <ActivityIndicator size='small' />
+                ) : (
+                    <Text style={styles.buttonText}>Submit</Text>
+                )}
             </TouchableOpacity>
+
         </View>
     </ScrollView>
   )
@@ -133,8 +143,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
     },
-    scrollViewContainer: {
-        paddingHorizontal: 10,
+    payContainer: {
+        padding: 10,
     },
     creditsBalance: {
         flexDirection: 'row',
@@ -173,7 +183,9 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 0 },
         shadowOpacity: 0.4,
         shadowRadius: 2,
-        padding: 15,
+        paddingVertical: 15,
+        paddingLeft: 20,
+        paddingRight: 35,
         top: 10,
         marginTop: 15,
 
@@ -206,13 +218,13 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
     radiusButton: {
-        // borderWidth: 2,
-        // borderColor: '#000',
         backgroundColor: '#cad7df',
         height: 35,
         width: 35,
         borderRadius: 50,
-        // padding: 20,
-
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
     },
 })
