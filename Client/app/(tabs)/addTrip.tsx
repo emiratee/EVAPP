@@ -12,7 +12,6 @@ import RNPickerSelect from 'react-native-picker-select';
 
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
-import { useMockData } from '../../utils/mockData';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 type Props = {}
@@ -49,15 +48,11 @@ const addTrip = (props: Props) => {
 
     const handlePriceChange = (text: string) => {
         let newText = text.replace(/,/g, '.');
-
-        // Check if the newText has more than one dot
         const splitText = newText.split('.');
         if (splitText.length > 2) {
-            // If more than one dot, remove the last entered character
             newText = newText.slice(0, -1);
         }
 
-        // Allow only two decimal places
         const formattedInput = newText.replace(/(\.\d{2})\d+/, '$1');
         setSeatPrice(formattedInput);
     }

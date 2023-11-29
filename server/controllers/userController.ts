@@ -23,10 +23,9 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             userId,
             name,
             password: await bcrypt.hash(password, 10),
-            email,
+            email: email.toLowerCase(),
             phoneNumber,
             memberSince: Date.now(),
-            driverId: '12345',
             cars: [],
             passengerRating: {
                 totalReviews: 0,
@@ -40,7 +39,10 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             },
             tripsAsDriverIDs: [],
             tripsAsPassengerIDs: [],
-            credits: '0'
+            credits: {
+                available: '10',
+                onHold: '0'
+            }
         });
         const token = jwt.sign({ userId }, SECRET_KEY);
         res.status(201).json({ token });
@@ -132,10 +134,33 @@ const putTripsAsDriver = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+const postLogin = async (req: Request, res: Response): Promise<any> => {
+
+    try {
+        const { email, password } = req.body; //Get credentials from body
+        if (!email || !password) return res.status(400).json({ error: "Credentials not provided correctly" })
+
+        const user = await User.findOne({ email }); //Check if user exists
+        console.log('user',user)
+        if (!user) return res.status(400).json({ error: "User does not exists" });
+
+        const validPassword = await bcrypt.compare(password, user.password); //Validate password from DB with the one that got provided
+        if (!validPassword) return res.status(401).json({ error: "Incorrect password" });
+
+        const token = jwt.sign({ userId: user.userId }, SECRET_KEY); //Create a JWT from the user_id and secret key
+        res.status(200).json({ token });
+        return
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 export default {
     postRegister,
     getDriver,
     getUser,
     putCar,
-    putTripsAsDriver
+    putTripsAsDriver,
+    postLogin
 }

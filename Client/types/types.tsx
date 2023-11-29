@@ -65,7 +65,10 @@ export type TUser = {
     },
     tripsAsDriverIDs: string[],
     tripsAsPasangerIDs: string[],
-    credits: string
+    credits: {
+        available: string,
+        onHold: string
+    } 
 
 }
 

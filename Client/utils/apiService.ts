@@ -111,6 +111,23 @@ const postRegister = async (data) => {
     }
 }
 
+const postLogin = async (email: string, password: string) => {    
+    try {
+        const response = await fetch(`${BASE_URL}/user/account/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export {
     getFilteredTrips,
     getDriver,
@@ -118,5 +135,6 @@ export {
     addCar,
     addNewTrip,
     putTripsAsDriver,
-    postRegister
+    postRegister,
+    postLogin
 }
