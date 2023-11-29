@@ -162,6 +162,7 @@ const putAvailableCredits = async (req: Request, res: Response): Promise<any> =>
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const currentCredits = Number(validatedUser.user.credits.available);
         const newCredits = Number(req.body.amount)
+
         await User.updateOne(
             { userId: validatedUser.userId },
             {

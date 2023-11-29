@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../utils/auth';
-
+import * as icons from '@expo/vector-icons';
 
 const Bill: React.FC = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }) => {
   const { user } = useAuth();
