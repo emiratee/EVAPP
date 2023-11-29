@@ -10,6 +10,7 @@ router.get('/trips', tripController.getFilteredTrips);
 
 //User account
 router.post('/user/account/register', userController.postRegister);
+router.post('/user/account/login', userController.postLogin);
 router.get('/user/account/:driverId', userController.getDriver)
 router.put('/user/account/cars', userController.putCar)
 router.put('/user/account/tripsAsDriver', userController.putTripsAsDriver)
