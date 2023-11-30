@@ -1,14 +1,12 @@
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
 import { Text, View } from '../../components/Themed'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import TripCard, { TripCardItem } from '../../components/TripCard/TripCard'
-import { useMockData } from '../../utils/mockData';
+import { TripCardItem } from '../../components/TripCard/TripCard'
 import { getHistory, putApproveTrip } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
-import HistoryItem from '../../components/HistoryItem';
 
 type Props = {}
 
@@ -65,14 +63,16 @@ const history = (props: Props) => {
                     <FlatList
                         data={upcomingTrips}
                         renderItem={({ item }) => {
-                            console.log(item)
+                            const requestAmount = item.trip.passengerIDs.length;
+                            
                             return (
                                 <TouchableOpacity style={previous.card} onPress={() => {
-                                    navigate('BookRequest')
+                                    const passengers = item.trip.passengerIDs;
+                                    requestAmount > 0 && navigate('BookRequest', { passengers })
                                 }}>
                                     <TripCardItem trip={item.trip} driver={item.driver} />
-                                    <View style={[previous.pendingContainer, { backgroundColor: item.trip.passengerIDs.length === 0 ? '#000' : '#5aa363' }]}>
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.length} pending requests`}</Text>
+                                    <View style={[previous.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )
