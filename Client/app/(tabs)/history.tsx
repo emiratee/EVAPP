@@ -4,7 +4,7 @@ import { Text, View } from '../../components/Themed'
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TripCardItem } from '../../components/TripCard/TripCard'
-import { getHistory, putApproveTrip } from '../../utils/apiService';
+import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
 
