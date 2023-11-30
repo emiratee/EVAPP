@@ -5,11 +5,12 @@ import { FlatList } from "react-native-gesture-handler";
 import { View } from "../components/Themed";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
+import { putApproveTrip } from "../utils/apiService";
 
 
 const BookingCard = ({ trip, passenger, setRequests }) => {
-    const { user, setUser } = useAuth();
-
+    const { token, user, setUser } = useAuth();    
+    
     const [icon, setIcon] = useState<any>();
     const [statusColor, setStatusColor] = useState('#5aa363');
     const [status, setStatus] = useState(passenger.status);
@@ -45,9 +46,19 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
             [
                 {
                     text: 'Confirm',
-                    onPress: () => {
+                    onPress: async () => {
                         setStatus(type);
-                        setRequests((prev: number) => (prev - 1))
+                        setRequests((prev: number) => (prev - 1));
+                        
+                        // const formData = {
+                        //     tripId: props.trip._id,
+                        //     passengerId: el.userId,
+                        //     totalCredits: (el.seats * Number(props.trip.price)).toString()
+                        // }
+                        // putApproveTrip(formData, token);
+                        const totalCredits = (passenger.seats * Number(trip.price)).toString();
+                        const response = await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
+                        if (response) console.log(response)
                     }
                 },
                 {

@@ -64,16 +64,15 @@ const history = (props: Props) => {
                         data={upcomingTrips}
                         renderItem={({ item }) => {
                             const requestAmount = item.trip.passengerIDs.length;
-                            
+
                             return (
                                 <TouchableOpacity style={previous.card} onPress={() => {
                                     const passengers = item.trip.passengerIDs;
                                     requestAmount > 0 && navigate('BookRequest', { trip: item.trip, passengers });
-                                    
                                 }}>
                                     <TripCardItem trip={item.trip} driver={item.driver} />
                                     <View style={[previous.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending' ).length} pending requests`}</Text>
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length} pending requests`}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )
