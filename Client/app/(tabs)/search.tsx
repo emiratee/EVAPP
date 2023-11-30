@@ -27,9 +27,6 @@ const SearchForm: React.FC = () => {
 
     const navigate = useNavigation();
 
-    console.log('checking token:', token);
-
-
     const handleConfirm = (selectedDate: Date) => {
         setDatePickerVisibility(false);
         if (selectedDate) {

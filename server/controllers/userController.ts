@@ -147,7 +147,6 @@ const postLogin = async (req: Request, res: Response): Promise<any> => {
         if (!email || !password) return res.status(400).json({ error: "Credentials not provided correctly" })
 
         const user = await User.findOne({ email }); //Check if user exists
-        console.log('user', user)
         if (!user) return res.status(400).json({ error: "User does not exists" });
 
         const validPassword = await bcrypt.compare(password, user.password); //Validate password from DB with the one that got provided
