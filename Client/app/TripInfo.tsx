@@ -6,7 +6,8 @@ import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
-import { useMockData } from '../utils/mockData';
+import { useAuth } from '../utils/auth';
+import { putRequestTrip } from '../utils/apiService';
 
 
 const LocationInformation = () => {
@@ -131,9 +132,8 @@ const DriverInformation = ({ trip, driver }) => {
     )
 }
 
-// here, we may want to pass also the navigation as a prop besides 'trip' and pass it to <Bill navigation={navigation}/> 
 const Request = ({ trip }) => {
-    const { mockUsers } = useMockData();
+    const { user, token } = useAuth()
 
     const [price, setPrice] = useState(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState(true);
@@ -154,11 +154,27 @@ const Request = ({ trip }) => {
     }
 
 
+
+    //TODO refactor button to be 2 diff buttons
+    const [secondClick, setSecondClick] = useState(false)
+
+
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
-        setHasEnoughCredits(parseFloat(mockUsers[0].credits) >= price);
-        setIsPickerVisible(false);
-        setText('Request Service');
+        if (!secondClick) {
+            setHasEnoughCredits(parseFloat(user.credits.available) >= price);
+            setIsPickerVisible(false);
+            setText('Send booking request');
+            setSecondClick(!secondClick)
+
+        } else {
+            console.log('2nd')
+            const formData = {
+                tripId: trip._id,
+                seats: seats
+            }
+            putRequestTrip(formData, token)
+        }
     }
 
     return (
@@ -176,7 +192,7 @@ const Request = ({ trip }) => {
                 </View>
             </TouchableOpacity>
 
-            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} mockUser={mockUsers[0]} />)}
+            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
 
             {isPickerVisible && (<Picker
                 style={request_styles.picker}
@@ -242,7 +258,7 @@ const request_styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     disabledButton: {
-        backgroundColor: '#b0aeae', // Set your desired background color for the disabled state
+        backgroundColor: '#b0aeae',
     },
     picker: {
         flex: 1,

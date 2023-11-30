@@ -15,7 +15,7 @@ const getFilteredTrips = async (departure, destination, date, seats): Promise<an
 
 const getDriver = async (driverId): Promise<any> => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/${driverId}`);
+        const response = await fetch(`${BASE_URL}/user/${driverId}`);
         return await response.json();
     } catch (error) {
         console.error(error);
@@ -25,7 +25,7 @@ const getDriver = async (driverId): Promise<any> => {
 
 const getUser = async (token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account`, {
+        const response = await fetch(`${BASE_URL}/user`, {
             method: 'GET',
             headers: {
                 'Authorization': `${token}`
@@ -41,7 +41,7 @@ const getUser = async (token: string) => {
 
 const addCar = async (data, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/cars`, {
+        const response = await fetch(`${BASE_URL}/user/cars`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
@@ -77,7 +77,7 @@ const addNewTrip = async (data, token: string) => {
 
 const putTripsAsDriver = async (data, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/account/tripsAsDriver`, {
+        const response = await fetch(`${BASE_URL}/user/driver`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const postRegister = async (data) => {
     }
 }
 
-const postLogin = async (email: string, password: string) => {    
+const postLogin = async (email: string, password: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/account/login`, {
             method: 'POST',
@@ -119,6 +119,93 @@ const postLogin = async (email: string, password: string) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, password })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const getHistory = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/history`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putAvailableCredits = async (amount: String, token: String) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/credits/available`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ amount })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putApproveTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/trips/approve`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+const putRejectTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/trips/reject`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putRequestTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/trips/request`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
         })
         //checkResponse(response);
         return await response.json();
@@ -136,5 +223,10 @@ export {
     addNewTrip,
     putTripsAsDriver,
     postRegister,
-    postLogin
+    postLogin,
+    putAvailableCredits,
+    getHistory,
+    putApproveTrip,
+    putRejectTrip,
+    putRequestTrip
 }

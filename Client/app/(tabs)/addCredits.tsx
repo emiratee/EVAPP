@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView, ActivityIndicator, TextInput } from 'react-native';
 import { useAuth } from '../../utils/auth';
 import { RadioButton } from 'react-native-paper';
+import { putAvailableCredits } from '../../utils/apiService';
 
 const addCredits: React.FC = () => {
 
-    const { user } = useAuth();
+    const { token, user, setUser } = useAuth();
 
     const [selectedMethod, setSelectedMethod] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,8 @@ const addCredits: React.FC = () => {
         if (selectedMethod && creditsAmount !== '' && Number(creditsAmount) > 0) {
             const currentCredits = parseFloat(user.credits.available);
             user.credits.available = (currentCredits + Number(creditsAmount)).toFixed(2);
+            setUser(prev =>({ ...prev, 'credits.available': currentCredits + Number(creditsAmount)}))            
+            await putAvailableCredits((Number(creditsAmount)).toFixed(2), token);
 
             Alert.alert(
                 'Yuuuhu!',

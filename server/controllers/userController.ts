@@ -7,6 +7,9 @@ import path from 'path'
 import dotenv from "dotenv";
 import { validateUser } from '../utils/userUtils.js';
 import Car from '../models/Car.js';
+import Trip from '../models/Trip.js';
+
+
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const SECRET_KEY = process.env.SECRET_KEY!;
@@ -41,7 +44,8 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             tripsAsPassengerIDs: [],
             credits: {
                 available: '10',
-                onHold: '0'
+                onHold: '0',
+                earningsOnHold: '0',
             }
         });
         const token = jwt.sign({ userId }, SECRET_KEY);
@@ -162,6 +166,7 @@ const putAvailableCredits = async (req: Request, res: Response): Promise<any> =>
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const currentCredits = Number(validatedUser.user.credits.available);
         const newCredits = Number(req.body.amount)
+
         await User.updateOne(
             { userId: validatedUser.userId },
             {
@@ -203,6 +208,53 @@ const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+const putEarningsCredits = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const validatedUser = await validateUser(req, res);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+        const currentCredits = Number(validatedUser.user.credits.earningsOnHold);
+        const newCredits = Number(req.body.amount)
+        await User.updateOne(
+            { userId: validatedUser.userId },
+            {
+                $set: {
+                    'credits.earningsOnHold': currentCredits + newCredits,
+                },
+            }
+        );
+
+        const updatedUser = await User.findOne({ userId: validatedUser.userId })
+
+        res.status(200).json({ message: 'earningsOnHold Credits Changed ', credits: updatedUser.credits });
+    } catch (error) {
+        console.error("Error in putearningsOnHoldCredits:", error);
+        res.status(500).json({ error: "Internal server error in putearningsOnHoldCredits" });
+    }
+};
+
+
+const getHistory = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const validatedUser = await validateUser(req, res);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+
+        const { user } = validatedUser;
+
+        const driverTrips = await Trip.find({ _id: { $in: user.tripsAsDriverIDs } });
+        const passengerTrips = await Trip.find({ _id: { $in: user.tripsAsPassengerIDs } });
+        const trips = [...driverTrips, ...passengerTrips];
+
+        const tripsWithDrivers = await Promise.all(trips.map(async (trip) => {
+            const driver = await getDriver(trip.driverID);
+            return { trip, driver };
+        }));
+
+        res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
+    } catch (error) {
+        console.error("Error in getHistory:", error);
+        res.status(500).json({ error: "Internal server error in getHistory" });
+    }
+};
 
 export default {
     postRegister,
@@ -213,4 +265,6 @@ export default {
     putAvailableCredits,
     putOnHoldCredits,
     postLogin,
+    getHistory,
+    putEarningsCredits
 }
