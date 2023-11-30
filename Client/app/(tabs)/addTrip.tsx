@@ -470,7 +470,7 @@ const addTrip = (props: Props) => {
                 style={{backgroundColor:'green', }}
                 >
                     <Text style={{textAlign:'center'}}>
-                The trip has been created succefully!
+                The car has been created succefully!
                     </Text>
             </Snackbar>
         </ScrollView>
