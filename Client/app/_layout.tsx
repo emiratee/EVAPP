@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import { MockDataProvider } from '../utils/mockData';
 import { AuthProvider } from '../utils/auth'
-
+import Toast from 'react-native-toast-message'; 
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,

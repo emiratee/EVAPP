@@ -14,6 +14,11 @@ import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
+import { Snackbar } from 'react-native-paper';
+
+
+
+
 type Props = {}
 
 
@@ -60,18 +65,27 @@ const addTrip = (props: Props) => {
     const [departure, setDeparture] = useState({})
     const [destination, setDestination] = useState({})
 
+
+
+
+
+
+    const [snackBar, setSnackBar] = useState(false)
+    const [addCarSnackBar, setAddCarSnackBar] = useState(false)
+
+
     const handleSubmit = () => {
-
-
+        
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
         });
-
-
-
+        
+        
+        
         if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
-
+            setSnackBar(true)
+            
             let averageDuration = 0
 
 
@@ -175,11 +189,12 @@ const addTrip = (props: Props) => {
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}
         >
+            
             <Overlay
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setAddNewCar={setAddNewCar} />
+                <AddNewCar setAddNewCar={setAddNewCar} setAddCarSnackBar={setAddCarSnackBar}/>
             </Overlay>
 
             <View style={styles.parameters}>
@@ -421,12 +436,43 @@ const addTrip = (props: Props) => {
 
                 </View>
             </View>
+            
             <TouchableOpacity
                 style={styles.btn}
                 onPress={handleSubmit}
             >
                 <Text >Create a trip</Text>
             </TouchableOpacity>
+            <Snackbar
+                visible={snackBar}
+                onDismiss={()=>setSnackBar(false)}
+                // action={{
+                //     // label: 'Undo',
+                //     onPress: () => {
+                //         // Do something
+                //     },
+                // }}
+                style={{backgroundColor:'green', }}
+                >
+                    <Text style={{textAlign:'center'}}>
+                The trip has been created succefully!
+                    </Text>
+            </Snackbar>
+            <Snackbar
+                visible={addCarSnackBar}
+                onDismiss={()=>setAddCarSnackBar(false)}
+                action={{
+                    label: 'Okay',
+                    onPress: () => {
+                        setAddCarSnackBar(false)
+                    },
+                }}
+                style={{backgroundColor:'green', }}
+                >
+                    <Text style={{textAlign:'center'}}>
+                The trip has been created succefully!
+                    </Text>
+            </Snackbar>
         </ScrollView>
 
     )

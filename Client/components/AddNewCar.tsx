@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, useColorScheme, Dimensions, TouchableOpacity,  } from 'react-native'
+import { StyleSheet, TextInput, useColorScheme, Dimensions, TouchableOpacity, Alert, } from 'react-native'
 import React, { useState } from 'react'
 import { Text, View } from './Themed'
 import * as icons from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useAuth } from '../utils/auth';
 import * as types from '../types/types'
 type Props = {
     setAddNewCar: any,
+    setAddCarSnackBar: any
 }
 
 const AddNewCar = (props: Props) => {
@@ -94,18 +95,25 @@ const AddNewCar = (props: Props) => {
                 <TouchableOpacity
                     style={styles.btn}
                     onPress={() => {
-                        const formData: types.TCarNoId = {
-                            model: newModel,
-                            color: newColor,
-                            licencePlate: newLicencePlates,
-                            seats: newNumberOfSeats,
+                        if (newModel && newColor && newLicencePlates && newNumberOfSeats) {
+
+                            const formData: types.TCarNoId = {
+                                model: newModel,
+                                color: newColor,
+                                licencePlate: newLicencePlates,
+                                seats: newNumberOfSeats,
+                            }
+                            addCar(formData, token).then(data => {
+                                props.setAddNewCar(false);
+                                setUser((user) => (
+                                    { ...user, cars: [...user.cars, data.car] }
+                                ))
+                            })
+                            props.setAddCarSnackBar(true)
+                        } else {
+                            Alert.alert('Missing fields', 'Please fill in all mandatory fields');
                         }
-                        addCar(formData, token).then(data => {
-                            props.setAddNewCar(false);
-                            setUser((user) => (
-                                { ...user, cars: [...user.cars, data.car] }
-                            ))
-                        })
+
                     }}
                 >
                     <Text >Add a car</Text>
