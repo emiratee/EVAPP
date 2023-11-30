@@ -7,28 +7,29 @@ import * as icons from '@expo/vector-icons';
 
 
 const BookingCard = ({ passenger }) => {
-    const [status, setStatus] = useState<any>();
-    const [statusColor, setStatusColor] = useState('#5aa363')
+    const [icon, setIcon] = useState<any>();
+    const [statusColor, setStatusColor] = useState('#5aa363');
+    const [status, setStatus] = useState(passenger.status);
 
     useEffect(() => {
-        switch (passenger.status) {
+        switch (status) {
             case 'Pending':
-                setStatus(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
                 setStatusColor('#e29257')
                 break;
             case 'Approved':
-                setStatus(<icons.Ionicons name="ios-checkmark-circle" size={20} color="black" />);
+                setIcon(<icons.Ionicons name="ios-checkmark-circle" size={20} color="black" />);
                 setStatusColor('#5aa363')
                 break;
             case 'Rejected':
-                setStatus(<icons.FontAwesome5 name="exclamation-circle" size={20} color="black" />)
+                setIcon(<icons.FontAwesome5 name="exclamation-circle" size={20} color="black" />)
                 setStatusColor('red')
                 break;
             default:
-                setStatus(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
                 setStatusColor('#5aa363')
         }
-    }, []);
+    }, [status]);
 
     return (
         <View style={request.card}>
@@ -42,23 +43,23 @@ const BookingCard = ({ passenger }) => {
                 </View>
                 <View style={request.status}>
                     <Text style={request.statusText}>Status:</Text>
-                    <Text style={[request.passengerStatus, { color: statusColor }]}>{passenger.status}</Text>
-                    {status}
+                    <Text style={[request.passengerStatus, { color: statusColor }]}>{status}</Text>
+                    {icon}
                 </View>
             </View>
-            {passenger.status === 'Pending' ? (
+            {status === 'Pending' ? (
                 <View style={request.footerContainer}>
-                    <TouchableOpacity style={[request.button, { backgroundColor: '#5aa363' }]}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: '#5aa363' }]} onPress={() => { setStatus('Approved') }}>
                         <Text style={request.buttonText}>Approve</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[request.button, { backgroundColor: 'red' }]}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: 'red' }]} onPress={() => { setStatus('Rejected') }}>
                         <Text style={request.buttonText}>Reject</Text>
                     </TouchableOpacity>
                 </View>
             ): (
                 <View style={request.footerContainer}>
                     <Text style={request.footerText}>
-                        {passenger.status === 'Approved' ? 'You accepted this booking offer' : "You rejected this booking offer" }
+                        {status === 'Approved' ? 'You accepted this booking offer' : "You rejected this booking offer" }
                     </Text>
                 </View>
             )}
@@ -74,7 +75,7 @@ export default function ModalScreen() {
         <View style={request.container}>
             <Text style={request.title}>{`You have ${passengers.length} booking requests`}</Text>
             <FlatList
-                data={passengers}
+                data={passengers.slice().sort((a, b) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))}
                 renderItem={({ item }) => (
                     <BookingCard passenger={item} />
                 )}
@@ -141,7 +142,6 @@ const request = StyleSheet.create({
     statusText: {
         fontSize: 16,
         fontWeight: '500',
-        paddingRight: 5
     },
     passengerStatus: {
         fontSize: 18,
