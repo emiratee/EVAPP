@@ -7,6 +7,17 @@ import tripController from './controllers/tripController.js';
 router.post('/trip/create', tripController.postCreate);
 //router.get('/trip/:id')
 router.get('/trips', tripController.getFilteredTrips);
+router.put('/trips/request', tripController.putMakeRequest);
+
+
+
+
+router.put('/user/trips/approve', tripController.putApprovePassenger);
+router.put('/user/trips/reject', tripController.putRejectPassenger);
+
+
+
+
 
 //User account (Setting etc.)
 router.post('/user/account/register', userController.postRegister);
@@ -23,6 +34,9 @@ router.put('/user/trips/driver', userController.putTripsAsDriver);
 //User (all about credits)
 router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
+router.put('/user/credits/earnings', userController.putEarningsCredits);
 //need also route to assign trip to user
+
+
 
 export default router;

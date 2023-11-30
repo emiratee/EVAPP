@@ -44,7 +44,8 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             tripsAsPassengerIDs: [],
             credits: {
                 available: '10',
-                onHold: '0'
+                onHold: '0',
+                earningsOnHold: '0',
             }
         });
         const token = jwt.sign({ userId }, SECRET_KEY);
@@ -207,6 +208,30 @@ const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+const putEarningsCredits = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const validatedUser = await validateUser(req, res);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+        const currentCredits = Number(validatedUser.user.credits.earningsOnHold);
+        const newCredits = Number(req.body.amount)
+        await User.updateOne(
+            { userId: validatedUser.userId },
+            {
+                $set: {
+                    'credits.earningsOnHold': currentCredits + newCredits,
+                },
+            }
+        );
+
+        const updatedUser = await User.findOne({ userId: validatedUser.userId })
+
+        res.status(200).json({ message: 'earningsOnHold Credits Changed ', credits: updatedUser.credits });
+    } catch (error) {
+        console.error("Error in putearningsOnHoldCredits:", error);
+        res.status(500).json({ error: "Internal server error in putearningsOnHoldCredits" });
+    }
+};
+
 
 const getHistory = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -239,6 +264,7 @@ export default {
     putTripsAsDriver,
     putAvailableCredits,
     putOnHoldCredits,
-    postLogin,,
-    getHistory
+    postLogin,
+    getHistory,
+    putEarningsCredits
 }

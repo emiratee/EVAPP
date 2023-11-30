@@ -144,7 +144,7 @@ const getHistory = async (token: string) => {
     }
 }
 
-const putAvailableCredits = async(amount: String, token: String) => {
+const putAvailableCredits = async (amount: String, token: String) => {
     try {
         const response = await fetch(`${BASE_URL}/user/credits/available`, {
             method: 'PUT',
@@ -159,7 +159,61 @@ const putAvailableCredits = async(amount: String, token: String) => {
     } catch (error) {
         console.error(error);
         throw error;
-    }}
+    }
+}
+
+const putApproveTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/trips/approve`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+const putRejectTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/trips/reject`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putRequestTrip = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/trips/request`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 export {
     getFilteredTrips,
@@ -171,5 +225,8 @@ export {
     postRegister,
     postLogin,
     putAvailableCredits,
-    getHistory
+    getHistory,
+    putApproveTrip,
+    putRejectTrip,
+    putRequestTrip
 }

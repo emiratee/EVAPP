@@ -39,7 +39,12 @@ export type TTrip = {
     car: TCar,
     price: string,
     driverID: string,
-    passengersIDs: string[],
+    passengersIDs: {
+        userId:string,
+        name:string,
+        status:string,
+        seats:number
+    }[],
     successful: boolean
 
 }
@@ -67,7 +72,8 @@ export type TUser = {
     tripsAsPasangerIDs: string[],
     credits: {
         available: string,
-        onHold: string
+        onHold: string,
+        earningsOnHold: string,
     } 
 
 }

@@ -5,9 +5,10 @@ import React, { useEffect, useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TripCardItem } from '../../components/TripCard/TripCard'
 import { useMockData } from '../../utils/mockData';
-import { getHistory } from '../../utils/apiService';
+import { getHistory, putApproveTrip } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect } from 'expo-router';
+import HistoryItem from '../../components/HistoryItem';
 
 type Props = {}
 
@@ -75,36 +76,7 @@ const history = (props: Props) => {
                     renderItem={({ item }) => (
                         <View style={styles.cardButton} >
                             <TripCardItem trip={item.trip} driver={item.driver} />
-                            <View>
-                                {item.trip.passengerIDs.length ? <View>
-                                    {
-                                        item.trip.passengerIDs.map((item, index) => {
-                                            return <View key={index}>
-                                                <View>
-                                                    <Text>{item.name}</Text>
-                                                    <Text>Seats: {item.seats}</Text>
-                                                    <Text>Status: {item.status}</Text>
-                                                </View>
-
-                                                <View style={styles.buttonsContainer}>
-                                                    <TouchableOpacity>
-                                                        <Text>Approve</Text>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity>
-                                                        <Text>Reject</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                        })
-                                    }
-
-
-                                </View> :
-
-                                    <Text>No requests yet!</Text>
-
-                                }
-                            </View>
+                            <HistoryItem trip={item.trip} driver={item.driver}/>
                         </View>
                     )}
                 />
@@ -127,7 +99,6 @@ export default history
 const styles = StyleSheet.create({
     cardButton: {
         width: '100%',
-        height: 175
     },
     disablecardButton: {
         opacity: 0.5,

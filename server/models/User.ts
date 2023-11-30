@@ -74,6 +74,10 @@ const userSchema = new mongoose.Schema({
         onHold: {
             type: String,
             required: true
+        },
+        earningsOnHold: {
+            type: String,
+            required: true
         }
     },
 });
