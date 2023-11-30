@@ -76,8 +76,8 @@ const history = () => {
                                 const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
 
                                 return (
-                                    <TouchableOpacity style={styles.card} onPress={() => {                                        
-                                        user.userId === item.trip.driverID && navigate("BookRequest", { trip: item.trip, passengers });
+                                    <TouchableOpacity style={styles.card} onPress={() => {
+                                        user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers });
                                     }}>
                                         <TripCardItem trip={item.trip} driver={item.driver} />
                                         {user.userId === item.trip.driverID ? (

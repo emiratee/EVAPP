@@ -58,7 +58,6 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                         // putApproveTrip(formData, token);
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
                         const response = await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
-                        if (response) console.log(response)
                     }
                 },
                 {

@@ -64,11 +64,10 @@ const getDriver = async (driverId): Promise<any> => {
         //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
 
         const driver = await User.findOne({ userId: driverId });
-
         //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
-
+        
         const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
-
+    
         return filteredDriver;
     } catch (error) {
         console.error(error);
@@ -249,7 +248,6 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
             const driver = await getDriver(trip.driverID);
             return { trip, driver };
         }));
-        console.log(tripsWithDrivers);
         
 
         res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user

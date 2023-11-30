@@ -4,6 +4,7 @@ import React from 'react';
 import { useNavigation } from 'expo-router';
 
 export const TripCardItem = ({ trip, driver }) => {
+
     return (
         <View style={styles.cardContainer}>
             <View style={styles.locationContainer}>
@@ -45,10 +46,14 @@ export const TripCardItem = ({ trip, driver }) => {
                             <Text style={styles.rating}>{driver.driverRating.averageRating}</Text>
                         </View>
                     </View>
-                    <Image
-                        source={require('../../assets/images/driver.png')}
-                        style={{ height: 50, width: 50, borderRadius: 50 }}
-                    />
+                    {driver.imageUrl ?
+                        <Image
+                            source={{ uri: driver.imageUrl }}
+                            style={{ height: 50, width: 50, borderRadius: 50 }}
+                        />
+                        :
+                        <icons.AntDesign name="user" size={30} color="black" style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
+                    }
                 </View>
             </View>
         </View>
