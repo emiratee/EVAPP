@@ -169,7 +169,6 @@ const Request = ({ trip }) => {
             setSecondClick(!secondClick)
 
         } else {
-            console.log('2nd')
             const formData = {
                 tripId: trip._id,
                 seats: seats
@@ -208,8 +207,7 @@ const Request = ({ trip }) => {
 export default function ModalScreen() {
     const { trip, driver } = useRoute().params;
     const { user } = useAuth();
-    console.log(user);
-    
+
 
     return (
         <View style={styles.container}>
