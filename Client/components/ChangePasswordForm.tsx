@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useAuth } from '../utils/auth';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import * as icons from '@expo/vector-icons';
+import { updateAccount } from '../utils/apiService';
+import { useAuth } from '../utils/auth';
+import { useNavigation } from 'expo-router';
 
-const ChangePasswordForm = () => {
-  const { changePassword } = useAuth();
+const ChangePasswordForm = ({ setVisible }) => {
+  const { token } = useAuth();
+  const navigation = useNavigation(); 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -23,23 +26,44 @@ const ChangePasswordForm = () => {
       setError('Please fill in all fields.');
       return;
     }
-
     // Check if new password matches confirm password
     if (newPassword !== confirmPassword) {
       setError('New password and confirm password must match.');
       return;
     }
-
+    if (currentPassword === newPassword) return setError("Oopsie! You cannot set the new password to your current one")
     try {
       // Call the changePassword function from your authentication utility
-      await changePassword(currentPassword, newPassword);
+      await updateAccount({currentPassword, newPassword}, token);
 
-      // Password changed successfully, you can navigate to a success screen or perform other actions
-      console.log('Password changed successfully!');
+      // Password changed successfully
+      // Password changed successfully
+      Alert.alert(
+        'Success',
+        'Password changed successfully!',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Close the overlay in the parent component
+              setVisible(false);
+
+              // Clear the form
+              setCurrentPassword('');
+              setNewPassword('');
+              setConfirmPassword('');
+
+              // Navigate back to the profile page
+              navigation.navigate('profile');
+            },
+          },
+        ]
+      );
     } catch (error) {
       // Handle password change error (e.g., incorrect current password)
       setError('Failed to change password. Please check your current password.');
     }
+    
   };
 
   const toggleShowPassword = (passwordType: string) => {

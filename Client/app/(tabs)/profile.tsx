@@ -119,7 +119,7 @@ const profile = (props: Props) => {
                         </View>
                     </TouchableOpacity>
                     <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-                        <ChangePasswordForm />
+                        <ChangePasswordForm setVisible={toggleOverlay} />
                     </Overlay>
                 </View>
             </View>
