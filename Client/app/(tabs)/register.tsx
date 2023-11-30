@@ -1,13 +1,14 @@
-import { Alert, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import { Alert, Button, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
 import { Text, View } from '../../components/Themed'
 import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
-
+import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { postRegister } from '../../utils/apiService'
+import { postRegister, uploadImage } from '../../utils/apiService';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 type Props = {}
 
@@ -31,13 +32,55 @@ const register = (props: Props) => {
     const [number, setNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
+    const [image, setImage] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 
     const [errName, setErrName] = useState('');
     const [errEmail, setErrEmail] = useState('');
     const [errNumber, setErrNumber] = useState('');
     const [errPassword, setErrPassword] = useState('');
 
+
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri)
+
+            const resizedImage = await resizeImage(result.assets[0].uri, 1400); // Adjust the desired width as needed
+
+            const uriParts = result.assets[0].uri.split('.');
+            const fileType = uriParts[uriParts.length - 1];
+
+            const formData = new FormData();
+            formData.append('image', {
+                uri: resizedImage.uri,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            });
+
+            const response = await uploadImage(formData)
+            setImageUrl(response.imageUrl);
+
+            // console.log('image URL', await uploadImage(formData))
+        }
+    };
+
+    const resizeImage = async (uri, width) => {
+        const resizedImage = await ImageManipulator.manipulateAsync(
+            uri,
+            [{ resize: { width } }],
+            { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+        );
+
+        return resizedImage;
+    };
 
     const handleSubmit = () => {
 
@@ -49,7 +92,7 @@ const register = (props: Props) => {
 
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
         if (!errName || !errEmail || !errNumber || !errPassword) {
-            const data = { name, email, phoneNumber: number, password }
+            const data = { name, email, phoneNumber: number, password, imageUrl }
             postRegister(data).then(data => {
                 login(data.token)
             })
@@ -62,16 +105,17 @@ const register = (props: Props) => {
         return emailRegex.test(email);
     }
 
-    const handleRegister = () => {
-        if (errName === '' && errEmail === '' && errNumber === '' && errPassword === '') {
-
-        }
-
-    }
-
     return (
         <View style={styles.container}>
-            <icons.AntDesign name="user" size={50} color="black" />
+            <TouchableOpacity style={styles.picture} onPress={pickImage} >
+
+                <View style={styles.picture}>
+                    {/* <Text style={{ alignSelf: 'center' }}>Avatar/Photo</Text> */}
+                    {image ? <Image source={{ uri: image }} style={ styles.picture  } /> : 
+                    <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+                    }
+                </View>
+            </TouchableOpacity>
             <TextInput placeholder='Name'
                 value={name}
                 onChangeText={(text) => { setName(text) }}
@@ -154,5 +198,15 @@ const styles = StyleSheet.create({
         color: 'red',
         marginBottom: 5
     },
-
+    picture: {
+        height: 120,
+        width: 120,
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 80,
+        marginVertical: 10,
+        alignSelf: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
 })

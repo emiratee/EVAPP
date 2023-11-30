@@ -55,6 +55,7 @@ export type TUser = {
     name: string,
     memberSince: string,
     email: string,
+    imageUrl?: string,
     phoneNumber: string,
     password: string,
     cars: TCar[],
