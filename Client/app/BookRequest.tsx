@@ -1,12 +1,15 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { View } from "../components/Themed";
 import * as icons from '@expo/vector-icons';
+import { useAuth } from "../utils/auth";
 
 
-const BookingCard = ({ passenger }) => {
+const BookingCard = ({ trip, passenger, setRequests }) => {
+    const { user, setUser } = useAuth();
+
     const [icon, setIcon] = useState<any>();
     const [statusColor, setStatusColor] = useState('#5aa363');
     const [status, setStatus] = useState(passenger.status);
@@ -31,6 +34,31 @@ const BookingCard = ({ passenger }) => {
         }
     }, [status]);
 
+    const handleSubmit = (type: string): any => {
+        let confirmationMessage = type === 'Approved'
+            ? 'Are you sure you want to accept this offer?'
+            : 'Are you sure you want to reject this offer?';
+
+        Alert.alert(
+            'Confirm',
+            confirmationMessage,
+            [
+                {
+                    text: 'Confirm',
+                    onPress: () => {
+                        setStatus(type);
+                        setRequests((prev: number) => (prev - 1))
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                }
+            ]
+        );
+    }
+
+
     return (
         <View style={request.card}>
             <View style={request.header}>
@@ -49,17 +77,17 @@ const BookingCard = ({ passenger }) => {
             </View>
             {status === 'Pending' ? (
                 <View style={request.footerContainer}>
-                    <TouchableOpacity style={[request.button, { backgroundColor: '#5aa363' }]} onPress={() => { setStatus('Approved') }}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: '#5aa363' }]} onPress={() => { handleSubmit('Approved') }}>
                         <Text style={request.buttonText}>Approve</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[request.button, { backgroundColor: 'red' }]} onPress={() => { setStatus('Rejected') }}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: 'red' }]} onPress={() => { handleSubmit('Rejected') }}>
                         <Text style={request.buttonText}>Reject</Text>
                     </TouchableOpacity>
                 </View>
-            ): (
+            ) : (
                 <View style={request.footerContainer}>
                     <Text style={request.footerText}>
-                        {status === 'Approved' ? 'You accepted this booking offer' : "You rejected this booking offer" }
+                        {status === 'Approved' ? 'You accepted this booking offer' : "You rejected this booking offer"}
                     </Text>
                 </View>
             )}
@@ -68,16 +96,16 @@ const BookingCard = ({ passenger }) => {
 }
 
 export default function ModalScreen() {
-    const { passengers } = useRoute().params;
-    console.log(passengers);
+    const { trip, passengers } = useRoute().params;
+    const [requests, setRequests] = useState(passengers.filter((el: { status: string; }) => el.status === 'Pending').length)
 
     return (
         <View style={request.container}>
-            <Text style={request.title}>{`You have ${passengers.length} booking requests`}</Text>
+            <Text style={request.title}>{`You have ${requests} booking requests`}</Text>
             <FlatList
-                data={passengers.slice().sort((a, b) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))}
+                data={passengers.slice().sort((a: { status: string; }, b: { status: string; }) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))} //Sort so that 'Pending' is always first
                 renderItem={({ item }) => (
-                    <BookingCard passenger={item} />
+                    <BookingCard trip={trip} passenger={item} setRequests={setRequests} />
                 )}
             />
         </View>
