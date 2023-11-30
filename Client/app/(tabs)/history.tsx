@@ -59,25 +59,43 @@ const history = (props: Props) => {
             </Tab>
 
             <TabView value={index} onChange={setIndex} animationType="spring" >
-                <View style={previous.container}>
-                    <FlatList
+                <View style={styles.container}>
+                    {upcomingTrips.length > 0 ? (<FlatList
                         data={upcomingTrips}
                         renderItem={({ item }) => {
                             const requestAmount = item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length
 
                             return (
-                                <TouchableOpacity style={previous.card} onPress={() => {
+                                <TouchableOpacity style={styles.card} onPress={() => {
                                     const passengers = item.trip.passengerIDs;
                                     requestAmount > 0 && navigate('BookRequest', { trip: item.trip, passengers });
                                 }}>
                                     <TripCardItem trip={item.trip} driver={item.driver} />
-                                    <View style={[previous.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                                    <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
                                         <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )
                         }}
-                    />
+                    />) : (
+                        <Text>No upcoming Trips</Text>
+                    )}
+                </View>
+                <View style={styles.container}>
+                    {previousTrips.length > 0 ? (<FlatList
+                        data={previousTrips}
+                        renderItem={({ item }) => {
+                            const requestAmount = item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length
+
+                            return (
+                                <View style={[styles.card, { opacity: 0.5 }]}>
+                                    <TripCardItem trip={item.trip} driver={item.driver} />
+                                </View>
+                            )
+                        }}
+                    />) : (
+                        <Text>No previous Trips</Text>
+                    )}
                 </View>
             </TabView>
         </>
@@ -86,7 +104,7 @@ const history = (props: Props) => {
 
 export default history
 
-const previous = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         backgroundColor: '#f2f2f2',
         position: 'relative',
