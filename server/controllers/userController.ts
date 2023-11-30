@@ -236,7 +236,7 @@ const putEarningsCredits = async (req: Request, res: Response): Promise<any> => 
 
 const getHistory = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         const { user } = validatedUser;
@@ -249,6 +249,8 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
             const driver = await getDriver(trip.driverID);
             return { trip, driver };
         }));
+        console.log(tripsWithDrivers);
+        
 
         res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
     } catch (error) {

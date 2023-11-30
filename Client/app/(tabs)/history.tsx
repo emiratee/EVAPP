@@ -3,45 +3,36 @@ import { Tab, TabView } from '@rneui/themed';
 import { Text, View } from '../../components/Themed'
 import React, { useEffect, useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import { TripCardItem } from '../../components/TripCard/TripCard'
+import TripCard, { TripCardItem } from '../../components/TripCard/TripCard'
 import { useMockData } from '../../utils/mockData';
 import { getHistory, putApproveTrip } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useNavigation } from 'expo-router';
 import HistoryItem from '../../components/HistoryItem';
 
 type Props = {}
 
 const history = (props: Props) => {
-
     const { token } = useAuth();
+    const { navigate } = useNavigation();
 
     const [index, setIndex] = useState(0)
-
     const [upcomingTrips, setUpcomingTrips] = useState([]);
     const [previousTrips, setPreviousTrips] = useState([]);
 
-    const date = Date.now();
+
     useFocusEffect(
         React.useCallback(() => {
-            getHistory(token).then(data => {
+            (async () => {
+                const history = await getHistory(token);
 
-                console.log('data:', data.data);
+                const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date) >= new Date() });
+                const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date) < new Date() });
 
-                let upTrips = data.data.filter(trip => {
-                    return new Date(trip.trip.date) >= new Date()
-                });
+                setUpcomingTrips(upcomingTrips);
+                setPreviousTrips(previousTrips);
 
-
-                let prevTrips = data.data.filter(trip => {
-                    // console.log('prev-date', new Date(trip.trip.date))
-                    return new Date(trip.trip.date) < new Date()
-                });
-
-                setUpcomingTrips(upTrips);
-                setPreviousTrips(prevTrips);
-            }
-            )
+            })();
         }, [])
     );
 
@@ -69,26 +60,25 @@ const history = (props: Props) => {
                 />
             </Tab>
 
-            <TabView value={index} onChange={setIndex} animationType="spring">
-
-                <FlatList
-                    data={upcomingTrips}
-                    renderItem={({ item }) => (
-                        <View style={styles.cardButton} >
-                            <TripCardItem trip={item.trip} driver={item.driver} />
-                            <HistoryItem trip={item.trip} driver={item.driver}/>
-                        </View>
-                    )}
-                />
-
-                <FlatList
-                    data={previousTrips}
-                    renderItem={({ item }) => (
-                        <View style={[!item.succesful ? styles.disablecardButton : styles.cardButton]} >
-                            <TripCardItem trip={item.trip} driver={item.driver} />
-                        </View>
-                    )}
-                />
+            <TabView value={index} onChange={setIndex} animationType="spring" >
+                <View style={previous.container}>
+                    <FlatList
+                        data={upcomingTrips}
+                        renderItem={({ item }) => {
+                            console.log(item)
+                            return (
+                                <TouchableOpacity style={previous.card} onPress={() => {
+                                    navigate('BookRequest')
+                                }}>
+                                    <TripCardItem trip={item.trip} driver={item.driver} />
+                                    <View style={[previous.pendingContainer, { backgroundColor: item.trip.passengerIDs.length === 0 ? '#000' : '#5aa363' }]}>
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.length} pending requests`}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        }}
+                    />
+                </View>
             </TabView>
         </>
     )
@@ -96,16 +86,32 @@ const history = (props: Props) => {
 
 export default history
 
-const styles = StyleSheet.create({
-    cardButton: {
+const previous = StyleSheet.create({
+    container: {
+        backgroundColor: '#f2f2f2',
+        position: 'relative',
+        height: '100%',
         width: '100%',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
     },
-    disablecardButton: {
-        opacity: 0.5,
-        width: '100%',
-        height: 175
+    card: {
+        minWidth: '95%',
+        backgroundColor: '#f2f2f2',
     },
-    buttonsContainer: {
-        flexDirection: 'row',
-    }
+    pendingContainer: {
+        position: 'absolute',
+        top: 15,
+        right: 100,
+        flex: 1,
+        backgroundColor: '#000',
+        borderColor: 'transparent',
+        borderWidth: 1,
+        borderRadius: 12,
+        height: 40,
+        justifyContent: 'center',
+        paddingHorizontal: 10
+    },
 })

@@ -56,6 +56,7 @@ function RootLayoutNav() {
                         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
+                        <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
                     </Stack>
                 </ThemeProvider>
             </MockDataProvider>

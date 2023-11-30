@@ -87,11 +87,12 @@ export default function TabLayout() {
             />
             
 
-{/* These on top are hidden from navbar, saved to be as reference for something for now.  */}
+
+            {/* These on top are hidden from navbar, saved to be as reference for something for now.  */}
 
 
 
-            
+
             <Tabs.Screen
                 name="search"
                 options={{
