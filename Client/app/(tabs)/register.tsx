@@ -105,63 +105,92 @@ const register = (props: Props) => {
         return emailRegex.test(email);
     }
 
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const toggleShowPassword = (passwordType: string) => {
+        switch (passwordType) {
+          case 'password':
+            setShowPassword(!showPassword);
+            break;
+          case 'confirm':
+            setShowConfirmPassword(!showConfirmPassword);
+            break;
+          default:
+            break;
+        }
+      };
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.picture} onPress={pickImage} >
 
                 <View style={styles.picture}>
                     {/* <Text style={{ alignSelf: 'center' }}>Avatar/Photo</Text> */}
-                    {image ? <Image source={{ uri: image }} style={ styles.picture  } /> : 
-                    <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+                    {image ? <Image source={{ uri: image }} style={styles.picture} /> :
+                        <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
                     }
                 </View>
             </TouchableOpacity>
-            <TextInput placeholder='Name'
-                value={name}
-                onChangeText={(text) => { setName(text) }}
-                style={[styles.input, errName != '' && styles.errorInput]}
-            ></TextInput>
-            {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
+            <View style={styles.inputContainer}>
+                <TextInput placeholder='Name'
+                    value={name}
+                    onChangeText={(text) => { setName(text) }}
+                    style={[styles.input, errName != '' && styles.errorInput]}
+                ></TextInput>
+            </View>
+                {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
+            <View style={styles.inputContainer}>
+                <TextInput placeholder='E-mail'
+                    value={email}
+                    keyboardType='email-address'
+                    onChangeText={(text) => { setEmail(text) }}
+                    style={[styles.input, errEmail != '' && styles.errorInput]}
+                ></TextInput>
 
-            <TextInput placeholder='E-mail'
-                value={email}
-                keyboardType='email-address'
-                onChangeText={(text) => { setEmail(text) }}
-                style={[styles.input, errEmail != '' && styles.errorInput]}
-            ></TextInput>
-            {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+            </View>
+                {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+            <View style={styles.inputContainer}>
+                <TextInput placeholder='Mobile Number (++)'
+                    value={number}
+                    keyboardType='phone-pad'
+                    onChangeText={(text) => { setNumber(text) }}
+                    style={[styles.input, errNumber != '' && styles.errorInput]}
+                ></TextInput>
 
-            <TextInput placeholder='Mobile Number (++)'
-                value={number}
-                keyboardType='phone-pad'
-                onChangeText={(text) => { setNumber(text) }}
-                style={[styles.input, errNumber != '' && styles.errorInput]}
-            ></TextInput>
-            {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
+            </View>
+                {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
+            <View style={styles.inputContainer}>
 
-            <TextInput placeholder='Password'
-                value={password}
-                onChangeText={(text) => {
-                    setErrPassword('');
-                    setPassword(text)
-                }}
-                style={styles.input}
-                secureTextEntry={true}
-            ></TextInput>
+                <TextInput placeholder='Password'
+                    value={password}
+                    onChangeText={(text) => {
+                        setErrPassword('');
+                        setPassword(text)
+                    }}
+                    style={styles.input}
+                    secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => toggleShowPassword('password')}>
+          <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+        </TouchableOpacity>
+            </View>
 
-            <TextInput placeholder='Confirm Password'
-                value={confirmPassword}
-                onChangeText={(text) => {
-                    setConfirmPassword(text);
-                    setErrPassword(text === password ? '' : 'Passwords do not match');
-                }}
-                style={styles.input}
-                secureTextEntry={true}
-            ></TextInput>
+            <View style={styles.inputContainer}>
+                <TextInput placeholder='Confirm Password'
+                    value={confirmPassword}
+                    onChangeText={(text) => {
+                        setConfirmPassword(text);
+                        setErrPassword(text === password ? '' : 'Passwords do not match');
+                    }}
+                    style={styles.input}
+                    secureTextEntry={!showConfirmPassword}
+                />
+                  <TouchableOpacity onPress={() => toggleShowPassword('confirm')}>
+          <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+        </TouchableOpacity>
+            </View>
             {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
-
             <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-                <Text>Register</Text>
+                <Text style={{ color: '#fff' }} >Register</Text>
             </TouchableOpacity>
 
             <TouchableOpacity >
@@ -176,20 +205,28 @@ export default register
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10
+        padding: 10,
+        flex: 1
     },
     input: {
+        flex: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        backgroundColor: '#ededed',
+        fontSize: 16,
+        marginBottom: 15,
+        zIndex: 1,
         height: 50,
-        marginTop: 12,
-        borderWidth: 1,
-        padding: 10,
-        borderColor: 'black',
-        borderRadius: 10
+        top: 8,
+
     },
     button: {
+        backgroundColor: '#000',
+        borderRadius: 25,
+        padding: 15,
         alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
+        marginTop: 10,
     },
     errorInput: {
         borderColor: 'red',
@@ -208,5 +245,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'column',
         justifyContent: 'center',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 50,
+        backgroundColor: '#ededed',
+        borderRadius: 10,
+        marginBottom: 15,
     },
 })
