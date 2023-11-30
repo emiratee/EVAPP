@@ -25,6 +25,7 @@ router.post('/user/image/upload', upload.single('image'), userController.uploadI
 //User account (Setting etc.)
 router.post('/user/account/register', userController.postRegister);
 router.post('/user/account/login', userController.postLogin);
+router.put('/user/account/update', userController.putUpdateAccount);
 
 //User (get certain information about the user directly)
 router.get('/user/history', userController.getHistory)

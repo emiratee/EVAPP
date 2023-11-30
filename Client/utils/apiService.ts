@@ -232,6 +232,27 @@ const uploadImage = async (data: any) => {
     }
 }
 
+const updateAccount = async (data, token: string) => {
+    try {
+        const { currentPassword, newPassword} = data;
+        const response = await fetch(`${BASE_URL}/user/account/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ 
+                currentPassword,
+                newPassword
+             })
+        })
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export {
     getFilteredTrips,
     getDriver,
@@ -246,5 +267,6 @@ export {
     putApproveTrip,
     putRejectTrip,
     putRequestTrip,
-    uploadImage
+    uploadImage,
+    updateAccount
 }

@@ -285,6 +285,37 @@ async function uploadImage(req: Request, res: Response): Promise<void> {
     }
 }
 
+async function putUpdateAccount(req: Request, res: Response): Promise<any> {
+    //currently only for password
+    try {
+        const { currentPassword, newPassword } = req.body;
+        // validate if required parameters are provided
+        if (!currentPassword ||!newPassword) {
+            return res.status(400).json({error: 'Required parameters not provided correctly'});
+        }
+
+        const validatedUser = await validateUser(req);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+
+        const { user } = validatedUser;
+
+        // Check if the current password is correct
+        const validPassword = await bcrypt.compare(currentPassword, user.password);
+        if (!validPassword) {
+            return res.status(401).json({error: 'Current password is incorrect'});
+        }
+        // hash and update the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.updateOne({ userId: user.userId }, { $set: { password: hashedPassword } });
+        res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+        console.error("Error in updatePassword:", error);
+        res.status(500).json({ error: "Internal server error in updatePassword" });
+    }
+}
+
+
+
 export default {
     postRegister,
     getDriver,
@@ -296,5 +327,6 @@ export default {
     postLogin,
     getHistory,
     putEarningsCredits,
+    putUpdateAccount,
     uploadImage
 }
