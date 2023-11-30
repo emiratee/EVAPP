@@ -12,7 +12,7 @@ const tripSchema = new mongoose.Schema({
         },
         city: {
             type: String,
-            required: true   
+            required: true
         },
         address: {
             type: String,
@@ -30,7 +30,7 @@ const tripSchema = new mongoose.Schema({
         },
         city: {
             type: String,
-            required: true   
+            required: true
         },
         address: {
             type: String,
@@ -97,10 +97,28 @@ const tripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    passengerIDs: {
-        type: Array,
-        required: true
-    },
+    passengerIDs:
+        [
+            {
+
+                userId: {
+                    type: String,
+                    required: true
+                },
+                name: {
+                    type: String,
+                    required: true
+                },
+                status: {
+                    type: String,
+                    required: true
+                },
+                seats: {
+                    type: Number,
+                    required: true
+                }
+            }
+        ],
     successful: {
         type: Boolean,
         required: true

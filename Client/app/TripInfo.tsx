@@ -7,6 +7,7 @@ import * as icons from '@expo/vector-icons';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
 import { useAuth } from '../utils/auth';
+import { putRequestTrip } from '../utils/apiService';
 
 
 const LocationInformation = () => {
@@ -132,7 +133,7 @@ const DriverInformation = ({ trip, driver }) => {
 }
 
 const Request = ({ trip }) => {
-    const { user } = useAuth()
+    const { user, token } = useAuth()
 
     const [price, setPrice] = useState(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState(true);
@@ -153,12 +154,27 @@ const Request = ({ trip }) => {
     }
 
 
+
+    //TODO refactor button to be 2 diff buttons
+    const [secondClick, setSecondClick] = useState(false)
+
+
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
+        if (!secondClick) {
+            setHasEnoughCredits(parseFloat(user.credits.available) >= price);
+            setIsPickerVisible(false);
+            setText('Send booking request');
+            setSecondClick(!secondClick)
 
-        setHasEnoughCredits(parseFloat(user.credits.available) >= price);
-        setIsPickerVisible(false);
-        setText('Send booking request');
+        } else {
+            console.log('2nd')
+            const formData = {
+                tripId: trip._id,
+                seats: seats
+            }
+            putRequestTrip(formData, token)
+        }
     }
 
     return (
