@@ -217,9 +217,6 @@ const putRequestTrip = async (data, token: string) => {
 
 const uploadImage = async (data: any) => {
     try {
-
-
-        console.log("DAta", data)
         const response = await fetch(`${BASE_URL}/user/image/upload`, {
             method: 'POST',
             body: data,

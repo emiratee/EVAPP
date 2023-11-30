@@ -77,7 +77,7 @@ const history = () => {
 
                                 return (
                                     <TouchableOpacity style={styles.card} onPress={() => {
-                                        navigate('BookRequest', { trip: item.trip, passengers });
+                                        user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers });
                                     }}>
                                         <TripCardItem trip={item.trip} driver={item.driver} />
                                         {user.userId === item.trip.driverID ? (
