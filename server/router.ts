@@ -2,6 +2,8 @@ import { Router } from "express";
 const router = Router();
 import userController from './controllers/userController.js';
 import tripController from './controllers/tripController.js';
+import multer from "multer";
+const upload = multer({ dest: "uploads/" });
 
 //Trips
 router.post('/trip/create', tripController.postCreate);
@@ -16,7 +18,8 @@ router.put('/user/trips/approve', tripController.putApprovePassenger);
 router.put('/user/trips/reject', tripController.putRejectPassenger);
 
 
-
+//image upload 
+router.post('/user/image/upload', upload.single('image'), userController.uploadImage);
 
 
 //User account (Setting etc.)
