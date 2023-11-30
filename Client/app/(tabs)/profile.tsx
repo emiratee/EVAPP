@@ -40,20 +40,34 @@ const profile = (props: Props) => {
         <Text style={{alignSelf: 'center'}}>Avatar/Photo</Text>
       </View>
       <View style={styles.container}>
-        <Text style={[styles.userName, {textAlign: 'center'}]}>{user.name}</Text>
-        <Text style={[styles.userStatus, {textAlign: 'center', marginBottom: 10}]}>Hola amig@s!</Text>
+        <Text style={styles.userName}>{user.name}</Text>
+        <Text style={styles.userStatus}>"Hola amig@s!"</Text>
+
+        {/* CREDITS INFO */}
+        <View style={styles.section}>
+          <View style={{flexDirection: 'row', justifyContent:'space-between', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '##ededed'}}>
+            <Text style={styles.sectionTitle}>Current Credit Balance: </Text>
+            <Text style={[styles.sectionTitle, {paddingRight: 50, fontWeight: '400'}]}>{parseFloat(user.credits.available).toFixed(2)}€</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('addCredits')}>
+            <View style={[styles.sectionInfo, {paddingTop: 10}]}>
+              <Text style={styles.sectionInfoText}>Add more credits</Text>
+              <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black"/>
+            </View>
+          </TouchableOpacity>
+        </View>
 
         {/* TRAVEL EXPERIENCE */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Travel Experience</Text>
           <View style={styles.sectionInfo}>
-            <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
+            <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center', paddingTop: 5,}}>
               <Text style={[styles.sectionInfoText, {fontWeight: '600'}]}>As Passenger</Text>
               <Text style={styles.sectionInfoText}>{parseFloat(user.passengerRating.totalReviews)} Reviews</Text>
               <RatingStars rating={parseFloat(user.passengerRating.averageRating)}/>
             </View>
 
-            <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center'}}>
+            <View style={{flexDirection: 'column', justifyContent:'center', alignItems: 'center', paddingTop: 5,}}>
               <Text style={[styles.sectionInfoText, {fontWeight: '600'}]}>As Driver</Text>
               <Text style={styles.sectionInfoText}>{parseFloat(user.driverRating.totalReviews)} Reviews</Text>
               <RatingStars rating={parseFloat(user.driverRating.averageRating)}/>
@@ -135,6 +149,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 60,
     marginVertical: 20,
     padding: 15,
+    marginBottom: 100,
   },
   buttonText: {
     textAlign: 'center',
@@ -156,9 +171,13 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   userStatus: {
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    fontSize: 16,
+    padding: 5,
+    textAlign: 'center',
   },
   sectionTitle: {
     fontSize: 18,
@@ -184,6 +203,6 @@ const styles = StyleSheet.create({
   },
   sectionInfoText: {
     fontSize: 16,
-  }
+  },
 
-})
+});

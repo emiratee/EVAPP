@@ -42,7 +42,6 @@ const ChangePasswordForm = () => {
     }
   };
 
-
   const toggleShowPassword = (passwordType: string) => {
     switch (passwordType) {
       case 'current':
@@ -135,6 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 15,
     alignItems: 'center',
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
