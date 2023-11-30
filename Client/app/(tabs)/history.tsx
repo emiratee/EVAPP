@@ -47,7 +47,7 @@ const history = (props: Props) => {
                 variant="primary"
             >
                 <Tab.Item
-                    title="Scheduled"
+                    title="Upcoming"
                     titleStyle={{ fontSize: 12 }}
                     icon={<icons.MaterialIcons name="schedule" size={24} color="white" />}
                 />
