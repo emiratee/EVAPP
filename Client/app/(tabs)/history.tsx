@@ -9,13 +9,22 @@ import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
 
 const history = () => {
-    const { token, user } = useAuth();
+    const { token, user, isAuthenticated } = useAuth();
     const { navigate } = useNavigation();
 
     const [index, setIndex] = useState(0)
     const [upcomingTrips, setUpcomingTrips] = useState([]);
     const [previousTrips, setPreviousTrips] = useState([]);
-    const [passengerColor, setPassengerColor] = useState('#e29257')
+
+    const navigation = useNavigation();
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!isAuthenticated) {
+                navigation.navigate('login');
+            }
+        }, [isAuthenticated])
+    );
 
 
     useFocusEffect(
@@ -35,7 +44,7 @@ const history = () => {
 
 
     return (
-        <>
+        user && <>
             <Tab
                 value={index}
                 onChange={(e) => setIndex(e)}
