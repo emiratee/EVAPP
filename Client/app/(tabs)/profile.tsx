@@ -1,19 +1,23 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React from 'react'
-import { useFocusEffect, useNavigation } from 'expo-router';
+import React, { useState } from 'react'
 import { useAuth } from '../../utils/auth';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { useFocusEffect, useNavigation } from 'expo-router';
+import { Overlay } from '@rneui/themed';
 import moment from 'moment';
 import * as icons from '@expo/vector-icons';
 import RatingStars  from '../../components/RatingStars';
+import ChangePasswordForm from '../../components/ChangePasswordForm';
 
 
 type Props = {}
 
 
-const t5 = (props: Props) => {
+const profile = (props: Props) => {
+  const [visible, setVisible] = useState(false);
+
   const { isAuthenticated, logout, user } = useAuth();
   const navigation = useNavigation();
+
   useFocusEffect(
     React.useCallback(() => {
       if (!isAuthenticated) {
@@ -26,9 +30,12 @@ const t5 = (props: Props) => {
     logout();
   }
 
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   return (
     <ScrollView style={styles.scrollContainer}>
-
       <View style={styles.picture}>
         <Text style={{alignSelf: 'center'}}>Avatar/Photo</Text>
       </View>
@@ -53,7 +60,6 @@ const t5 = (props: Props) => {
             </View>
           </View>
         </View>
-
 
         {/* ACCOUNT INFO */}
         <View style={styles.section}>
@@ -88,16 +94,21 @@ const t5 = (props: Props) => {
         {/* PRIVACY */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Privacy</Text>
-          <View style={styles.sectionInfo}>
-            <Text style={styles.sectionInfoText}>Change password</Text>
-            <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />
-          </View>
+          <TouchableOpacity
+          onPress={toggleOverlay}
+          >
+            <View style={styles.sectionInfo}>
+                <Text style={styles.sectionInfoText}>Change password</Text>
+                <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black"/>
+            </View>
+          </TouchableOpacity>
+          <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+            <ChangePasswordForm/>
+          </Overlay>
         </View>
-      
       </View>
 
-
-
+      {/* LOGOUT */}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
@@ -105,7 +116,7 @@ const t5 = (props: Props) => {
   )
 }
 
-export default t5
+export default profile;
 
 const styles = StyleSheet.create({
   scrollContainer: {
