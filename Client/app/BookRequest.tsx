@@ -27,7 +27,7 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                 break;
             case 'Rejected':
                 setIcon(<icons.FontAwesome5 name="exclamation-circle" size={20} color="black" />)
-                setStatusColor('red')
+                setStatusColor('#ff0000')
                 break;
             default:
                 setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);

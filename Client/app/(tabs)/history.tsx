@@ -8,15 +8,14 @@ import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
 
-type Props = {}
-
-const history = (props: Props) => {
-    const { token } = useAuth();
+const history = () => {
+    const { token, user } = useAuth();
     const { navigate } = useNavigation();
 
     const [index, setIndex] = useState(0)
     const [upcomingTrips, setUpcomingTrips] = useState([]);
     const [previousTrips, setPreviousTrips] = useState([]);
+    const [passengerColor, setPassengerColor] = useState('#e29257')
 
 
     useFocusEffect(
@@ -60,39 +59,54 @@ const history = (props: Props) => {
 
             <TabView value={index} onChange={setIndex} animationType="spring" >
                 <View style={styles.container}>
-                    {upcomingTrips.length > 0 ? (<FlatList
-                        data={upcomingTrips}
-                        renderItem={({ item }) => {
-                            const requestAmount = item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length
+                    {upcomingTrips.length > 0 ? (
+                        <FlatList
+                            data={upcomingTrips}
+                            renderItem={({ item }) => {
+                                const passengers = item.trip.passengerIDs;
+                                const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
 
-                            return (
-                                <TouchableOpacity style={styles.card} onPress={() => {
-                                    const passengers = item.trip.passengerIDs;
-                                    requestAmount > 0 && navigate('BookRequest', { trip: item.trip, passengers });
-                                }}>
-                                    <TripCardItem trip={item.trip} driver={item.driver} />
-                                    <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        }}
-                    />) : (
+                                return (
+                                    <TouchableOpacity style={styles.card} onPress={() => {
+                                        requestAmount > 0 && navigate('BookRequest', { trip: item.trip, passengers });
+                                    }}>
+                                        <TripCardItem trip={item.trip} driver={item.driver} />
+                                        {user.userId === item.trip.driverID ? (
+                                            <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                                                <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
+                                            </View>
+                                        ) : (
+                                            <>
+                                                {passengers.map(passenger => (
+                                                    passenger.userId === user.userId && (
+                                                        <View key={passenger.userId} style={[styles.pendingContainer, {
+                                                            backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
+                                                                passenger.status === 'Pending' ? '#e29257' : '#ff0000'
+                                                        }]}>
+                                                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                                                        </View>
+                                                    )
+                                                ))}
+                                            </>
+                                        )}
+                                    </TouchableOpacity>
+                                );
+                            }}
+                        />
+                    ) : (
                         <Text>No upcoming Trips</Text>
                     )}
                 </View>
+
                 <View style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
                         data={previousTrips}
-                        renderItem={({ item }) => {
-                            const requestAmount = item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length
-
-                            return (
-                                <View style={[styles.card, { opacity: 0.5 }]}>
-                                    <TripCardItem trip={item.trip} driver={item.driver} />
-                                </View>
-                            )
-                        }}
+                        renderItem={({ item }) => (
+                            <View style={[styles.card, { opacity: 0.5 }]}>
+                                <TripCardItem trip={item.trip} driver={item.driver} />
+                            </View>
+                        )
+                        }
                     />) : (
                         <Text>No previous Trips</Text>
                     )}
@@ -122,7 +136,7 @@ const styles = StyleSheet.create({
     pendingContainer: {
         position: 'absolute',
         top: 15,
-        right: 100,
+        right: 105,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',
