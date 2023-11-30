@@ -63,7 +63,7 @@ const history = (props: Props) => {
                     <FlatList
                         data={upcomingTrips}
                         renderItem={({ item }) => {
-                            const requestAmount = item.trip.passengerIDs.length;
+                            const requestAmount = item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length
 
                             return (
                                 <TouchableOpacity style={previous.card} onPress={() => {
@@ -72,7 +72,7 @@ const history = (props: Props) => {
                                 }}>
                                     <TripCardItem trip={item.trip} driver={item.driver} />
                                     <View style={[previous.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
-                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.filter(passenger => passenger.status === 'Pending').length} pending requests`}</Text>
+                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )

@@ -64,7 +64,9 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
         //onhold credits from passenger deduct  WORKS
         //passengers credits goes to driver creits(onhold) WORKS
 
-        const { tripId, passengerId, totalCredits } = req.body.data
+        const { tripId, passengerId, totalCredits } = req.body.data;
+        console.log(tripId, passengerId, totalCredits);
+        
 
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.userId": passengerId },
