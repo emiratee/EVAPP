@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import { validateUser } from '../utils/userUtils.js';
 import Car from '../models/Car.js';
 import Trip from '../models/Trip.js';
+import { v2 as cloudinary } from 'cloudinary'
 
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
@@ -15,7 +16,7 @@ dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 const SECRET_KEY = process.env.SECRET_KEY!;
 const postRegister = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { name, email, phoneNumber, password } = req.body;
+        const { name, email, phoneNumber, password, imageUrl } = req.body;
         if (!name || !email || !phoneNumber || !password) return res.status(400).json({ error: "Credentials not provided correctly" });
 
         const user = await User.findOne({ email });
@@ -25,6 +26,7 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
         await User.insertMany({
             userId,
             name,
+            imageUrl,
             password: await bcrypt.hash(password, 10),
             email: email.toLowerCase(),
             phoneNumber,
@@ -256,6 +258,32 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
     }
 };
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+async function uploadImage(req: Request, res: Response): Promise<void> {
+    try {
+        console.log("Received image upload request");
+        if (!req.file) {
+            res.status(400).json({ error: "No image uploaded" });
+        } else {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                quality: "auto",
+                fetch_format: "auto",
+            })
+            const imageUrl = result.url;
+            console.log('image here:', imageUrl)
+            res.json({ imageUrl });
+        }
+    } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+        res.status(500).json({ error: "Failed to upload image" });
+    }
+}
+
 export default {
     postRegister,
     getDriver,
@@ -266,5 +294,6 @@ export default {
     putOnHoldCredits,
     postLogin,
     getHistory,
-    putEarningsCredits
+    putEarningsCredits,
+    uploadImage
 }

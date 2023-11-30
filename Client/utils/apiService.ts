@@ -77,7 +77,7 @@ const addNewTrip = async (data, token: string) => {
 
 const putTripsAsDriver = async (data, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/user/driver`, {
+        const response = await fetch(`${BASE_URL}/user/trips/driver`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
@@ -215,6 +215,23 @@ const putRequestTrip = async (data, token: string) => {
     }
 }
 
+const uploadImage = async (data: any) => {
+    try {
+
+
+        console.log("DAta", data)
+        const response = await fetch(`${BASE_URL}/user/image/upload`, {
+            method: 'POST',
+            body: data,
+        });
+        checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export {
     getFilteredTrips,
     getDriver,
@@ -228,5 +245,6 @@ export {
     getHistory,
     putApproveTrip,
     putRejectTrip,
-    putRequestTrip
+    putRequestTrip,
+    uploadImage
 }
