@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { Alert, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
@@ -25,8 +25,6 @@ const register = (props: Props) => {
         }, [isAuthenticated])
     );
 
-
-
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [number, setNumber] = useState('');
@@ -39,10 +37,9 @@ const register = (props: Props) => {
     const [errEmail, setErrEmail] = useState('');
     const [errNumber, setErrNumber] = useState('');
     const [errPassword, setErrPassword] = useState('');
-
-
+    const [isLoading, setIsLoading] = useState(false)
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
+        setIsLoading(true)
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -53,7 +50,7 @@ const register = (props: Props) => {
         if (!result.canceled) {
             setImage(result.assets[0].uri)
 
-            const resizedImage = await resizeImage(result.assets[0].uri, 1400); // Adjust the desired width as needed
+            const resizedImage = await resizeImage(result.assets[0].uri, 1400);
 
             const uriParts = result.assets[0].uri.split('.');
             const fileType = uriParts[uriParts.length - 1];
@@ -67,9 +64,11 @@ const register = (props: Props) => {
 
             const response = await uploadImage(formData)
             setImageUrl(response.imageUrl);
+            setIsLoading(false)
 
-            // console.log('image URL', await uploadImage(formData))
+
         }
+        setIsLoading(false)
     };
 
     const resizeImage = async (uri, width) => {
@@ -91,7 +90,9 @@ const register = (props: Props) => {
         );
 
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
-        if (!errName || !errEmail || !errNumber || !errPassword) {
+
+
+        if (!errName && !errEmail && !errNumber && !errPassword) {
             const data = { name, email, phoneNumber: number, password, imageUrl }
             postRegister(data).then(data => {
                 login(data.token)
@@ -107,26 +108,16 @@ const register = (props: Props) => {
 
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const toggleShowPassword = (passwordType: string) => {
-        switch (passwordType) {
-          case 'password':
-            setShowPassword(!showPassword);
-            break;
-          case 'confirm':
-            setShowConfirmPassword(!showConfirmPassword);
-            break;
-          default:
-            break;
-        }
-      };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.picture} onPress={pickImage} >
-
                 <View style={styles.picture}>
-                    {/* <Text style={{ alignSelf: 'center' }}>Avatar/Photo</Text> */}
-                    {image ? <Image source={{ uri: image }} style={styles.picture} /> :
-                        <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+                    {
+                        isLoading ? <ActivityIndicator size={'large'} /> :
+                            image ? <Image source={{ uri: image }} style={styles.picture} /> :
+                                <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+
                     }
                 </View>
             </TouchableOpacity>
@@ -137,7 +128,7 @@ const register = (props: Props) => {
                     style={[styles.input, errName != '' && styles.errorInput]}
                 ></TextInput>
             </View>
-                {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
+            {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
             <View style={styles.inputContainer}>
                 <TextInput placeholder='E-mail'
                     value={email}
@@ -147,7 +138,7 @@ const register = (props: Props) => {
                 ></TextInput>
 
             </View>
-                {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+            {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
             <View style={styles.inputContainer}>
                 <TextInput placeholder='Mobile Number (++)'
                     value={number}
@@ -157,7 +148,7 @@ const register = (props: Props) => {
                 ></TextInput>
 
             </View>
-                {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
+            {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
             <View style={styles.inputContainer}>
 
                 <TextInput placeholder='Password'
@@ -168,10 +159,11 @@ const register = (props: Props) => {
                     }}
                     style={styles.input}
                     secureTextEntry={!showPassword}
+                    textContentType="password"
                 />
-                <TouchableOpacity onPress={() => toggleShowPassword('password')}>
-          <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
-        </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                    <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                </TouchableOpacity>
             </View>
 
             <View style={styles.inputContainer}>
@@ -183,17 +175,22 @@ const register = (props: Props) => {
                     }}
                     style={styles.input}
                     secureTextEntry={!showConfirmPassword}
+                    textContentType="password"
                 />
-                  <TouchableOpacity onPress={() => toggleShowPassword('confirm')}>
-          <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
-        </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                    <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                </TouchableOpacity>
             </View>
             {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} >
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleSubmit}
+                disabled={isLoading}
+            >
                 <Text style={{ color: '#fff' }} >Register</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity >
+            <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
                 <Link href={'/(tabs)/login'}>already have an account?</Link>
             </TouchableOpacity>
 
@@ -205,7 +202,7 @@ export default register
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: 30,
         flex: 1
     },
     input: {
