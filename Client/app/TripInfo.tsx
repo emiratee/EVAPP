@@ -8,6 +8,7 @@ import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
 import { useAuth } from '../utils/auth';
 import { putRequestTrip } from '../utils/apiService';
+import { userInfo } from 'os';
 
 
 const LocationInformation = () => {
@@ -206,6 +207,9 @@ const Request = ({ trip }) => {
 }
 export default function ModalScreen() {
     const { trip, driver } = useRoute().params;
+    const { user } = useAuth();
+    console.log(user);
+    
 
     return (
         <View style={styles.container}>
@@ -220,7 +224,7 @@ export default function ModalScreen() {
                 keyExtractor={(item, index) => index.toString()}
                 style={{ width: '100%', height: '100%' }}
             />
-            <Request trip={trip} />
+            {user.userId !== trip.driverID && <Request trip={trip} />}
         </View>
     );
 }

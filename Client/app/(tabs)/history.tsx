@@ -1,53 +1,50 @@
 import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
 import { Text, View } from '../../components/Themed'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TripCardItem } from '../../components/TripCard/TripCard'
-import { useMockData } from '../../utils/mockData';
-import { getHistory, putApproveTrip } from '../../utils/apiService';
+import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
-import { useFocusEffect } from 'expo-router';
-import HistoryItem from '../../components/HistoryItem';
+import { useFocusEffect, useNavigation } from 'expo-router';
 
-type Props = {}
-
-const history = (props: Props) => {
-
-    const { token } = useAuth();
+const history = () => {
+    const { token, user, isAuthenticated } = useAuth();
+    const { navigate } = useNavigation();
 
     const [index, setIndex] = useState(0)
-
     const [upcomingTrips, setUpcomingTrips] = useState([]);
     const [previousTrips, setPreviousTrips] = useState([]);
 
-    const date = Date.now();
+    const navigation = useNavigation();
+
     useFocusEffect(
         React.useCallback(() => {
-            getHistory(token).then(data => {
-
-                console.log('data:', data.data);
-
-                let upTrips = data.data.filter(trip => {
-                    return new Date(trip.trip.date) >= new Date()
-                });
-
-
-                let prevTrips = data.data.filter(trip => {
-                    // console.log('prev-date', new Date(trip.trip.date))
-                    return new Date(trip.trip.date) < new Date()
-                });
-
-                setUpcomingTrips(upTrips);
-                setPreviousTrips(prevTrips);
+            if (!isAuthenticated) {
+                navigation.navigate('login');
             }
-            )
+        }, [isAuthenticated])
+    );
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+            (async () => {
+                const history = await getHistory(token);
+
+                const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date) >= new Date() });
+                const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date) < new Date() });
+
+                setUpcomingTrips(upcomingTrips);
+                setPreviousTrips(previousTrips);
+
+            })();
         }, [])
     );
 
 
     return (
-        <>
+        user && <>
             <Tab
                 value={index}
                 onChange={(e) => setIndex(e)}
@@ -58,7 +55,7 @@ const history = (props: Props) => {
                 variant="primary"
             >
                 <Tab.Item
-                    title="Scheduled"
+                    title="Upcoming"
                     titleStyle={{ fontSize: 12 }}
                     icon={<icons.MaterialIcons name="schedule" size={24} color="white" />}
                 />
@@ -69,26 +66,60 @@ const history = (props: Props) => {
                 />
             </Tab>
 
-            <TabView value={index} onChange={setIndex} animationType="spring">
+            <TabView value={index} onChange={setIndex} animationType="spring" >
+                <View style={styles.container}>
+                    {upcomingTrips.length > 0 ? (
+                        <FlatList
+                            data={upcomingTrips}
+                            renderItem={({ item }) => {
+                                const passengers = item.trip.passengerIDs;
+                                const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
 
-                <FlatList
-                    data={upcomingTrips}
-                    renderItem={({ item }) => (
-                        <View style={styles.cardButton} >
-                            <TripCardItem trip={item.trip} driver={item.driver} />
-                            <HistoryItem trip={item.trip} driver={item.driver}/>
-                        </View>
+                                return (
+                                    <TouchableOpacity style={styles.card} onPress={() => {
+                                        requestAmount > 0 && navigate('BookRequest', { trip: item.trip, passengers });
+                                    }}>
+                                        <TripCardItem trip={item.trip} driver={item.driver} />
+                                        {user.userId === item.trip.driverID ? (
+                                            <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                                                <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
+                                            </View>
+                                        ) : (
+                                            <>
+                                                {passengers.map(passenger => (
+                                                    passenger.userId === user.userId && (
+                                                        <View key={passenger.userId} style={[styles.pendingContainer, {
+                                                            backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
+                                                                passenger.status === 'Pending' ? '#e29257' : '#ff0000'
+                                                        }]}>
+                                                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                                                        </View>
+                                                    )
+                                                ))}
+                                            </>
+                                        )}
+                                    </TouchableOpacity>
+                                );
+                            }}
+                        />
+                    ) : (
+                        <Text>No upcoming Trips</Text>
                     )}
-                />
+                </View>
 
-                <FlatList
-                    data={previousTrips}
-                    renderItem={({ item }) => (
-                        <View style={[!item.succesful ? styles.disablecardButton : styles.cardButton]} >
-                            <TripCardItem trip={item.trip} driver={item.driver} />
-                        </View>
+                <View style={styles.container}>
+                    {previousTrips.length > 0 ? (<FlatList
+                        data={previousTrips}
+                        renderItem={({ item }) => (
+                            <View style={[styles.card, { opacity: 0.5 }]}>
+                                <TripCardItem trip={item.trip} driver={item.driver} />
+                            </View>
+                        )
+                        }
+                    />) : (
+                        <Text>No previous Trips</Text>
                     )}
-                />
+                </View>
             </TabView>
         </>
     )
@@ -97,15 +128,31 @@ const history = (props: Props) => {
 export default history
 
 const styles = StyleSheet.create({
-    cardButton: {
+    container: {
+        backgroundColor: '#f2f2f2',
+        position: 'relative',
+        height: '100%',
         width: '100%',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 10,
     },
-    disablecardButton: {
-        opacity: 0.5,
-        width: '100%',
-        height: 175
+    card: {
+        minWidth: '95%',
+        backgroundColor: '#f2f2f2',
     },
-    buttonsContainer: {
-        flexDirection: 'row',
-    }
+    pendingContainer: {
+        position: 'absolute',
+        top: 15,
+        right: 105,
+        flex: 1,
+        backgroundColor: '#000',
+        borderColor: 'transparent',
+        borderWidth: 1,
+        borderRadius: 12,
+        height: 40,
+        justifyContent: 'center',
+        paddingHorizontal: 10
+    },
 })
