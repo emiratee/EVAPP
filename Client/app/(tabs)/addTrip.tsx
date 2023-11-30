@@ -15,6 +15,7 @@ import moment from 'moment';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { Snackbar } from 'react-native-paper';
+import { useFocusEffect, useNavigation } from 'expo-router';
 
 
 
@@ -24,7 +25,7 @@ type Props = {}
 
 const addTrip = (props: Props) => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-    const { user, token } = useAuth()
+    const { user, token,isAuthenticated } = useAuth()
 
     const [seatPrice, setSeatPrice] = useState<string>("")
 
@@ -49,7 +50,15 @@ const addTrip = (props: Props) => {
     const styles = getDynamicStyles(iconColor);
 
 
+    const navigation = useNavigation();
 
+    useFocusEffect(
+        React.useCallback(() => {
+            if (!isAuthenticated) {
+                navigation.navigate('login');
+            }
+        }, [isAuthenticated])
+    );
 
     const handlePriceChange = (text: string) => {
         let newText = text.replace(/,/g, '.');

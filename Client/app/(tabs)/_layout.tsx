@@ -71,6 +71,20 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
+            <Tabs.Screen
+                name="login"
+                options={{
+                    href: null,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                }}
+            />
+            <Tabs.Screen
+                name="register"
+                options={{
+                    href: null,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                }}
+            />
             
 
 {/* These on top are hidden from navbar, saved to be as reference for something for now.  */}
@@ -93,7 +107,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="t3"
+                name="messages"
                 options={{
                     title: 'Messages',
                     tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
