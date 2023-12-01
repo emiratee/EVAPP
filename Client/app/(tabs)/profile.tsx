@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../utils/auth';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { Overlay } from '@rneui/themed';
 import moment from 'moment';
@@ -8,16 +8,10 @@ import * as icons from '@expo/vector-icons';
 import RatingStars from '../../components/RatingStars';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
 import ImageUploader from '../../components/ImageUploader';
-import { updateAccount } from '../../utils/apiService';
 
-
-type Props = {}
-
-
-const profile = ({ updateAccount }) => {
-    const { isAuthenticated, logout, user, token } = useAuth();
+const profile = () => {
+    const { isAuthenticated, logout, user } = useAuth();
     const [visible, setVisible] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(parseInt(user.imageUrl) || '');
 
 
     const navigation = useNavigation();
@@ -38,23 +32,19 @@ const profile = ({ updateAccount }) => {
         setVisible(!visible);
     };
 
-    const handleImageSelected = async (imageUri) => {
-        // You can perform any additional actions here if needed
-        console.log('Image selected:', imageUri);
-    
-        // Call the updateAccount function with the selected image URI and user token
-        await updateAccount({ image: imageUri }, token);
-      };
 
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
             
-            <ImageUploader onImageSelected={setSelectedImage} />
-            {/* <View style={styles.picture}>
+            {/* IMAGE UPLOADER - COMPONENT */}
+            <ImageUploader />
+            {/* BEFORE:
+            <View style={styles.picture}>
                 {user.imageUrl ? <Image source={{ uri: user.imageUrl }} style={styles.picture} /> :
                     <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
                 }
             </View> */}
+
             <View style={styles.container}>
                 <Text style={styles.userName}>{user.name}</Text>
                 <Text style={styles.userStatus}>"Hola amig@s!"</Text>
@@ -173,17 +163,6 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         color: '#fff',
     },
-    // picture: {
-    //     height: 120,
-    //     width: 120,
-    //     borderWidth: 1,
-    //     borderColor: '#000',
-    //     borderRadius: 80,
-    //     marginVertical: 10,
-    //     alignSelf: 'center',
-    //     flexDirection: 'column',
-    //     justifyContent: 'center',
-    // },
     userName: {
         fontSize: 24,
         fontWeight: 'bold',
