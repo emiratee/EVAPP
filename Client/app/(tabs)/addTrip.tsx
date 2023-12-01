@@ -115,7 +115,7 @@ const addTrip = () => {
                             city: destination.city,
                             address: destination.address,
                             time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm'),
-                            date: moment(date, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
+                            date: moment(combinedDateTime, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
                         },
                         date: moment(date).format('YYYY-MM-DD'),
 
