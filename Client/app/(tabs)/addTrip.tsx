@@ -77,17 +77,17 @@ const addTrip = () => {
 
 
     const handleSubmit = () => {
-        
+
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
         });
-        
-        
-        
+
+
+
         if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
             setSnackBar(true)
-            
+
             let averageDuration = 0
 
 
@@ -191,12 +191,12 @@ const addTrip = () => {
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}
         >
-            
+
             <Overlay
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setAddNewCar={setAddNewCar} setAddCarSnackBar={setAddCarSnackBar}/>
+                <AddNewCar setAddNewCar={setAddNewCar} setAddCarSnackBar={setAddCarSnackBar} />
             </Overlay>
 
             <View style={styles.parameters}>
@@ -438,7 +438,7 @@ const addTrip = () => {
 
                 </View>
             </View>
-            
+
             <TouchableOpacity
                 style={styles.btn}
                 onPress={handleSubmit}
@@ -447,33 +447,33 @@ const addTrip = () => {
             </TouchableOpacity>
             <Snackbar
                 visible={snackBar}
-                onDismiss={()=>setSnackBar(false)}
+                onDismiss={() => setSnackBar(false)}
                 // action={{
                 //     // label: 'Undo',
                 //     onPress: () => {
                 //         // Do something
                 //     },
                 // }}
-                style={{backgroundColor:'green', }}
-                >
-                    <Text style={{textAlign:'center'}}>
-                The trip has been created succefully!
-                    </Text>
+                style={{ backgroundColor: 'green', }}
+            >
+                <Text style={{ textAlign: 'center' }}>
+                    The trip has been created succefully!
+                </Text>
             </Snackbar>
             <Snackbar
                 visible={addCarSnackBar}
-                onDismiss={()=>setAddCarSnackBar(false)}
+                onDismiss={() => setAddCarSnackBar(false)}
                 action={{
                     label: 'Okay',
                     onPress: () => {
                         setAddCarSnackBar(false)
                     },
                 }}
-                style={{backgroundColor:'green', }}
-                >
-                    <Text style={{textAlign:'center'}}>
-                The car has been created succefully!
-                    </Text>
+                style={{ backgroundColor: 'green', }}
+            >
+                <Text style={{ textAlign: 'center' }}>
+                    The car has been created succefully!
+                </Text>
             </Snackbar>
         </ScrollView>
 
@@ -487,7 +487,6 @@ const getDynamicStyles = (textColor: string) => {
         label: {
             fontSize: 18,
             textAlign: 'center',
-
         },
         btn: {
             backgroundColor: 'red',
@@ -504,15 +503,13 @@ const getDynamicStyles = (textColor: string) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderRadius: 10,
             padding: 10,
-            borderColor: '#a8a8a8'
+            borderColor: '#a8a8a8',
         },
         iconContainer: {
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 10
+            gap: 10,
         },
         parameters: {
             gap: 5,
@@ -520,7 +517,8 @@ const getDynamicStyles = (textColor: string) => {
             // borderWidth: 1,
             borderColor: '#a8a8a8',
             padding: 5,
-            marginBottom: 10
+            marginBottom: 10,
+            backgroundColor: '#fff'
         },
         input: {
             height: 50,
