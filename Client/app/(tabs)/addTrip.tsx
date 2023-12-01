@@ -13,7 +13,7 @@ import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { Snackbar } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from 'expo-router';
-import { Overlay } from '@rneui/base';
+import { Overlay } from '@rneui/themed';
 
 
 
