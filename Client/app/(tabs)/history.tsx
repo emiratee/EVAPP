@@ -3,10 +3,10 @@ import { Tab, TabView } from '@rneui/themed';
 import { Text, View } from '../../components/Themed'
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import { TripCardItem } from '../../components/TripCard/TripCard'
 import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
+import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
 
 const history = () => {
     const { token, user, isAuthenticated } = useAuth();
