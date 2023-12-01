@@ -1,6 +1,5 @@
-import { StyleSheet, TextInput, useColorScheme, Dimensions, TouchableOpacity, Alert, } from 'react-native'
+import { StyleSheet, TextInput, useColorScheme, Dimensions, TouchableOpacity, Alert, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Text, View } from './Themed'
 import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import { addCar } from '../utils/apiService';

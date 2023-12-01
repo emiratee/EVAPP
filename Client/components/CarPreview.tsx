@@ -1,5 +1,4 @@
-import { StyleSheet, } from 'react-native'
-import { Text, View } from './Themed'
+import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import * as icons from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'

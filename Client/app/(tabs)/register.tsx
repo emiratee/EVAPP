@@ -1,8 +1,7 @@
-import { Alert, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
-import { Text, View } from '../../components/Themed'
 import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import * as ImagePicker from 'expo-image-picker';

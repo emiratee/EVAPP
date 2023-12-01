@@ -1,16 +1,15 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { View } from "../components/Themed";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
-import { putApproveTrip } from "../utils/apiService";
+import { putApproveTrip, putRejectTrip } from "../utils/apiService";
 
 
-const BookingCard = ({ trip, passenger, setRequests }) => {
-    const { token, user, setUser } = useAuth();    
-    
+const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
+    const { token } = useAuth();
+
     const [icon, setIcon] = useState<any>();
     const [statusColor, setStatusColor] = useState('#5aa363');
     const [status, setStatus] = useState(passenger.status);
@@ -18,7 +17,7 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
     useEffect(() => {
         switch (status) {
             case 'Pending':
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
                 setStatusColor('#e29257')
                 break;
             case 'Approved':
@@ -30,8 +29,8 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                 setStatusColor('#ff0000')
                 break;
             default:
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
-                setStatusColor('#5aa363')
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
+                setStatusColor('#e29257')
         }
     }, [status]);
 
@@ -49,15 +48,8 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                     onPress: async () => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
-                        
-                        // const formData = {
-                        //     tripId: props.trip._id,
-                        //     passengerId: el.userId,
-                        //     totalCredits: (el.seats * Number(props.trip.price)).toString()
-                        // }
-                        // putApproveTrip(formData, token);
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        const response = await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
+                        type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
                     }
                 },
                 {
@@ -115,7 +107,7 @@ export default function ModalScreen() {
             <FlatList
                 data={passengers.slice().sort((a: { status: string; }, b: { status: string; }) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))} //Sort so that 'Pending' is always first
                 renderItem={({ item }) => (
-                    <BookingCard trip={trip} passenger={item} setRequests={setRequests} />
+                    <BookingCard trip={trip} passenger={item} bookingId={item.bookingId} setRequests={setRequests} />
                 )}
             />
         </View>

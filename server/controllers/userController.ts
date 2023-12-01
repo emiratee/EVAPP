@@ -78,7 +78,7 @@ const getDriver = async (driverId): Promise<any> => {
 
 const getUser = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         const { user } = validatedUser;
@@ -118,7 +118,7 @@ const putCar = async (req: Request, res: Response): Promise<any> => {
 
 const putTripsAsDriver = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         await User.updateOne(
@@ -162,7 +162,7 @@ const postLogin = async (req: Request, res: Response): Promise<any> => {
 
 const putAvailableCredits = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const currentCredits = Number(validatedUser.user.credits.available);
         const newCredits = Number(req.body.amount)
@@ -186,7 +186,7 @@ const putAvailableCredits = async (req: Request, res: Response): Promise<any> =>
 
 const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const currentCredits = Number(validatedUser.user.credits.onHold);
         const newCredits = Number(req.body.amount)
@@ -210,7 +210,7 @@ const putOnHoldCredits = async (req: Request, res: Response): Promise<any> => {
 
 const putEarningsCredits = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const currentCredits = Number(validatedUser.user.credits.earningsOnHold);
         const newCredits = Number(req.body.amount)

@@ -1,31 +1,24 @@
 import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Switch, useColorScheme, TextInput } from 'react-native'
+import { Switch, useColorScheme, TextInput, Text, View } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
-import { Text, View } from '../../components/Themed';
-import { Overlay } from '@rneui/themed';
 import AddNewCar from '../../components/AddNewCar';
 import * as types from '../../types/types'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { Snackbar } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from 'expo-router';
+import { Overlay } from '@rneui/themed';
 
 
-
-
-type Props = {}
-
-
-const addTrip = (props: Props) => {
+const addTrip = () => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-    const { user, token,isAuthenticated } = useAuth()
+    const { user, token, isAuthenticated } = useAuth();
 
     const [seatPrice, setSeatPrice] = useState<string>("")
 
@@ -84,17 +77,17 @@ const addTrip = (props: Props) => {
 
 
     const handleSubmit = () => {
-        
+
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
         });
-        
-        
-        
+
+
+
         if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
             setSnackBar(true)
-            
+
             let averageDuration = 0
 
 
@@ -198,12 +191,12 @@ const addTrip = (props: Props) => {
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}
         >
-            
+
             <Overlay
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
-                <AddNewCar setAddNewCar={setAddNewCar} setAddCarSnackBar={setAddCarSnackBar}/>
+                <AddNewCar setAddNewCar={setAddNewCar} setAddCarSnackBar={setAddCarSnackBar} />
             </Overlay>
 
             <View style={styles.parameters}>
@@ -445,7 +438,7 @@ const addTrip = (props: Props) => {
 
                 </View>
             </View>
-            
+
             <TouchableOpacity
                 style={styles.btn}
                 onPress={handleSubmit}
@@ -454,33 +447,33 @@ const addTrip = (props: Props) => {
             </TouchableOpacity>
             <Snackbar
                 visible={snackBar}
-                onDismiss={()=>setSnackBar(false)}
+                onDismiss={() => setSnackBar(false)}
                 // action={{
                 //     // label: 'Undo',
                 //     onPress: () => {
                 //         // Do something
                 //     },
                 // }}
-                style={{backgroundColor:'green', }}
-                >
-                    <Text style={{textAlign:'center'}}>
-                The trip has been created succefully!
-                    </Text>
+                style={{ backgroundColor: 'green', }}
+            >
+                <Text style={{ textAlign: 'center' }}>
+                    The trip has been created succefully!
+                </Text>
             </Snackbar>
             <Snackbar
                 visible={addCarSnackBar}
-                onDismiss={()=>setAddCarSnackBar(false)}
+                onDismiss={() => setAddCarSnackBar(false)}
                 action={{
                     label: 'Okay',
                     onPress: () => {
                         setAddCarSnackBar(false)
                     },
                 }}
-                style={{backgroundColor:'green', }}
-                >
-                    <Text style={{textAlign:'center'}}>
-                The car has been created succefully!
-                    </Text>
+                style={{ backgroundColor: 'green', }}
+            >
+                <Text style={{ textAlign: 'center' }}>
+                    The car has been created succefully!
+                </Text>
             </Snackbar>
         </ScrollView>
 
@@ -494,7 +487,6 @@ const getDynamicStyles = (textColor: string) => {
         label: {
             fontSize: 18,
             textAlign: 'center',
-
         },
         btn: {
             backgroundColor: 'red',
@@ -511,15 +503,13 @@ const getDynamicStyles = (textColor: string) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            // borderWidth: 1,
-            // borderRadius: 10,
             padding: 10,
-            borderColor: '#a8a8a8'
+            borderColor: '#a8a8a8',
         },
         iconContainer: {
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 10
+            gap: 10,
         },
         parameters: {
             gap: 5,
@@ -527,7 +517,8 @@ const getDynamicStyles = (textColor: string) => {
             // borderWidth: 1,
             borderColor: '#a8a8a8',
             padding: 5,
-            marginBottom: 10
+            marginBottom: 10,
+            backgroundColor: '#fff'
         },
         input: {
             height: 50,

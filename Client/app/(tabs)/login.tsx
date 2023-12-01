@@ -1,6 +1,5 @@
-import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Text, View } from '../../components/Themed'
 import { TextInput } from 'react-native-gesture-handler'
 import { Link, useFocusEffect, useNavigation } from 'expo-router'
 import { postLogin } from '../../utils/apiService';

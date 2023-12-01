@@ -1,6 +1,5 @@
-import { FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
-import { Text, View } from '../../components/Themed'
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import { getHistory } from '../../utils/apiService';
@@ -20,16 +19,8 @@ const history = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            if (!isAuthenticated) {
-                navigation.navigate('login');
-            }
-        }, [isAuthenticated])
-    );
-
-
-    useFocusEffect(
-        React.useCallback(() => {
             (async () => {
+                if (!isAuthenticated) return navigation.navigate('login');
                 const history = await getHistory(token);
 
                 const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date) >= new Date() });
@@ -39,7 +30,7 @@ const history = () => {
                 setPreviousTrips(previousTrips);
 
             })();
-        }, [])
+        }, [isAuthenticated])
     );
 
 
@@ -145,7 +136,7 @@ const styles = StyleSheet.create({
     pendingContainer: {
         position: 'absolute',
         top: 15,
-        right: 105,
+        left: 110,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',
