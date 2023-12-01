@@ -55,7 +55,7 @@ const profile = () => {
                         <Text style={styles.sectionTitle}>Current Credit Balance: </Text>
                         <Text style={[styles.sectionTitle, { paddingRight: 50, fontWeight: '400' }]}>{parseFloat(user.credits.available).toFixed(2)}€</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate('addCredits')}>
+                    <TouchableOpacity onPress={() => navigate('addCredits')}>
                         <View style={[styles.sectionInfo, { paddingTop: 10 }]}>
                             <Text style={styles.sectionInfoText}>Add more credits</Text>
                             <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />

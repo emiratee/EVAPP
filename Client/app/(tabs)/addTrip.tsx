@@ -16,14 +16,9 @@ import { useFocusEffect, useNavigation } from 'expo-router';
 import { Overlay } from '@rneui/themed';
 
 
-
-
-type Props = {}
-
-
-const addTrip = (props: Props) => {
+const addTrip = () => {
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-    const { user, token,isAuthenticated } = useAuth()
+    const { user, token, isAuthenticated } = useAuth();
 
     const [seatPrice, setSeatPrice] = useState<string>("")
 
