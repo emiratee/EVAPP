@@ -40,6 +40,7 @@ export type TTrip = {
     price: string,
     driverID: string,
     passengersIDs: {
+        bookingId: string,
         userId:string,
         name:string,
         status:string,
