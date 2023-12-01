@@ -133,6 +133,7 @@ const register = (props: Props) => {
                 <TextInput placeholder='E-mail'
                     value={email}
                     keyboardType='email-address'
+                    autoCapitalize='none'
                     onChangeText={(text) => { setEmail(text) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
                 ></TextInput>
