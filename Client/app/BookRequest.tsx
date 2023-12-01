@@ -8,7 +8,7 @@ import { putApproveTrip } from "../utils/apiService";
 
 
 const BookingCard = ({ trip, passenger, setRequests }) => {
-    const { token, user, setUser } = useAuth();    
+    const { token } = useAuth();    
     
     const [icon, setIcon] = useState<any>();
     const [statusColor, setStatusColor] = useState('#5aa363');
@@ -17,7 +17,7 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
     useEffect(() => {
         switch (status) {
             case 'Pending':
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
                 setStatusColor('#e29257')
                 break;
             case 'Approved':
@@ -29,8 +29,8 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                 setStatusColor('#ff0000')
                 break;
             default:
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={{ transform: 'rotate(180deg)' }} />);
-                setStatusColor('#5aa363')
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
+                setStatusColor('#e29257')
         }
     }, [status]);
 
@@ -48,15 +48,8 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                     onPress: async () => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
-                        
-                        // const formData = {
-                        //     tripId: props.trip._id,
-                        //     passengerId: el.userId,
-                        //     totalCredits: (el.seats * Number(props.trip.price)).toString()
-                        // }
-                        // putApproveTrip(formData, token);
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        const response = await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
+                        await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
                     }
                 },
                 {

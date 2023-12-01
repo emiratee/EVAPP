@@ -54,30 +54,26 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
 
 const putApprovePassenger = async (req: Request, res: Response): Promise<any> => {
     try {
-
-        //what we need? 
-
-        //trip id, passengerid, driverid 
         const validatedUser = await validateUser(req, res);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-        //change trip passengersid status to Approved  WORKS
-        //onhold credits from passenger deduct  WORKS
-        //passengers credits goes to driver creits(onhold) WORKS
-
         const { tripId, passengerId, totalCredits } = req.body.data;
 
-        await Trip.updateOne(
+        await Trip.updateMany(
             { _id: tripId, "passengerIDs.userId": passengerId },
-            { $set: { "passengerIDs.$.status": "Approved" } },
+            {
+                $set: {
+                    "passengerIDs.$[passenger].status": "Approved"
+                }
+            },
+            {
+                arrayFilters: [{ "passenger.userId": passengerId }]
+            }
         );
 
         const creditsInQuestion = Number(totalCredits)
 
-
-        //find passenger by id
         const passenger = await User.findOne({ userId: passengerId });
 
-        //deducting passenger's on hold
         const currentPassengerOnHold = Number(passenger.credits.onHold);
 
         await User.updateOne(
