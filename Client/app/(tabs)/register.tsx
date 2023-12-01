@@ -133,7 +133,7 @@ const register = (props: Props) => {
                 <TextInput placeholder='E-mail'
                     value={email}
                     keyboardType='email-address'
-                    onChangeText={(text) => { setEmail(text) }}
+                    onChangeText={(text) => { setEmail(text.toLowerCase()) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
                 ></TextInput>
 

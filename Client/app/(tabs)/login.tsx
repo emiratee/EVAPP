@@ -54,7 +54,7 @@ const login = (props: Props) => {
                     placeholder='E-mail'
                     value={email}
                     keyboardType='email-address'
-                    onChangeText={(text) => { setEmail(text) }}
+                    onChangeText={(text) => { setEmail(text.toLowerCase()) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
                 />
             </View>

@@ -7,15 +7,19 @@ import moment from 'moment';
 import * as icons from '@expo/vector-icons';
 import RatingStars from '../../components/RatingStars';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
+import ImageUploader from '../../components/ImageUploader';
+import { updateAccount } from '../../utils/apiService';
 
 
 type Props = {}
 
 
-const profile = (props: Props) => {
-    const [visible, setVisible] = useState(false);
-
+const profile = ({ updateAccount, userToken }) => {
     const { isAuthenticated, logout, user } = useAuth();
+    const [visible, setVisible] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(parseInt(user.imageUrl) || '');
+
+
     const navigation = useNavigation();
 
     useFocusEffect(
@@ -34,13 +38,23 @@ const profile = (props: Props) => {
         setVisible(!visible);
     };
 
+    const handleImageSelected = async (imageUri) => {
+        // You can perform any additional actions here if needed
+        console.log('Image selected:', imageUri);
+    
+        // Call the updateAccount function with the selected image URI and user token
+        await updateAccount({ image: imageUri }, userToken);
+      };
+
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
-            <View style={styles.picture}>
+            
+            <ImageUploader onImageSelected={setSelectedImage} token={userToken}/>
+            {/* <View style={styles.picture}>
                 {user.imageUrl ? <Image source={{ uri: user.imageUrl }} style={styles.picture} /> :
                     <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
                 }
-            </View>
+            </View> */}
             <View style={styles.container}>
                 <Text style={styles.userName}>{user.name}</Text>
                 <Text style={styles.userStatus}>"Hola amig@s!"</Text>
@@ -159,17 +173,17 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         color: '#fff',
     },
-    picture: {
-        height: 120,
-        width: 120,
-        borderWidth: 1,
-        borderColor: '#000',
-        borderRadius: 80,
-        marginVertical: 10,
-        alignSelf: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
+    // picture: {
+    //     height: 120,
+    //     width: 120,
+    //     borderWidth: 1,
+    //     borderColor: '#000',
+    //     borderRadius: 80,
+    //     marginVertical: 10,
+    //     alignSelf: 'center',
+    //     flexDirection: 'column',
+    //     justifyContent: 'center',
+    // },
     userName: {
         fontSize: 24,
         fontWeight: 'bold',

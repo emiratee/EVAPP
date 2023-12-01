@@ -231,7 +231,7 @@ const uploadImage = async (data: any) => {
 
 const updateAccount = async (data, token: string) => {
     try {
-        const { currentPassword, newPassword} = data;
+        const { currentPassword, newPassword, image} = data;
         const response = await fetch(`${BASE_URL}/user/account/update`, {
             method: 'PUT',
             headers: {
@@ -240,7 +240,8 @@ const updateAccount = async (data, token: string) => {
             },
             body: JSON.stringify({ 
                 currentPassword,
-                newPassword
+                newPassword,
+                image
              })
         })
         return await response.json();
