@@ -49,7 +49,7 @@ const profile = ({ updateAccount }) => {
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
             
-            <ImageUploader onImageSelected={setSelectedImage} token={token}/>
+            <ImageUploader onImageSelected={setSelectedImage} />
             {/* <View style={styles.picture}>
                 {user.imageUrl ? <Image source={{ uri: user.imageUrl }} style={styles.picture} /> :
                     <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />

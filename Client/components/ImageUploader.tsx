@@ -4,9 +4,11 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as icons from '@expo/vector-icons';
 import { updateAccount } from '../utils/apiService';
+import { useAuth } from '../utils/auth';
 
 
-const ImageUploader = ({ onImageSelected, token }) => {
+const ImageUploader = ({ onImageSelected }) => {
+  const { token } = useAuth()
   const [image, setImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
