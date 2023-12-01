@@ -58,8 +58,6 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
-        console.log(tripId, passengerId, bookingId);
-        
 
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.bookingId": bookingId },
@@ -107,32 +105,37 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
         //onhold credits from passenger deduct  WORKS
         //passengers credits goes to driver creits(onhold) WORKS
 
-        const { tripId, passengerId, totalCredits, seats } = req.body.data
+        const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
         const trip = await Trip.findOne({ _id: tripId });
 
-        const currentAvailableSeats = trip.seats.available
+        const passenger = await Trip.findOne(
+            { _id: tripId, "passengerIDs.bookingId": bookingId },
+            { "passengerIDs.$": 1 }
+        )
+
+        const seats = passenger.passengerIDs[0].seats;
+        
 
         await Trip.updateOne(
-            { _id: tripId, "passengerIDs.userId": passengerId },
+            { _id: tripId, "passengerIDs.bookingId": bookingId },
             {
-                $set: {
-                    "passengerIDs.$.status": "Rejected",
-                    "seats.available": currentAvailableSeats + seats
-                }
-            },
+                $set: { "passengerIDs.$.status": "Rejected" },
+                $inc: { 'seats.available': seats }
+            }
         );
+
 
         const creditsInQuestion = Number(totalCredits)
 
 
         //find passenger by id
-        const passenger = await User.findOne({ userId: passengerId });
+        const user = await User.findOne({ userId: passengerId });
 
-        const currentPassengerOnHold = Number(passenger.credits.onHold);
-        const currentPassengerAvailable = Number(passenger.credits.available);
+        const currentPassengerOnHold = Number(user.credits.onHold);
+        const currentPassengerAvailable = Number(user.credits.available);
 
         await User.updateOne(
-            { userId: passenger.userId },
+            { userId: user.userId },
             {
                 $set: {
                     'credits.onHold': currentPassengerOnHold - creditsInQuestion,

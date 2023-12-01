@@ -4,7 +4,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
-import { putApproveTrip } from "../utils/apiService";
+import { putApproveTrip, putRejectTrip } from "../utils/apiService";
 
 
 const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
@@ -49,7 +49,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token);
+                        type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
                     }
                 },
                 {
