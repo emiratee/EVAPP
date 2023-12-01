@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Image, TouchableOpacity, Animated, Easing } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Text, View } from '../components/Themed';
 import * as icons from '@expo/vector-icons';
@@ -8,11 +8,32 @@ import { Picker } from 'react-native-wheel-pick';
 import Bill from '../components/Bill';
 import { useAuth } from '../utils/auth';
 import { putRequestTrip } from '../utils/apiService';
-import { userInfo } from 'os';
 
 
 const LocationInformation = () => {
-    const { trip } = useRoute().params
+    const { trip } = useRoute().params;
+    const [lineAnimation] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+        setTimeout(() => {
+            animateLine();
+        }, 250);
+    }, []);
+
+    const animateLine = () => {
+        Animated.timing(lineAnimation, {
+            toValue: 1,
+            duration: 300,
+            easing: Easing.linear,
+            useNativeDriver: false
+        }).start();
+    }
+
+    const lineHeight = lineAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 120],
+    });
+
     return (
         <View style={styles.locationContainer}>
             <View style={styles.timeContainer}>
@@ -28,7 +49,7 @@ const LocationInformation = () => {
             </View>
             <View style={styles.dotContainer}>
                 <View style={styles.dot}>
-                    <View style={styles.line}></View>
+                    <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
                 </View>
                 <View style={styles.dot}></View>
             </View>

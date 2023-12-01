@@ -1,16 +1,35 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Animated, Easing } from 'react-native';
 import * as icons from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from 'expo-router';
 
 export const TripCardItem = ({ trip, driver }) => {
+    const [lineAnimation] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+        animateLine();
+    }, []);
+
+    const animateLine = () => {
+        Animated.timing(lineAnimation, {
+            toValue: 1,
+            duration: 250,
+            easing: Easing.linear,
+            useNativeDriver: false
+        }).start();
+    }
+
+    const lineHeight = lineAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 120],
+    });
 
     return (
         <View style={styles.cardContainer}>
             <View style={styles.locationContainer}>
                 <View style={styles.dotContainer}>
                     <View style={styles.dot}>
-                        <View style={styles.line}></View>
+                        <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
                     </View>
                     <View style={styles.dot}></View>
                 </View>
