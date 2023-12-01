@@ -286,7 +286,7 @@ async function uploadImage(req: Request, res: Response): Promise<void> {
 async function putUpdateAccount(req: Request, res: Response): Promise<any> {
     //currently only for password
     try {
-        const { currentPassword, newPassword } = req.body;
+        const { currentPassword, newPassword, image } = req.body;
         // validate if required parameters are provided
         if (!currentPassword ||!newPassword) {
             return res.status(400).json({error: 'Required parameters not provided correctly'});
@@ -305,6 +305,12 @@ async function putUpdateAccount(req: Request, res: Response): Promise<any> {
         // hash and update the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await User.updateOne({ userId: user.userId }, { $set: { password: hashedPassword } });
+
+        // Update the user's imageUrl if provided
+        if (image) {
+            await User.updateOne({ userId: user.userId }, { $set: { image } });
+        }
+
         res.status(200).json({ message: "Password updated successfully" });
     } catch (error) {
         console.error("Error in updatePassword:", error);
