@@ -66,12 +66,6 @@ const addTrip = () => {
 
     const [departure, setDeparture] = useState({})
     const [destination, setDestination] = useState({})
-
-
-
-
-
-
     const [snackBar, setSnackBar] = useState(false)
     const [addCarSnackBar, setAddCarSnackBar] = useState(false)
 
@@ -101,6 +95,7 @@ const addTrip = () => {
                         });
                     });
                     averageDuration = totalDuration / data.routes.length;
+                    console.log(averageDuration)
                 }).then(() => {
 
                     const submitForm: types.TTripNoId = {
@@ -116,9 +111,10 @@ const addTrip = () => {
                             address: destination.address,
                             time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm')
                         },
-
                         date: moment(date).format('YYYY-MM-DD'),
-
+                        
+                        //here is a bug. since we store only arriving time ,not date, it removes 24h if averageduaration is more than 24hours. need to 
+                        //store destiantion day as well? 
                         totalTime: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
 
                         seats: {
@@ -140,21 +136,9 @@ const addTrip = () => {
                         successful: false
                     }
 
-
                     addNewTrip(submitForm, token).then(data => {
                         putTripsAsDriver({ _id: data.trip._id }, token)
                     })
-
-
-                    // setTrips([...trips, submitForm])
-                    // // refactor when server comes?
-                    // setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
-                    //     user.id === user.id
-                    //         ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
-                    //         : user
-                    // )));
-
-
 
                 })
                 .catch(err => {
@@ -230,10 +214,7 @@ const addTrip = () => {
                             mode="date"
                             onConfirm={(selectedDate: Date) => {
                                 setDatePickerVisibility(false)
-
-
                                 setDate(selectedDate);
-
                                 setTimeout(() => {
                                     setIsTimePickerVisible(true);
                                 }, 500)
@@ -254,7 +235,6 @@ const addTrip = () => {
                             onConfirm={(selectedTime: Date) => {
                                 setIsTimePickerVisible(false)
                                 setTime(selectedTime);
-
                                 const combinedDateTime = moment(date).set({
                                     hour: moment(selectedTime).hour(),
                                     minute: moment(selectedTime).minute()
@@ -262,28 +242,14 @@ const addTrip = () => {
 
                                 if (combinedDateTime.isBefore(moment().add(2, 'hours'))) {
                                     Alert.alert('Invalid Selection', 'You cannot select a date/time less than 2 hours in the future.');
-                                } else {
-                                    // Proceed with valid date and time
-                                }
-
-
-
-
-
-
+                                } 
                             }
                             }
                             onCancel={() => setIsTimePickerVisible(false)}
-                        // minimumDate={new Date()} 
                         />
                         <icons.FontAwesome5 name="clock" size={24} color="black" />
                         <Text style={styles.label}>{moment(time).format('HH:mm')}</Text>
                     </TouchableOpacity>
-                    {/* todo forgot to add time */}
-
-
-
-
                 </View>
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
@@ -292,7 +258,6 @@ const addTrip = () => {
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
-                        // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
                         key={selectedCar && selectedCar._id}
                         onValueChange={(value) => { setNumberOfSeats(value) }}
                         style={{
@@ -307,12 +272,7 @@ const addTrip = () => {
                     />
                 </View>
 
-
-
             </View>
-
-
-
 
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
