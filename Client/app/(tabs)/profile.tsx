@@ -14,8 +14,8 @@ import { updateAccount } from '../../utils/apiService';
 type Props = {}
 
 
-const profile = ({ updateAccount, userToken }) => {
-    const { isAuthenticated, logout, user } = useAuth();
+const profile = ({ updateAccount }) => {
+    const { isAuthenticated, logout, user, token } = useAuth();
     const [visible, setVisible] = useState(false);
     const [selectedImage, setSelectedImage] = useState(parseInt(user.imageUrl) || '');
 
@@ -43,13 +43,13 @@ const profile = ({ updateAccount, userToken }) => {
         console.log('Image selected:', imageUri);
     
         // Call the updateAccount function with the selected image URI and user token
-        await updateAccount({ image: imageUri }, userToken);
+        await updateAccount({ image: imageUri }, token);
       };
 
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
             
-            <ImageUploader onImageSelected={setSelectedImage} token={userToken}/>
+            <ImageUploader onImageSelected={setSelectedImage} token={token}/>
             {/* <View style={styles.picture}>
                 {user.imageUrl ? <Image source={{ uri: user.imageUrl }} style={styles.picture} /> :
                     <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
