@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import path from 'path'
 import dotenv from "dotenv";
+import { v4 as uuidv4 } from 'uuid';
 import { validateUser } from '../utils/userUtils.js';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
@@ -54,20 +55,16 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
 
 const putApprovePassenger = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-        const { tripId, passengerId, totalCredits } = req.body.data;
+        const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
+        console.log(tripId, passengerId, bookingId);
+        
 
-        await Trip.updateMany(
-            { _id: tripId, "passengerIDs.userId": passengerId },
-            {
-                $set: {
-                    "passengerIDs.$[passenger].status": "Approved"
-                }
-            },
-            {
-                arrayFilters: [{ "passenger.userId": passengerId }]
-            }
+        await Trip.updateOne(
+            { _id: tripId, "passengerIDs.bookingId": bookingId },
+            { $set: { "passengerIDs.$.status": "Approved" } },
+            { new: true }
         );
 
         const creditsInQuestion = Number(totalCredits)
@@ -78,21 +75,13 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
 
         await User.updateOne(
             { userId: passenger.userId },
-            {
-                $set: {
-                    'credits.onHold': currentPassengerOnHold - creditsInQuestion,
-                },
-            }
+            { $set: { 'credits.onHold': currentPassengerOnHold - creditsInQuestion } }
         );
         const currentDriverEarningOnHold = Number(validatedUser.user.credits.earningsOnHold);
 
         await User.updateOne(
             { userId: validatedUser.userId },
-            {
-                $set: {
-                    'credits.earningsOnHold': currentDriverEarningOnHold + creditsInQuestion,
-                },
-            }
+            { $set: { 'credits.earningsOnHold': currentDriverEarningOnHold + creditsInQuestion } }
         );
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
@@ -112,7 +101,7 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
         //what we need? 
 
         //trip id, passengerid, driverid 
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         //change trip passengersid status to Approved  WORKS
         //onhold credits from passenger deduct  WORKS
@@ -165,7 +154,7 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
 const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         // add validateduser to trips passengers list
@@ -181,10 +170,11 @@ const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
             {
                 $push: {
                     passengerIDs: {
+                        bookingId: uuidv4(),
                         userId: validatedUser.user.userId,
                         name: validatedUser.user.name,
                         status: 'Pending',
-                        seats: seats,
+                        seats: seats
                     },
                 },
                 $inc: { "seats.available": -seats },

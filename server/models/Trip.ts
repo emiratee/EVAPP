@@ -100,7 +100,10 @@ const tripSchema = new mongoose.Schema({
     passengerIDs:
         [
             {
-
+                bookingId: {
+                    type: String,
+                    required: true
+                },
                 userId: {
                     type: String,
                     required: true

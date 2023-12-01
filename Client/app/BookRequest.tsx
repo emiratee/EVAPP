@@ -7,9 +7,9 @@ import { useAuth } from "../utils/auth";
 import { putApproveTrip } from "../utils/apiService";
 
 
-const BookingCard = ({ trip, passenger, setRequests }) => {
-    const { token } = useAuth();    
-    
+const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
+    const { token } = useAuth();
+
     const [icon, setIcon] = useState<any>();
     const [statusColor, setStatusColor] = useState('#5aa363');
     const [status, setStatus] = useState(passenger.status);
@@ -49,7 +49,7 @@ const BookingCard = ({ trip, passenger, setRequests }) => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        await putApproveTrip({ tripId: trip._id, passengerId: passenger.userId, totalCredits}, token);
+                        await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token);
                     }
                 },
                 {
@@ -107,7 +107,7 @@ export default function ModalScreen() {
             <FlatList
                 data={passengers.slice().sort((a: { status: string; }, b: { status: string; }) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))} //Sort so that 'Pending' is always first
                 renderItem={({ item }) => (
-                    <BookingCard trip={trip} passenger={item} setRequests={setRequests} />
+                    <BookingCard trip={trip} passenger={item} bookingId={item.bookingId} setRequests={setRequests} />
                 )}
             />
         </View>
