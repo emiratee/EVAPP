@@ -23,8 +23,8 @@ const history = () => {
                 if (!isAuthenticated) return navigation.navigate('login');
                 const history = await getHistory(token);
 
-                const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') >= new Date() });
-                const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') < new Date() });
+                const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date) >= new Date() });
+                const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date) < new Date() });
 
                 setUpcomingTrips(upcomingTrips);
                 setPreviousTrips(previousTrips);

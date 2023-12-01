@@ -51,8 +51,7 @@ function RootLayoutNav() {
     return (
         <AuthProvider>
             <MockDataProvider>
-                {/* <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}> */}
-                <ThemeProvider value={colorScheme === 'dark' ? DefaultTheme : DefaultTheme}>
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
