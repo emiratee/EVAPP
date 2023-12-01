@@ -12,7 +12,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<types.TUser | null>(null);
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, [token])
 
-    const login = async (token) => {
+    const login = async (token:string) => {
         try {
             await AsyncStorage.setItem('token', token)
             setToken(token);

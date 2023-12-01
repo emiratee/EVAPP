@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
@@ -8,14 +8,19 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { postRegister, uploadImage } from '../../utils/apiService';
 import * as ImageManipulator from 'expo-image-manipulator';
-
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 type Props = {}
 
 const register = (props: Props) => {
     const { token, login, isAuthenticated } = useAuth();
+    const [expoPushToken, setExpoPushToken] = useState('');
 
     const navigation = useNavigation();
-
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+      }, []);
+    
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
@@ -92,7 +97,7 @@ const register = (props: Props) => {
 
 
         if (!errName && !errEmail && !errNumber && !errPassword) {
-            const data = { name, email, phoneNumber: number, password, imageUrl }
+            const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
             postRegister(data).then(data => {
                 login(data.token)
             })
@@ -253,3 +258,38 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
 })
+
+
+async function registerForPushNotificationsAsync() {
+    let token;
+  
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      // Learn more about projectId:
+      // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+      token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e742dc1b-029a-4980-8364-e2d0e7b1f40e' })).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    return token;
+  }
