@@ -1,14 +1,14 @@
-import User from '../models/User.js';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
-import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
-import path from 'path'
+import { v2 as cloudinary } from 'cloudinary';
 import dotenv from "dotenv";
-import { validateUser } from '../utils/userUtils.js';
-import Car from '../models/Car.js';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import multer from 'multer';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import Trip from '../models/Trip.js';
-import { v2 as cloudinary } from 'cloudinary'
+import User from '../models/User.js';
+import { validateUser } from '../utils/userUtils.js';
 
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
@@ -283,20 +283,26 @@ async function uploadImage(req: Request, res: Response): Promise<void> {
     }
 }
 
-async function putUpdateAccount(req: Request, res: Response): Promise<any> {
-    //currently only for password
-    try {
-        const { currentPassword, newPassword, image } = req.body;
-        // validate if required parameters are provided
-        if (!currentPassword ||!newPassword) {
-            return res.status(400).json({error: 'Required parameters not provided correctly'});
-        }
 
+async function putUpdateAccount(req: Request, res: Response): Promise<any> {
+    try {
+        // first validate user
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
-        const { user } = validatedUser;
+        const { currentPassword, newPassword, image } = req.body;
 
+        // check if there's an image
+        if (image) {
+            await User.updateOne({ userId: validatedUser.user.userId }, { $set: { imageUrl: image } });
+            return res.status(200).json({ message: 'Image changed successfully' });
+        }
+        
+        // validate if required password parameters are provided
+        if (!currentPassword ||!newPassword) {
+            return res.status(400).json({error: 'Required parameters not provided correctly'});
+        }
+        const { user } = validatedUser;
         // Check if the current password is correct
         const validPassword = await bcrypt.compare(currentPassword, user.password);
         if (!validPassword) {
@@ -305,16 +311,12 @@ async function putUpdateAccount(req: Request, res: Response): Promise<any> {
         // hash and update the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await User.updateOne({ userId: user.userId }, { $set: { password: hashedPassword } });
+        res.status(200).json({ message: 'Password changed successfully' });
 
-        // Update the user's imageUrl if provided
-        if (image) {
-            await User.updateOne({ userId: user.userId }, { $set: { image } });
-        }
-
-        res.status(200).json({ message: "Password updated successfully" });
+       
     } catch (error) {
-        console.error("Error in updatePassword:", error);
-        res.status(500).json({ error: "Internal server error in updatePassword" });
+        console.error("Error in updateAccount:", error);
+        res.status(500).json({ error: "Internal server error in updateAccount" });
     }
 }
 

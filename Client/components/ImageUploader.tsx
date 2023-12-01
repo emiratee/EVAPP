@@ -3,13 +3,13 @@ import { View, TouchableOpacity, Image, ActivityIndicator, StyleSheet } from 're
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as icons from '@expo/vector-icons';
-import { updateAccount } from '../utils/apiService';
+import { updateAccount, uploadImage } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 
 
-const ImageUploader = ({ onImageSelected }) => {
-  const { token } = useAuth()
-  const [image, setImage] = useState('');
+const ImageUploader = ({ }) => {
+  const { token, user } = useAuth()
+  const [image, setImage] = useState(user.imageUrl );
   const [isLoading, setIsLoading] = useState(false);
 
   const pickImage = async () => {
@@ -22,16 +22,22 @@ const ImageUploader = ({ onImageSelected }) => {
     });
 
     if (!result.canceled) {
-      const resizedImage = await resizeImage(result.assets[0].uri, 1400);
+      const resizedImage = await resizeImage(result.assets[0].uri, 1400); // resize image
 
-      // Store the selected image URI in the component's state
-      setImage(resizedImage.uri);
 
-      // Pass the selected image URI to the parent component
-      onImageSelected(resizedImage.uri);
+      const uriParts = result.assets[0].uri.split('.');
+      const fileType = uriParts[uriParts.length - 1];
 
-      // Trigger the update function
-      await updateAccount({ image: resizedImage.uri }, token);
+      const formData = new FormData();
+      formData.append('image', {
+          uri: resizedImage.uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+      });
+
+      const response = await uploadImage(formData) // upload new image to Cloudinary
+      setImage(resizedImage.uri); // set the image with the image URI from Cloudinary
+      await updateAccount({ image: response.imageUrl }, token); // call API method to update image
 
       setIsLoading(false);
     } else {
@@ -39,6 +45,7 @@ const ImageUploader = ({ onImageSelected }) => {
     }
   };
 
+  
   const resizeImage = async (uri, width) => {
     const resizedImage = await ImageManipulator.manipulateAsync(
       uri,
