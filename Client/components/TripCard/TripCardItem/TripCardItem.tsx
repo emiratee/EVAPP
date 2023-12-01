@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, Animated, Easing } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 
 const TripCardItem = ({ trip, driver }) => {
     const [lineAnimation, setLineAnimation] = useState(new Animated.Value(0));
@@ -39,14 +40,14 @@ const TripCardItem = ({ trip, driver }) => {
                 <View style={styles.addressContainer}>
                     <View style={styles.mainContainer}>
                         <Text style={styles.city}>{trip.departure.city}</Text>
-                        <Text style={styles.time}>{trip.departure.time}</Text>
+                        <Text style={styles.time}>{moment(trip.date).format('DD MMM')} {trip.departure.time}</Text>
                     </View>
                     <View style={styles.mainContainer}>
                         <Text style={styles.totalTime}>{trip.totalTime}</Text>
                     </View>
                     <View style={styles.mainContainer}>
                         <Text style={styles.city}>{trip.destination.city}</Text>
-                        <Text style={styles.time}>{trip.destination.time}</Text>
+                        <Text style={styles.time}>{moment(trip.destination.date).format('DD MMM')} {trip.destination.time}</Text>
                     </View>
                 </View>
             </View>

@@ -21,7 +21,11 @@ const tripSchema = new mongoose.Schema({
         time: {
             type: String,
             required: true
-        }
+        },
+        date: {
+            type: String,
+            required: true
+        },
     },
     destination: {
         country: {
@@ -39,7 +43,11 @@ const tripSchema = new mongoose.Schema({
         time: {
             type: String,
             required: true
-        }
+        },
+        date: {
+            type: String,
+            required: true
+        },
     },
     date: {
         type: String,
