@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     pendingContainer: {
         position: 'absolute',
         top: 15,
-        left: 110,
+        left: 140,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',

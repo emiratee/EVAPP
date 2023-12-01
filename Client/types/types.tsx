@@ -14,13 +14,15 @@ export type TTrip = {
         country: string,
         city: string,
         address: string,
-        time: string
+        time: string,
+        date: string
     },
     destination: {
         country: string,
         city: string,
         address: string,
-        time: string
+        time: string,
+        date: string
     },
     date: string,
     totalTime: string,
@@ -41,10 +43,10 @@ export type TTrip = {
     driverID: string,
     passengersIDs: {
         bookingId: string,
-        userId:string,
-        name:string,
-        status:string,
-        seats:number
+        userId: string,
+        name: string,
+        status: string,
+        seats: number
     }[],
     successful: boolean
 
@@ -76,7 +78,7 @@ export type TUser = {
         available: string,
         onHold: string,
         earningsOnHold: string,
-    } 
+    }
 
 }
 

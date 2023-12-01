@@ -95,27 +95,33 @@ const addTrip = () => {
                         });
                     });
                     averageDuration = totalDuration / data.routes.length;
-                    console.log(averageDuration)
                 }).then(() => {
+
+
+                    const duration = moment.duration(averageDuration, 'seconds');
+                    const formattedTime = `${Math.floor(duration.asHours())}:${duration.minutes()}`;
+
 
                     const submitForm: types.TTripNoId = {
                         departure: {
                             country: departure.country,
                             city: departure.city,
                             address: departure.address,
-                            time: moment(time).format('HH:mm')
+                            time: moment(time).format('HH:mm'),
+                            date: moment(date).format('YYYY-MM-DD')
                         },
                         destination: {
                             country: destination.country,
                             city: destination.city,
                             address: destination.address,
-                            time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm')
+                            time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm'),
+                            date: moment(date, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
                         },
                         date: moment(date).format('YYYY-MM-DD'),
-                        
+
                         //here is a bug. since we store only arriving time ,not date, it removes 24h if averageduaration is more than 24hours. need to 
                         //store destiantion day as well? 
-                        totalTime: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
+                        totalTime: formattedTime,
 
                         seats: {
                             available: numberOfSeats,
@@ -242,7 +248,7 @@ const addTrip = () => {
 
                                 if (combinedDateTime.isBefore(moment().add(2, 'hours'))) {
                                     Alert.alert('Invalid Selection', 'You cannot select a date/time less than 2 hours in the future.');
-                                } 
+                                }
                             }
                             }
                             onCancel={() => setIsTimePickerVisible(false)}
