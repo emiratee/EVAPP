@@ -1,21 +1,19 @@
 import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Switch, useColorScheme, TextInput } from 'react-native'
+import { Switch, useColorScheme, TextInput, Text, View } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
-import { Text, View } from '../../components/Themed';
-import { Overlay } from '@rneui/themed';
 import AddNewCar from '../../components/AddNewCar';
 import * as types from '../../types/types'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-
 import LocationSearch from '../../components/LocationSearch';
 import moment from 'moment';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { Snackbar } from 'react-native-paper';
 import { useFocusEffect, useNavigation } from 'expo-router';
+import { Overlay } from '@rneui/base';
 
 
 

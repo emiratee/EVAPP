@@ -1,5 +1,4 @@
 import React from 'react';
-import TripCard from '../../components/TripCard/TripCard';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import { StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';

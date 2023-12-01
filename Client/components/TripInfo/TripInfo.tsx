@@ -22,7 +22,7 @@ const TripInfoModalScreen = ({ trip, driver }) => {
                 keyExtractor={(item, index) => index.toString()}
                 style={{ width: '100%', height: '100%' }}
             />
-            {user.userId === trip.driverID && <Request trip={trip} />}
+            {user && user.userId !== trip.driverID && <Request trip={trip} />}
         </View>
     );
 }

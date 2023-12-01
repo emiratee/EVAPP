@@ -1,8 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { View } from "../components/Themed";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
 import { putApproveTrip } from "../utils/apiService";

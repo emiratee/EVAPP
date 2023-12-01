@@ -14,12 +14,12 @@ const profile = () => {
     const [visible, setVisible] = useState(false);
 
 
-    const navigation = useNavigation();
+    const { navigate } = useNavigation();
 
     useFocusEffect(
         React.useCallback(() => {
             if (!isAuthenticated) {
-                navigation.navigate('login');
+                navigate('login');
             }
         }, [isAuthenticated])
     );
