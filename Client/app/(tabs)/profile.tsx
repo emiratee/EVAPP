@@ -10,7 +10,7 @@ import ChangePasswordForm from '../../components/ChangePasswordForm';
 import ImageUploader from '../../components/ImageUploader';
 
 const profile = () => {
-    const { isAuthenticated, logout, user } = useAuth();
+    const { isAuthenticated, logout, user, token } = useAuth();
     const [visible, setVisible] = useState(false);
 
 
@@ -23,6 +23,12 @@ const profile = () => {
             }
         }, [isAuthenticated])
     );
+    useFocusEffect(
+        React.useCallback(() => {
+
+        }, [token])
+    );
+
 
     const handleSubmit = () => {
         logout();
@@ -35,7 +41,7 @@ const profile = () => {
 
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
-            
+
             {/* IMAGE UPLOADER - COMPONENT */}
             <ImageUploader />
             {/* BEFORE:

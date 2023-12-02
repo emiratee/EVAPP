@@ -1,5 +1,5 @@
 import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Switch, useColorScheme, TextInput, Text, View } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
@@ -17,6 +17,26 @@ import { Overlay } from '@rneui/themed';
 
 
 const addTrip = () => {
+    const scrollViewRef = useRef(null);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setSelectedCar(null)
+            setSeatPrice('')
+            setSmokingToggled(false)
+            setChildSeatToggled(false)
+            setPetsToggled(false)
+            setAlcoholToggled(false)
+            setLuggageToggled(false)
+            setCommentsValue("")
+            setNumberOfSeats(1)
+            setSnackBar(false)
+            if (scrollViewRef.current) {
+                scrollViewRef.current.scrollTo({ y: 0, animated: true });
+            }
+        }, [])
+    );
+
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
     const { user, token, isAuthenticated } = useAuth();
 
@@ -151,6 +171,7 @@ const addTrip = () => {
                     console.error(err);
                 });
 
+            navigation.navigate('history');
 
 
 
@@ -177,6 +198,7 @@ const addTrip = () => {
 
 
         <ScrollView
+            ref={scrollViewRef}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}

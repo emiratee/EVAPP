@@ -23,7 +23,7 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
             }}>
-            <Tabs.Screen
+            {/* <Tabs.Screen
                 name="index"
                 options={{
                     href: null,
@@ -44,7 +44,7 @@ export default function TabLayout() {
                         </Link>
                     ),
                 }}
-            />
+            /> */}
             <Tabs.Screen
                 name="TripCardRedirect"
                 options={{
@@ -94,7 +94,7 @@ export default function TabLayout() {
 
 
             <Tabs.Screen
-                name="search"
+                name="index"
                 options={{
                     title: 'Search',
                     tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
@@ -105,6 +105,8 @@ export default function TabLayout() {
                 options={{
                     title: 'Add a trip',
                     tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
+                    key: 'history' + new Date().getTime(),
+
                 }}
             />
             <Tabs.Screen

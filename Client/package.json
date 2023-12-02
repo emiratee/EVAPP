@@ -20,6 +20,8 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@types/expo": "^33.0.1",
     "@types/expo__vector-icons": "^10.0.0",
+    "@types/form-data": "^2.5.0",
+    "@types/formdata": "^0.10.4",
     "@types/react": "~18.2.14",
     "@types/react-native": "^0.72.7",
     "crypto": "^1.0.1",

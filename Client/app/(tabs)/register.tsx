@@ -19,12 +19,12 @@ const register = (props: Props) => {
     const navigation = useNavigation();
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-      }, []);
-    
+    }, []);
+
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
-                navigation.navigate('search');
+                navigation.navigate('index');
             }
         }, [isAuthenticated])
     );
@@ -85,30 +85,29 @@ const register = (props: Props) => {
         return resizedImage;
     };
 
-    const handleSubmit = () => {
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 
+
+    const handleSubmit = () => {
         setErrName(name.trim() === '' ? 'Please enter name' : '');
         setErrEmail(!validateEmail(email) ? 'Please enter valid email address' : '');
         setErrPassword(
             password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
         );
-
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
-
-
-        if (!errName && !errEmail && !errNumber && !errPassword) {
-            const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
-            postRegister(data).then(data => {
-                login(data.token)
-            })
-        }
-
+        !!errName && !!errEmail && !!errNumber && !!errPassword && register()
+    }
+    const register = () => {
+        const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
+        postRegister(data).then(data => {
+            login(data.token)
+        })
     }
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+
 
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -262,34 +261,34 @@ const styles = StyleSheet.create({
 
 async function registerForPushNotificationsAsync() {
     let token;
-  
+
     if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
     }
-  
+
     if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      // Learn more about projectId:
-      // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-      token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e742dc1b-029a-4980-8364-e2d0e7b1f40e' })).data;
-      console.log(token);
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        // Learn more about projectId:
+        // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+        token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e742dc1b-029a-4980-8364-e2d0e7b1f40e' })).data;
+        console.log(token);
     } else {
-      alert('Must use physical device for Push Notifications');
+        alert('Must use physical device for Push Notifications');
     }
-  
+
     return token;
-  }
+}

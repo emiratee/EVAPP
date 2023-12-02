@@ -22,7 +22,7 @@ const login = (props: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
-                navigation.navigate('search');
+                navigation.navigate('index');
             }
         }, [isAuthenticated])
     );
