@@ -50,7 +50,6 @@ const SearchForm: React.FC = () => {
             navigate.navigate('TripCardRedirect', { response });
         }
 
-
         // simulate a delay (e.g., 2000 milliseconds) before resetting the form
         setTimeout(() => {
             setIsLoading(false); // set loading to false to hide the spinner

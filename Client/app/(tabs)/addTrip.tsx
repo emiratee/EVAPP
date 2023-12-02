@@ -21,6 +21,7 @@ const addTrip = () => {
 
     useFocusEffect(
         React.useCallback(() => {
+            //reset states when the screen comes in focus again. 
             setSelectedCar(null)
             setSeatPrice('')
             setSmokingToggled(false)
@@ -89,15 +90,12 @@ const addTrip = () => {
     const [snackBar, setSnackBar] = useState(false)
     const [addCarSnackBar, setAddCarSnackBar] = useState(false)
 
-
     const handleSubmit = () => {
 
         const combinedDateTime = moment(date).set({
             hour: moment(time).hour(),
             minute: moment(time).minute()
         });
-
-
 
         if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
             setSnackBar(true)

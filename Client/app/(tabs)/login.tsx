@@ -105,11 +105,6 @@ const styles = StyleSheet.create({
         height: 50,
         top: 8,
     },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-    },
     errorInput: {
         borderColor: 'red',
     },

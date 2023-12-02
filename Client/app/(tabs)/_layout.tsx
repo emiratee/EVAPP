@@ -23,28 +23,6 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
             }}>
-            {/* <Tabs.Screen
-                name="index"
-                options={{
-                    href: null,
-                    title: 'Tab One',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-                    headerRight: () => (
-                        <Link href="/modal" asChild>
-                            <Pressable>
-                                {({ pressed }) => (
-                                    <FontAwesome
-                                        name="info-circle"
-                                        size={25}
-                                        color={Colors[colorScheme ?? 'light'].text}
-                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                    />
-                                )}
-                            </Pressable>
-                        </Link>
-                    ),
-                }}
-            /> */}
             <Tabs.Screen
                 name="TripCardRedirect"
                 options={{
@@ -54,19 +32,9 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="three"
-                options={{
-                    href: null,
-
-                    title: 'Tab Three',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                }}
-            />
-            <Tabs.Screen
                 name="addCredits"
                 options={{
                     href: null,
-
                     title: 'Add Credits',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
@@ -75,6 +43,7 @@ export default function TabLayout() {
                 name="login"
                 options={{
                     href: null,
+                    title: 'Login',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
@@ -82,17 +51,10 @@ export default function TabLayout() {
                 name="register"
                 options={{
                     href: null,
+                    title: 'Register',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
-            
-
-
-            {/* These on top are hidden from navbar, saved to be as reference for something for now.  */}
-
-
-
-
             <Tabs.Screen
                 name="index"
                 options={{
@@ -105,8 +67,6 @@ export default function TabLayout() {
                 options={{
                     title: 'Add a trip',
                     tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
-                    key: 'history' + new Date().getTime(),
-
                 }}
             />
             <Tabs.Screen

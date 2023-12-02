@@ -17,9 +17,9 @@ const register = (props: Props) => {
     const [expoPushToken, setExpoPushToken] = useState('');
 
     const navigation = useNavigation();
-    useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-    }, []);
+    // useEffect(() => {
+    //     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    // }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -98,8 +98,9 @@ const register = (props: Props) => {
             password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
         );
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
-        !!errName && !!errEmail && !!errNumber && !!errPassword && register()
+        !errName.length && !errEmail.length && !errNumber.length && !errPassword.length && register()
     }
+
     const register = () => {
         const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
         postRegister(data).then(data => {
