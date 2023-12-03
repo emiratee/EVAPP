@@ -37,9 +37,10 @@ const register = (props: Props) => {
     );
 
     const navigation = useNavigation();
-    // useEffect(() => {
-    //     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-    // }, []);
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+        console.log(expoPushToken)
+    }, []);
 
     useFocusEffect(
         React.useCallback(() => {

@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    expoPushToken: {
+        type: String
+    },
     password: {
         type: String,
         required: true

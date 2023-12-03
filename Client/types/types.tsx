@@ -56,6 +56,7 @@ export type TTrip = {
 export type TUser = {
     _id: string,
     name: string,
+    expoPushToken?:string,
     memberSince: string,
     email: string,
     imageUrl?: string,

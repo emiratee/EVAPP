@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import path from 'path'
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from 'uuid';
-import { validateUser } from '../utils/userUtils.js';
+import { sendPushNotification, validateUser } from '../utils/userUtils.js';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
 import userController from './userController.js'
@@ -70,6 +70,8 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
 
+
+
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.bookingId": bookingId },
             { $set: { "passengerIDs.$.status": "Approved" } },
@@ -79,6 +81,12 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
         const creditsInQuestion = Number(totalCredits)
 
         const passenger = await User.findOne({ userId: passengerId });
+
+        passenger.expoPushToken && sendPushNotification(
+            passenger.expoPushToken,
+            'The trip you booked has been accepted!',
+            'Be prepared!'
+        )
 
         const currentPassengerOnHold = Number(passenger.credits.onHold);
 
@@ -141,6 +149,12 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
         //find passenger by id
         const user = await User.findOne({ userId: passengerId });
+
+        user.expoPushToken && sendPushNotification(
+            user.expoPushToken,
+            'The trip you booked has been rejected!',
+            'Good luck next time!'
+        )
 
         const currentPassengerOnHold = Number(user.credits.onHold);
         const currentPassengerAvailable = Number(user.credits.available);
@@ -214,7 +228,13 @@ const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
 
             }
         );
+        const driver = await User.findOne({ userId: trip.driverID });
 
+        driver.expoPushToken && sendPushNotification(
+            driver.expoPushToken,
+            'New Request to your trip!',
+            'Accept or Reject it!'
+        )
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 

@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 
-// const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
-const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
+const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
+// const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
@@ -288,6 +288,27 @@ const cloudinaryUpload = async (data) => {
     }
 }
 
+
+async function sendPushNotification(expoPushToken:string) {
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: 'Original Title',
+      body: 'And here is the body!',
+      data: { someData: 'goes here' },
+    };
+  
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
 export {
     cloudinaryUpload,
     getFilteredTrips,
@@ -303,5 +324,6 @@ export {
     putApproveTrip,
     putRejectTrip,
     putRequestTrip,
-    updateAccount
+    updateAccount,
+    sendPushNotification
 }

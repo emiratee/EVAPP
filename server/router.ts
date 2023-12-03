@@ -14,10 +14,6 @@ router.put('/trips/request', tripController.putMakeRequest);
 router.put('/user/trips/approve', tripController.putApprovePassenger);
 router.put('/user/trips/reject', tripController.putRejectPassenger);
 
-
-//image upload 
-router.post('/user/image/upload', upload.single('image'), userController.uploadImage);
-
 //User account (Setting etc.)
 router.post('/user/account/register', userController.postRegister);
 router.post('/user/account/login', userController.postLogin);

@@ -37,7 +37,6 @@ const SearchForm: React.FC = () => {
 
     const handleSubmit = async () => {
         setIsLoading(true);
-
         const formData = {
             departure,
             destination,
