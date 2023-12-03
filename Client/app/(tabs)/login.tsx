@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { Link, useFocusEffect, useNavigation } from 'expo-router'
@@ -47,43 +47,49 @@ const login = (props: Props) => {
     }
     const [showPassword, setShowPassword] = useState(false)
     return (
-        <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='E-mail'
-                    value={email}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    onChangeText={(text) => { setEmail(text) }}
-                    style={[styles.input, errEmail != '' && styles.errorInput]}
-                    placeholderTextColor="#838383"
-                />
-            </View>
-            {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='Password'
-                    value={password}
-                    secureTextEntry={!showPassword}
-                    onChangeText={(text) => { setPassword(text) }}
-                    style={[styles.input, errEmail != '' && styles.errorInput]}
-                    placeholderTextColor="#838383"
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+            <View
+
+                style={styles.container}>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder='E-mail'
+                        value={email}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        onChangeText={(text) => { setEmail(text) }}
+                        style={[styles.input, errEmail != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
+                    />
+                </View>
+                {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder='Password'
+                        value={password}
+                        secureTextEntry={!showPassword}
+                        onChangeText={(text) => { setPassword(text) }}
+                        style={[styles.input, errEmail != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
+
+                    />
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                    </TouchableOpacity>
+                </View>
+
+                {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
+                <TouchableOpacity style={styles.button} onPress={handleSubmit} >
+                    <Text style={{ color: '#fff' }}>Login</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
+                    <Link href={'/(tabs)/register'}>don't have an account yet?</Link>
                 </TouchableOpacity>
             </View>
+        </TouchableWithoutFeedback>
 
-            {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-                <Text style={{ color: '#fff' }}>Login</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
-                <Link href={'/(tabs)/register'}>don't have an account yet?</Link>
-            </TouchableOpacity>
-        </View>
     )
 }
 

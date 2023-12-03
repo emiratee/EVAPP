@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
@@ -141,102 +141,105 @@ const register = (props: Props) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.picture} onPress={pickImage} >
-                <View style={styles.picture}>
-                    {
-                        isLoading ? <ActivityIndicator size={'large'} /> :
-                            image ? <Image source={{ uri: image }} style={styles.picture} /> :
-                                <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-                    }
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.picture} onPress={pickImage} >
+                    <View style={styles.picture}>
+                        {
+                            isLoading ? <ActivityIndicator size={'large'} /> :
+                                image ? <Image source={{ uri: image }} style={styles.picture} /> :
+                                    <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+
+                        }
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.inputContainer}>
+                    <TextInput placeholder='Name'
+                        value={name}
+                        onChangeText={(text) => { setName(text) }}
+                        style={[styles.input, errName != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
+
+                    ></TextInput>
                 </View>
-            </TouchableOpacity>
-            <View style={styles.inputContainer}>
-                <TextInput placeholder='Name'
-                    value={name}
-                    onChangeText={(text) => { setName(text) }}
-                    style={[styles.input, errName != '' && styles.errorInput]}
-                    placeholderTextColor="#838383"
+                {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
+                <View style={styles.inputContainer}>
+                    <TextInput placeholder='E-mail'
+                        value={email}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        onChangeText={(text) => { setEmail(text) }}
+                        style={[styles.input, errEmail != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
 
-                ></TextInput>
-            </View>
-            {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
-            <View style={styles.inputContainer}>
-                <TextInput placeholder='E-mail'
-                    value={email}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    onChangeText={(text) => { setEmail(text) }}
-                    style={[styles.input, errEmail != '' && styles.errorInput]}
-                    placeholderTextColor="#838383"
+                    ></TextInput>
 
-                ></TextInput>
+                </View>
+                {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+                <View style={styles.inputContainer}>
+                    <TextInput placeholder='Mobile Number (++)'
+                        value={number}
+                        keyboardType='phone-pad'
+                        onChangeText={(text) => { setNumber(text) }}
+                        style={[styles.input, errNumber != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
 
-            </View>
-            {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
-            <View style={styles.inputContainer}>
-                <TextInput placeholder='Mobile Number (++)'
-                    value={number}
-                    keyboardType='phone-pad'
-                    onChangeText={(text) => { setNumber(text) }}
-                    style={[styles.input, errNumber != '' && styles.errorInput]}
-                    placeholderTextColor="#838383"
+                    ></TextInput>
 
-                ></TextInput>
+                </View>
+                {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
+                <View style={styles.inputContainer}>
 
-            </View>
-            {errNumber ? <Text style={styles.errorText}>{errNumber}</Text> : null}
-            <View style={styles.inputContainer}>
+                    <TextInput placeholder='Password'
+                        value={password}
+                        onChangeText={(text) => {
+                            setErrPassword('');
+                            setPassword(text)
+                        }}
+                        style={styles.input}
+                        secureTextEntry={!showPassword}
+                        textContentType="password"
+                        placeholderTextColor="#838383"
 
-                <TextInput placeholder='Password'
-                    value={password}
-                    onChangeText={(text) => {
-                        setErrPassword('');
-                        setPassword(text)
-                    }}
-                    style={styles.input}
-                    secureTextEntry={!showPassword}
-                    textContentType="password"
-                    placeholderTextColor="#838383"
+                    />
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                    </TouchableOpacity>
+                </View>
 
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                <View style={styles.inputContainer}>
+                    <TextInput placeholder='Confirm Password'
+                        value={confirmPassword}
+                        onChangeText={(text) => {
+                            setConfirmPassword(text);
+                            setErrPassword(text === password ? '' : 'Passwords do not match');
+                        }}
+                        style={styles.input}
+                        secureTextEntry={!showConfirmPassword}
+                        textContentType="password"
+                        placeholderTextColor="#838383"
+
+                    />
+                    <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                        <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                    </TouchableOpacity>
+                </View>
+                {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSubmit}
+                    disabled={isLoading}
+                >
+                    <Text style={{ color: '#fff' }} >Register</Text>
                 </TouchableOpacity>
-            </View>
 
-            <View style={styles.inputContainer}>
-                <TextInput placeholder='Confirm Password'
-                    value={confirmPassword}
-                    onChangeText={(text) => {
-                        setConfirmPassword(text);
-                        setErrPassword(text === password ? '' : 'Passwords do not match');
-                    }}
-                    style={styles.input}
-                    secureTextEntry={!showConfirmPassword}
-                    textContentType="password"
-                    placeholderTextColor="#838383"
-
-                />
-                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                    <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
+                    <Link href={'/(tabs)/login'}>already have an account?</Link>
                 </TouchableOpacity>
+
             </View>
-            {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleSubmit}
-                disabled={isLoading}
-            >
-                <Text style={{ color: '#fff' }} >Register</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
-                <Link href={'/(tabs)/login'}>already have an account?</Link>
-            </TouchableOpacity>
-
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 
