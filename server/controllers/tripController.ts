@@ -28,8 +28,6 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
     try {
         const validatedUser = await validateUser(req);
         const { departureCountry, departureCity, destinationCountry, destinationCity, date, seats } = req.query;
-        console.log(validatedUser)
-        console.log('query', req.query)
         let params
 
         if (!destinationCountry && !destinationCity) {

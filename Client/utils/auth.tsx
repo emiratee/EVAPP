@@ -3,15 +3,33 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from './apiService';
 import * as types from '../types/types';
 
+type AuthContextType = {
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    user: types.TUser | null;
+    setUser: React.Dispatch<React.SetStateAction<types.TUser | null>>;
+    login: (token: string) => Promise<void>;
+    logout: () => Promise<void>;
+    isAuthenticated: boolean;
+}
 
+const defaultAuthContext: AuthContextType = {
+    token: null,
+    setToken: () => { },
+    user: null,
+    setUser: () => { },
+    login: async () => { },
+    logout: async () => { },
+    isAuthenticated: false,
+};
 
-const AuthContext = createContext();
+const AuthContext = createContext(defaultAuthContext);
 
 export const useAuth = () => {
     return useContext(AuthContext);
 };
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<types.TUser | null>(null);
 
@@ -23,7 +41,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, [token])
 
-    const login = async (token:string) => {
+    const login = async (token: string): Promise<void> => {
         try {
             await AsyncStorage.setItem('token', token)
             setToken(token);
@@ -33,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = async () => {
+    const logout = async (): Promise<void> => {
         try {
             await AsyncStorage.removeItem('token')
             setToken(null);
@@ -43,7 +61,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const getData = async () => {
+    const getData = async (): Promise<void> => {
         try {
             const value = await AsyncStorage.getItem('token');
             if (value !== null) {
@@ -60,9 +78,9 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
 
-    const isAuthenticated = !!token;
+    const isAuthenticated: boolean = !!token;
 
-    const value = {
+    return <AuthContext.Provider value={{
         token,
         setToken,
         login,
@@ -70,7 +88,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         user,
         setUser
-    };
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    }}>
+        {children}
+    </AuthContext.Provider>;
 };
