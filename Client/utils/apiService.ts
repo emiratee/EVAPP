@@ -1,15 +1,23 @@
 import { Alert } from "react-native";
 
-const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
-// const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
+// const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
+const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
 };
 
 const getFilteredTrips = async (departure, destination, date, seats): Promise<any> => {
     try {
-        const response = await fetch(`${BASE_URL}/trips?departureCountry=${departure.country}&departureCity=${departure.city}&destinationCountry=${destination.country}&destinationCity=${destination.city}&date=${date}&seats=${seats}`);
-        return await response.json();
+        if (!destination) {
+            const response = await fetch(`${BASE_URL}/trips?departureCountry=${departure.country}&departureCity=${departure.city}&date=${date}&seats=${seats}`);
+            return await response.json();
+
+        } else {
+
+            const response = await fetch(`${BASE_URL}/trips?departureCountry=${departure.country}&departureCity=${departure.city}&destinationCountry=${destination?.country}&destinationCity=${destination?.city}&date=${date}&seats=${seats}`);
+            return await response.json();
+        }
+
     } catch (error) {
         console.error(error);
         throw error;
