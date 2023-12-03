@@ -35,9 +35,6 @@ const Map = ({ departure, destination }) => {
         fetchCoordinates();
     }, [departure, destination]);
 
-    console.log("A",locationA);
-    console.log("B",locationB);
-
     const mapViewRef = useRef(null);
 
     useEffect(() => {

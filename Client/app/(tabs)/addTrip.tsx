@@ -117,7 +117,12 @@ const addTrip = () => {
 
 
                     const duration = moment.duration(averageDuration, 'seconds');
-                    const formattedTime = `${Math.floor(duration.asHours())}:${duration.minutes()}`;
+                    const hours = Math.floor(duration.asHours()).toString();
+                    const formattedHours = hours.length === 1 ? `0${hours}` : hours;
+                    const minutes = duration.minutes().toString();
+                    const formattedMinutes = minutes.length === 1 ? `0${minutes}` : minutes;
+
+                    const formattedTime = `${formattedHours}:${formattedMinutes}`;
 
 
                     const submitForm: types.TTripNoId = {
