@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
 import { Link } from 'expo-router';
@@ -15,6 +15,26 @@ type Props = {}
 const register = (props: Props) => {
     const { token, login, isAuthenticated } = useAuth();
     const [expoPushToken, setExpoPushToken] = useState('');
+    const scrollViewRef = useRef(null);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            //reset states when the screen comes in focus again. 
+            setName('')
+            setEmail('')
+            setNumber('')
+            setPassword('')
+            setConfirmPassword('')
+            setImage('')
+            setErrName('')
+            setErrEmail('')
+            setErrNumber('')
+            setErrPassword('')
+            if (scrollViewRef.current) {
+                scrollViewRef.current.scrollTo({ y: 0, animated: true });
+            }
+        }, [])
+    );
 
     const navigation = useNavigation();
     // useEffect(() => {
@@ -87,43 +107,32 @@ const register = (props: Props) => {
         return resizedImage;
     };
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        console.log('testing: ', emailRegex.test(email))
-        return emailRegex.test(email);
-    }
-
 
     const handleSubmit = () => {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setErrName(name.trim() === '' ? 'Please enter name' : '');
         setErrPassword(
-            password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
+            password.trim() === '' || confirmPassword.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
         );
         setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '');
-        if (emailRegex.test(email)) {
 
-            !errName.length && !errNumber.length && !errPassword.length && registering()
+        if (emailRegex.test(email)) {
+            setErrEmail('');
+            (!errName.length && !errNumber.length && !errPassword.length) && (confirmPassword.trim() !== '') && registering()
         } else {
             setErrEmail('Please enter correct email address');
-            // setErrName(name.trim() === '' ? 'Please enter name' : '');
-            // setErrPassword(
-            //     password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
-            // );
-            // setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '');
         }
     }
 
-    console.log('logging: ', errEmail)
     const registering = () => {
-        const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
-        postRegister(data).then(data => {
-            login(data.token)
-        })
+        if (!errName.length && !errNumber.length && !errPassword.length) {
+            const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
+            postRegister(data).then(data => {
+                login(data.token)
+            })
+        }
     }
-
-
 
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
