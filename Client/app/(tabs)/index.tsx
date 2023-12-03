@@ -14,7 +14,7 @@ import { getFilteredTrips } from '../../utils/apiService';
 const SearchForm: React.FC = () => {
 
 
-    const {token} = useAuth();
+    const { token } = useAuth();
     const [departure, setDeparture] = useState<string>('');
     const [destination, setDestination] = useState('');
 
@@ -36,7 +36,7 @@ const SearchForm: React.FC = () => {
 
 
     const handleSubmit = async () => {
-        setIsLoading(true); 
+        setIsLoading(true);
 
         const formData = {
             departure,
@@ -44,8 +44,13 @@ const SearchForm: React.FC = () => {
             date: moment(date).format('YYYY-MM-DD'),
             numberOfPeople,
         };
-        
-        const response = await getFilteredTrips(formData.departure, formData.destination, formData.date, formData.numberOfPeople);
+
+        const response = await getFilteredTrips({
+            departure: formData.departure,
+            destination: formData.destination,
+            date: formData.date,
+            seats: formData.numberOfPeople
+        }, token);
         if (response) {
             navigate.navigate('TripCardRedirect', { response });
         }
@@ -59,10 +64,10 @@ const SearchForm: React.FC = () => {
 
 
     return (
-        <ScrollView 
-        automaticallyAdjustKeyboardInsets={true}
-        keyboardShouldPersistTaps={'handled'}
-        style={styles.container}>
+        <ScrollView
+            automaticallyAdjustKeyboardInsets={true}
+            keyboardShouldPersistTaps={'handled'}
+            style={styles.container}>
             <Text style={styles.title}>EVAPP</Text>
             <Text style={styles.subtitle}>Welcome to EVAPP, please select your travel destination!</Text>
             <Image

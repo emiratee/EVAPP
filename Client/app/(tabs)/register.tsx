@@ -130,6 +130,8 @@ const register = (props: Props) => {
             const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
             postRegister(data).then(data => {
                 login(data.token)
+            }).catch(error => {
+                alert(error)
             })
         }
     }
