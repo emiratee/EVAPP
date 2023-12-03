@@ -1,3 +1,6 @@
+import { Alert } from "react-native";
+
+// const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app'; //not working
 const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
@@ -13,7 +16,7 @@ const getFilteredTrips = async (departure, destination, date, seats): Promise<an
     }
 }
 
-const getDriver = async (driverId): Promise<any> => {
+const getDriver = async (driverId:string): Promise<any> => {
     try {
         const response = await fetch(`${BASE_URL}/user/${driverId}`);
         return await response.json();
@@ -215,19 +218,7 @@ const putRequestTrip = async (data, token: string) => {
     }
 }
 
-const uploadImage = async (data: any) => {
-    try {
-        const response = await fetch(`${BASE_URL}/user/image/upload`, {
-            method: 'POST',
-            body: data,
-        });
-        checkResponse(response);
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
+
 
 const updateAccount = async (data, token: string) => {
     try {
@@ -251,7 +242,29 @@ const updateAccount = async (data, token: string) => {
     }
 }
 
+const cloudinaryUpload = async (data) => {
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
+            method: "POST",
+            body: data,
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const cloudinaryData = await response.json();
+        
+        return cloudinaryData.secure_url;
+    } catch (err) {
+        console.error('An Error Occurred While Uploading:', err);
+        Alert.alert('An Error Occurred While Uploading');
+        throw err;
+    }
+}
+
 export {
+    cloudinaryUpload,
     getFilteredTrips,
     getDriver,
     getUser,
@@ -265,6 +278,5 @@ export {
     putApproveTrip,
     putRejectTrip,
     putRequestTrip,
-    uploadImage,
     updateAccount
 }

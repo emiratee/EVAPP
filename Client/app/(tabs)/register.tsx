@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { postRegister, uploadImage } from '../../utils/apiService';
+import { postRegister, uploadImage, cloudinaryUpload } from '../../utils/apiService';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -60,14 +60,15 @@ const register = (props: Props) => {
             const fileType = uriParts[uriParts.length - 1];
 
             const formData = new FormData();
-            formData.append('image', {
+            formData.append('file', {
                 uri: resizedImage.uri,
                 name: `photo.${fileType}`,
                 type: `image/${fileType}`,
             });
+            formData.append('upload_preset', 'profile_image')
 
-            const response = await uploadImage(formData)
-            setImageUrl(response.imageUrl);
+            const imageUrl = await cloudinaryUpload(formData)
+            setImageUrl(imageUrl);
             setIsLoading(false)
 
 

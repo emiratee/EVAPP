@@ -59,7 +59,10 @@ const SearchForm: React.FC = () => {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView 
+        automaticallyAdjustKeyboardInsets={true}
+        keyboardShouldPersistTaps={'handled'}
+        style={styles.container}>
             <Text style={styles.title}>EVAPP</Text>
             <Text style={styles.subtitle}>Welcome to EVAPP, please select your travel destination!</Text>
             <Image
@@ -175,7 +178,6 @@ const SearchForm: React.FC = () => {
                         <RNPickerSelect
                             onValueChange={(value) => setNumberOfPeople(value)}
                             items={[
-                                // { label: '1', value: 1 },
                                 { label: '2', value: 2 },
                                 { label: '3', value: 3 },
                                 { label: '4', value: 4 },
