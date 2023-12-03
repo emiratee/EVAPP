@@ -37,6 +37,8 @@ const AddNewCar = (props: Props) => {
                         onChangeText={text => setNewModel(text)}
                         value={newModel}
                         placeholder="Type here..."
+                        placeholderTextColor="#838383"
+
                     />
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
@@ -50,6 +52,8 @@ const AddNewCar = (props: Props) => {
                         onChangeText={text => setNewColor(text)}
                         value={newColor}
                         placeholder="Type here..."
+                        placeholderTextColor="#838383"
+
                     />
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
@@ -63,6 +67,8 @@ const AddNewCar = (props: Props) => {
                         onChangeText={text => setNewLicencePlates(text)}
                         value={newLicencePlates}
                         placeholder="Type here..."
+                        placeholderTextColor="#838383"
+
                     />
                 </View>
 

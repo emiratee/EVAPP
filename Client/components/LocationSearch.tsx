@@ -36,6 +36,9 @@ const LocationSearch = (props: Props) => {
             }
 
             }
+            textInputProps={{
+                placeholderTextColor: '#838383',
+              }}
             disableScroll={true}
             placeholder='Search'
             fetchDetails={true}

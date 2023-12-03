@@ -94,6 +94,8 @@ const ChangePasswordForm = ({ setVisible }) => {
           value={currentPassword}
           onChangeText={(text) => setCurrentPassword(text)}
           onFocus={() => setShowCurrentPassword(false)}
+          placeholderTextColor="#838383"
+
         />
         <TouchableOpacity onPress={() => toggleShowPassword('current')}>
           <icons.MaterialCommunityIcons name={showCurrentPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
@@ -108,6 +110,8 @@ const ChangePasswordForm = ({ setVisible }) => {
           value={newPassword}
           onChangeText={(text) => setNewPassword(text)}
           onFocus={() => setShowNewPassword(false)}
+          placeholderTextColor="#838383"
+
         />
         <TouchableOpacity onPress={() => toggleShowPassword('new')}>
           <icons.MaterialCommunityIcons name={showNewPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
@@ -122,6 +126,8 @@ const ChangePasswordForm = ({ setVisible }) => {
           value={confirmPassword}
           onChangeText={(text) => setConfirmPassword(text)}
           onFocus={() => setShowConfirmPassword(false)}
+          placeholderTextColor="#838383"
+
         />
         <TouchableOpacity onPress={() => toggleShowPassword('confirm')}>
           <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />

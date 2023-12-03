@@ -66,6 +66,7 @@ const addCredits: React.FC = () => {
                 keyboardType="numeric"
                 value={creditsAmount}
                 onChangeText={(text) => setCreditsAmount(text)}
+                placeholderTextColor="#838383"
             >
             </TextInput>
             <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 0,}]}>

@@ -157,6 +157,8 @@ const register = (props: Props) => {
                     value={name}
                     onChangeText={(text) => { setName(text) }}
                     style={[styles.input, errName != '' && styles.errorInput]}
+                    placeholderTextColor="#838383"
+
                 ></TextInput>
             </View>
             {errName ? <Text style={styles.errorText}>{errName}</Text> : null}
@@ -167,6 +169,8 @@ const register = (props: Props) => {
                     autoCapitalize='none'
                     onChangeText={(text) => { setEmail(text) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
+                    placeholderTextColor="#838383"
+
                 ></TextInput>
 
             </View>
@@ -177,6 +181,8 @@ const register = (props: Props) => {
                     keyboardType='phone-pad'
                     onChangeText={(text) => { setNumber(text) }}
                     style={[styles.input, errNumber != '' && styles.errorInput]}
+                    placeholderTextColor="#838383"
+
                 ></TextInput>
 
             </View>
@@ -192,6 +198,8 @@ const register = (props: Props) => {
                     style={styles.input}
                     secureTextEntry={!showPassword}
                     textContentType="password"
+                    placeholderTextColor="#838383"
+
                 />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                     <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
@@ -208,6 +216,8 @@ const register = (props: Props) => {
                     style={styles.input}
                     secureTextEntry={!showConfirmPassword}
                     textContentType="password"
+                    placeholderTextColor="#838383"
+
                 />
                 <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
                     <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />

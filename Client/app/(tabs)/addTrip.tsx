@@ -52,7 +52,7 @@ const addTrip = () => {
     const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user && user.cars.length && user.cars[0] || null)
 
 
-    const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
+
 
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -60,9 +60,6 @@ const addTrip = () => {
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [numberOfSeats, setNumberOfSeats] = useState(1);
-
-    const styles = getDynamicStyles(iconColor);
-
 
     const navigation = useNavigation();
 
@@ -217,7 +214,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-on' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='location-on' size={24} color={"black"} />
                         <Text>From: </Text>
                     </View>
                     <View
@@ -226,7 +223,7 @@ const addTrip = () => {
                     </View>
                     <View
                         style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-searching' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='location-searching' size={24} color={"black"} />
                         <Text>To: </Text>
                     </View>
                     <View
@@ -285,7 +282,7 @@ const addTrip = () => {
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name="ios-people" size={24} color={iconColor} />
+                        <icons.Ionicons name="ios-people" size={24} color={"black"} />
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
@@ -308,7 +305,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='smoking' size={24} color={iconColor} />
+                        <icons.MaterialCommunityIcons name='smoking' size={24} color={"black"} />
                         <Text>Smoking</Text>
                     </View>
                     <Switch
@@ -320,7 +317,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={iconColor} />
+                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={"black"} />
                         <Text>Child Seat</Text>
                     </View>
                     <Switch
@@ -332,7 +329,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='pets' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='pets' size={24} color={"black"} />
                         <Text>Pets</Text>
                     </View>
 
@@ -345,7 +342,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.FontAwesome5 name='wine-bottle' size={24} color={iconColor} />
+                        <icons.FontAwesome5 name='wine-bottle' size={24} color={"black"} />
                         <Text>Alcohol</Text>
                     </View>
                     <Switch
@@ -357,7 +354,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='luggage' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='luggage' size={24} color={"black"} />
                         <Text>Luggage</Text>
                     </View>
                     <Switch
@@ -369,7 +366,7 @@ const addTrip = () => {
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
                         {/* <Text>Luggage</Text> */}
                         <Text>Additional Comments: </Text>
                     </View>
@@ -379,6 +376,8 @@ const addTrip = () => {
                         onChangeText={text => setCommentsValue(text)}
                         value={commentsValue}
                         placeholder="Type here..."
+                        placeholderTextColor="#838383"
+
                     />
                 </View>
             </View>
@@ -401,7 +400,7 @@ const addTrip = () => {
                             style={styles.addNewCar}
                             onPress={() => setAddNewCar(true)}
                         >
-                            <icons.FontAwesome name='plus' size={28} color={iconColor} />
+                            <icons.FontAwesome name='plus' size={28} color={"black"} />
                         </TouchableOpacity>
                     }
                 />
@@ -409,7 +408,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
                         <Text>Price per seat</Text>
 
 
@@ -424,6 +423,8 @@ const addTrip = () => {
                             placeholder='Enter price per seat'
                             onChangeText={handlePriceChange}
                             value={seatPrice}
+                            placeholderTextColor="#838383"
+
                         />
                     </View>
 
@@ -472,93 +473,91 @@ const addTrip = () => {
 }
 
 export default addTrip
-const getDynamicStyles = (textColor: string) => {
+const styles = StyleSheet.create({
+    label: {
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    btn: {
+        backgroundColor: 'red',
+        alignItems: 'center',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20
+    },
+    container: {
+        padding: 10,
+        flex: 1
+    },
+    parameter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderColor: '#a8a8a8',
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    parameters: {
+        gap: 5,
+        borderRadius: 10,
+        // borderWidth: 1,
+        borderColor: '#a8a8a8',
+        padding: 5,
+        marginBottom: 10,
+        backgroundColor: '#fff'
+    },
+    input: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
+        borderColor: '#a8a8a8',
+        color: "black",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // textAlign: 'center',
+    },
 
-    return StyleSheet.create({
-        label: {
-            fontSize: 18,
-            textAlign: 'center',
-        },
-        btn: {
-            backgroundColor: 'red',
-            alignItems: 'center',
-            padding: 20,
-            borderRadius: 10,
-            marginBottom: 20
-        },
-        container: {
-            padding: 10,
-            flex: 1
-        },
-        parameter: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 10,
-            borderColor: '#a8a8a8',
-        },
-        iconContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 10,
-        },
-        parameters: {
-            gap: 5,
-            borderRadius: 10,
-            // borderWidth: 1,
-            borderColor: '#a8a8a8',
-            padding: 5,
-            marginBottom: 10,
-            backgroundColor: '#fff'
-        },
-        input: {
-            height: 50,
-            width: '100%',
-            borderWidth: 1,
-            padding: 10,
-            borderRadius: 10,
-            borderColor: '#a8a8a8',
-            color: textColor,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            // textAlign: 'center',
-        },
+    currency: {
+        position: 'absolute',
+        left: 10, // Adjust the position as needed
+        // Style your text as needed
+    },
+    priceContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    inputPrice: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
+        borderColor: '#a8a8a8',
+        color: "black",
+        paddingLeft: 40
+    },
+    carsContainer: {
 
-        currency: {
-            position: 'absolute',
-            left: 10, // Adjust the position as needed
-            // Style your text as needed
-        },
-        priceContainer: {
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        inputPrice: {
-            height: 50,
-            width: '100%',
-            borderWidth: 1,
-            padding: 10,
-            borderRadius: 10,
-            borderColor: '#a8a8a8',
-            color: textColor,
-            paddingLeft: 40
-        },
-        carsContainer: {
+    },
+    addNewCar: {
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#a8a8a8',
+        height: 100,
+        width: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+})
 
-        },
-        addNewCar: {
-            padding: 10,
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: '#a8a8a8',
-            height: 100,
-            width: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }
-    })
-}
 
 
 

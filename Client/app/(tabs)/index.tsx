@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -36,29 +36,35 @@ const SearchForm: React.FC = () => {
 
 
     const handleSubmit = async () => {
-        setIsLoading(true);
-        const formData = {
-            departure,
-            destination,
-            date: moment(date).format('YYYY-MM-DD'),
-            numberOfPeople,
-        };
+        if (departure) {
 
-        const response = await getFilteredTrips({
-            departure: formData.departure,
-            destination: formData.destination,
-            date: formData.date,
-            seats: formData.numberOfPeople
-        }, token);
-        if (response) {
-            navigate.navigate('TripCardRedirect', { response });
+            setIsLoading(true);
+            const formData = {
+                departure,
+                destination,
+                date: moment(date).format('YYYY-MM-DD'),
+                numberOfPeople,
+            };
+
+            const response = await getFilteredTrips({
+                departure: formData.departure,
+                destination: formData.destination,
+                date: formData.date,
+                seats: formData.numberOfPeople
+            }, token);
+            if (response) {
+                navigate.navigate('TripCardRedirect', { response });
+            }
+
+            // simulate a delay (e.g., 2000 milliseconds) before resetting the form
+            setTimeout(() => {
+                setIsLoading(false); // set loading to false to hide the spinner
+                setResetForm(true); // set the flag to trigger the form reset
+            }, 2000);
+        } else {
+            Alert.alert('Missing fields', 'Please fill in departure!')
         }
 
-        // simulate a delay (e.g., 2000 milliseconds) before resetting the form
-        setTimeout(() => {
-            setIsLoading(false); // set loading to false to hide the spinner
-            setResetForm(true); // set the flag to trigger the form reset
-        }, 2000);
     };
 
 
@@ -87,6 +93,9 @@ const SearchForm: React.FC = () => {
                                     borderBottomWidth: 1,
                                     fontSize: 18,
                                 }
+                            }}
+                            textInputProps={{
+                                placeholderTextColor: '#838383',
                             }}
                             placeholder='Search'
                             minLength={2}
@@ -129,6 +138,9 @@ const SearchForm: React.FC = () => {
                                     borderBottomWidth: 1,
                                     fontSize: 18,
                                 }
+                            }}
+                            textInputProps={{
+                                placeholderTextColor: '#838383',
                             }}
                             placeholder='Search'
                             minLength={2}
@@ -196,12 +208,15 @@ const SearchForm: React.FC = () => {
                                     paddingVertical: 12,
                                     paddingHorizontal: 10,
                                     paddingRight: 55,
+                                    color: "#838383"
                                 },
                                 inputAndroid: {
                                     fontSize: 18,
                                     paddingVertical: 12,
                                     paddingHorizontal: 10,
                                     paddingRight: 55,
+                                    color: "#838383"
+
                                 },
                             }}
                         />

@@ -56,6 +56,7 @@ const login = (props: Props) => {
                     autoCapitalize='none'
                     onChangeText={(text) => { setEmail(text) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
+                    placeholderTextColor="#838383"
                 />
             </View>
             {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
@@ -66,6 +67,8 @@ const login = (props: Props) => {
                     secureTextEntry={!showPassword}
                     onChangeText={(text) => { setPassword(text) }}
                     style={[styles.input, errEmail != '' && styles.errorInput]}
+                    placeholderTextColor="#838383"
+
                 />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                     <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
