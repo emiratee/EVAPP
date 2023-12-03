@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image, ActivityIndicator, StyleSheet, Alert } f
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as icons from '@expo/vector-icons';
-import { updateAccount, uploadImage, cloudinaryUpload } from '../utils/apiService';
+import { updateAccount, cloudinaryUpload } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 
 

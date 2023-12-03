@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { postRegister, uploadImage, cloudinaryUpload } from '../../utils/apiService';
+import { postRegister, cloudinaryUpload } from '../../utils/apiService';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
