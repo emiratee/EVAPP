@@ -1,7 +1,11 @@
 import { Alert } from "react-native";
 
+<<<<<<< HEAD
 const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
 // const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
+=======
+const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
+>>>>>>> 998f30b (fixing register bug)
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
 };
@@ -109,6 +113,7 @@ const postRegister = async (data) => {
         return await response.json();
 
     } catch (error) {
+        Alert.alert('here')
         console.log(error)
         throw error;
     }

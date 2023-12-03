@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
@@ -58,7 +58,7 @@ const history = () => {
             </Tab>
 
             <TabView value={index} onChange={setIndex} animationType="spring" >
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                     {upcomingTrips.length > 0 ? (
                         <FlatList
                             data={upcomingTrips}
@@ -96,9 +96,9 @@ const history = () => {
                     ) : (
                         <Text>No upcoming Trips</Text>
                     )}
-                </View>
+                </SafeAreaView>
 
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
                         data={previousTrips}
                         renderItem={({ item }) => (
@@ -110,7 +110,7 @@ const history = () => {
                     />) : (
                         <Text>No previous Trips</Text>
                     )}
-                </View>
+                </SafeAreaView>
             </TabView>
         </>
     )

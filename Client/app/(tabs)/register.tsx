@@ -41,6 +41,7 @@ const register = (props: Props) => {
     const [errEmail, setErrEmail] = useState('');
     const [errNumber, setErrNumber] = useState('');
     const [errPassword, setErrPassword] = useState('');
+
     const [isLoading, setIsLoading] = useState(false)
     const pickImage = async () => {
         setIsLoading(true)
@@ -88,21 +89,34 @@ const register = (props: Props) => {
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        console.log('testing: ', emailRegex.test(email))
         return emailRegex.test(email);
     }
 
 
     const handleSubmit = () => {
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setErrName(name.trim() === '' ? 'Please enter name' : '');
-        setErrEmail(!validateEmail(email) ? 'Please enter valid email address' : '');
         setErrPassword(
             password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
         );
-        setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '')
-        !errName.length && !errEmail.length && !errNumber.length && !errPassword.length && register()
+        setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '');
+        if (emailRegex.test(email)) {
+
+            !errName.length && !errNumber.length && !errPassword.length && registering()
+        } else {
+            setErrEmail('Please enter correct email address');
+            // setErrName(name.trim() === '' ? 'Please enter name' : '');
+            // setErrPassword(
+            //     password.trim() === '' ? 'Please enter a password' : password !== confirmPassword ? 'Passwords do not match! Please re-enter' : ''
+            // );
+            // setErrNumber(number.trim() === '' ? 'Please enter mobile number' : '');
+        }
     }
 
-    const register = () => {
+    console.log('logging: ', errEmail)
+    const registering = () => {
         const data = { name, email, phoneNumber: number, password, imageUrl, expoPushToken }
         postRegister(data).then(data => {
             login(data.token)
