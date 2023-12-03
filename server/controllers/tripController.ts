@@ -26,18 +26,28 @@ const postCreate = async (req: Request, res: Response): Promise<any> => {
 
 const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validUser = validateUser(req);
-        if (!validUser) return res.status(401).json({ error: "Authentication failed" });
-
+        const validatedUser = await validateUser(req);
         const { departureCountry, departureCity, destinationCountry, destinationCity, date, seats } = req.query;
-        const params = {
-            'departure.country': departureCountry,
-            'departure.city': departureCity,
-            'destination.country': destinationCountry,
-            'destination.city': destinationCity,
-            date,
-            'seats.available': { $gte: seats }
-        };
+
+        let params
+
+        if (!destinationCountry && !destinationCity) {
+            params = {
+                'departure.country': departureCountry,
+                'departure.city': departureCity,
+                date: { $gte: date },
+                'seats.available': { $gte: seats }
+            };
+        } else {
+            params = {
+                'departure.country': departureCountry,
+                'departure.city': departureCity,
+                'destination.country': destinationCountry,
+                'destination.city': destinationCity,
+                date: { $gte: date },
+                'seats.available': { $gte: seats }
+            };
+        }
 
         const trips = await Trip.find(params);
         let formedTrips: [] = [];
@@ -114,7 +124,7 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
         )
 
         const seats = passenger.passengerIDs[0].seats;
-        
+
 
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.bookingId": bookingId },
