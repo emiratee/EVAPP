@@ -49,9 +49,9 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
                 'driverID': { $ne: validatedUser.userId }
             };
         }
-
+        //todo remove any
         const trips = await Trip.find(params);
-        let formedTrips: [] = [];
+        let formedTrips: any[] = [];
         for (const trip of trips) {
             const driver = await userController.getDriver(trip.driverID);
             formedTrips.push({ trip, driver });

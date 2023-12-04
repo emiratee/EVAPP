@@ -5,9 +5,11 @@ import User from '../models/User';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-export async function validateUser(req: Request): Promise<any> {
+
+//todo, change not to any
+export async function validateUser(req: Request | any): Promise<any> {
     try {
-        const { authorization } = req.headers;
+        const { authorization } = req.headers
 
         if (!authorization) return false;
 

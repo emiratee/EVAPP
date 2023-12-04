@@ -12,11 +12,11 @@ const login = (props: Props) => {
 
     const { login, isAuthenticated } = useAuth();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const [errEmail, setErrEmail] = useState('');
-    const [errPassword, setErrPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [errEmail, setErrEmail] = useState<string>('');
+    const [errPassword, setErrPassword] = useState<string>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const navigation = useNavigation();
     useFocusEffect(
@@ -45,12 +45,9 @@ const login = (props: Props) => {
             }
         }
     }
-    const [showPassword, setShowPassword] = useState(false)
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
             <View
-
                 style={styles.container}>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -89,7 +86,6 @@ const login = (props: Props) => {
                 </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
-
     )
 }
 
@@ -121,7 +117,6 @@ const styles = StyleSheet.create({
         color: 'red',
         marginBottom: 5
     },
-
 
     inputContainer: {
         flexDirection: 'row',

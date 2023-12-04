@@ -10,7 +10,6 @@ import Trip from '../models/Trip.js';
 import User from '../models/User.js';
 import { validateUser, sendPushNotification } from '../utils/userUtils.js';
 
-
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const SECRET_KEY = process.env.SECRET_KEY!;
@@ -60,7 +59,7 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-const getDriver = async (driverId): Promise<any> => {
+const getDriver = async (driverId: string): Promise<any> => {
     try {
         //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
 
@@ -95,7 +94,7 @@ const getUser = async (req: Request, res: Response): Promise<any> => {
 
 const putCar = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         await User.updateOne(

@@ -19,7 +19,7 @@ import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 
 
 const addTrip = () => {
-    const scrollViewRef = useRef(null);
+    const scrollViewRef = useRef<ScrollView | null>(null);
     const { user, token, isAuthenticated } = useAuth();
 
     useFocusEffect(
@@ -359,7 +359,6 @@ const addTrip = () => {
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
                         <icons.MaterialIcons name='comment' size={24} color={"black"} />
-                        {/* <Text>Luggage</Text> */}
                         <Text>Additional Comments: </Text>
                     </View>
                     <TextInput
@@ -386,7 +385,6 @@ const addTrip = () => {
                         setSelectedCar={setSelectedCar}
                         onPress={() => { setSelectedCar(item) }}
                     />}
-                    // ItemSeparatorComponent={() => <View style={{ marginRight: 10 }} />}
                     ListFooterComponent={
                         <TouchableOpacity
                             style={styles.addNewCar}
@@ -402,8 +400,6 @@ const addTrip = () => {
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
                         <icons.MaterialIcons name='comment' size={24} color={"black"} />
                         <Text>Price per seat</Text>
-
-
                     </View>
                     <View style={styles.priceContainer}>
 
@@ -432,12 +428,6 @@ const addTrip = () => {
             <Snackbar
                 visible={snackBar}
                 onDismiss={() => setSnackBar(false)}
-                // action={{
-                //     // label: 'Undo',
-                //     onPress: () => {
-                //         // Do something
-                //     },
-                // }}
                 style={{ backgroundColor: 'green', }}
             >
                 <Text style={{ textAlign: 'center' }}>
@@ -470,6 +460,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
     },
+    
     btn: {
         backgroundColor: 'red',
         alignItems: 'center',
@@ -477,10 +468,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20
     },
+
     container: {
         padding: 10,
         flex: 1
     },
+
     parameter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -488,20 +481,22 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: '#a8a8a8',
     },
+
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
     },
+
     parameters: {
         gap: 5,
         borderRadius: 10,
-        // borderWidth: 1,
         borderColor: '#a8a8a8',
         padding: 5,
         marginBottom: 10,
         backgroundColor: '#fff'
     },
+
     input: {
         height: 50,
         width: '100%',
@@ -513,18 +508,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // textAlign: 'center',
     },
 
     currency: {
         position: 'absolute',
-        left: 10, // Adjust the position as needed
-        // Style your text as needed
+        left: 10, 
     },
+    
     priceContainer: {
         flexDirection: 'row',
         alignItems: 'center'
     },
+
     inputPrice: {
         height: 50,
         width: '100%',
@@ -535,9 +530,7 @@ const styles = StyleSheet.create({
         color: "black",
         paddingLeft: 40
     },
-    carsContainer: {
 
-    },
     addNewCar: {
         padding: 10,
         borderRadius: 10,

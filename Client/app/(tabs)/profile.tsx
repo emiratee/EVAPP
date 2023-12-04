@@ -11,8 +11,7 @@ import ImageUploader from '../../components/ImageUploader';
 
 const profile = () => {
     const { isAuthenticated, logout, user, token } = useAuth();
-    const [visible, setVisible] = useState(false);
-
+    const [visible, setVisible] = useState<boolean>(false);
 
     const { navigate } = useNavigation();
 
@@ -30,26 +29,11 @@ const profile = () => {
     );
 
 
-    const handleSubmit = () => {
-        logout();
-    }
-
-    const toggleOverlay = () => {
-        setVisible(!visible);
-    };
-
-
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
 
             {/* IMAGE UPLOADER - COMPONENT */}
             <ImageUploader />
-            {/* BEFORE:
-            <View style={styles.picture}>
-                {user.imageUrl ? <Image source={{ uri: user.imageUrl }} style={styles.picture} /> :
-                    <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
-                }
-            </View> */}
 
             <View style={styles.container}>
                 <Text style={styles.userName}>{user.name}</Text>
@@ -121,21 +105,21 @@ const profile = () => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Privacy</Text>
                     <TouchableOpacity
-                        onPress={toggleOverlay}
+                        onPress={() => { setVisible(!visible) }}
                     >
                         <View style={styles.sectionInfo}>
                             <Text style={styles.sectionInfoText}>Change password</Text>
                             <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />
                         </View>
                     </TouchableOpacity>
-                    <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-                        <ChangePasswordForm setVisible={toggleOverlay} />
+                    <Overlay isVisible={visible} onBackdropPress={() => { setVisible(!visible) }}>
+                        <ChangePasswordForm setVisible={() => { setVisible(!visible) }} />
                     </Overlay>
                 </View>
             </View>
 
             {/* LOGOUT */}
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <TouchableOpacity style={styles.button} onPress={() => { logout() }}>
                 <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
         </ScrollView>
