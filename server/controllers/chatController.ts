@@ -7,7 +7,7 @@ import Chat from '../models/Chat';
 import User from '../models/User';
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-const getUserById = async (id: string): Promise<any> => {
+export const getUserById = async (id: string): Promise<any> => {
     try {
         return await User.findOne({ userId: id });
     } catch (error) {

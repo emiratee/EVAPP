@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUserById = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const uuid_1 = require("uuid");
@@ -18,6 +19,7 @@ const getUserById = async (id) => {
         console.error(error);
     }
 };
+exports.getUserById = getUserById;
 //Creating a new chat
 const postChat = async (req, res) => {
     try {
@@ -25,8 +27,8 @@ const postChat = async (req, res) => {
         if (!validatedUser || !validatedUser.userId)
             return res.status(401).json({ error: validatedUser });
         const { driverId, passengerId } = req.body;
-        const driver = await getUserById(driverId);
-        const passenger = await getUserById(passengerId);
+        const driver = await (0, exports.getUserById)(driverId);
+        const passenger = await (0, exports.getUserById)(passengerId);
         const chat = await Chat_1.default.insertMany({
             chatId: (0, uuid_1.v4)(),
             'driver.userId': driver.userId,

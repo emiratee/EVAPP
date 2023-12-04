@@ -11,6 +11,7 @@ const uuid_1 = require("uuid");
 const Trip_js_1 = __importDefault(require("../models/Trip.js"));
 const User_js_1 = __importDefault(require("../models/User.js"));
 const userUtils_js_1 = require("../utils/userUtils.js");
+const chatController_js_1 = require("./chatController.js");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
 const SECRET_KEY = process.env.SECRET_KEY;
 const postRegister = async (req, res) => {
@@ -199,7 +200,7 @@ const getHistory = async (req, res) => {
         const passengerTrips = await Trip_js_1.default.find({ _id: { $in: user.tripsAsPassengerIDs } });
         const trips = [...driverTrips, ...passengerTrips];
         const tripsWithDrivers = await Promise.all(trips.map(async (trip) => {
-            const driver = await getDriver(trip.driverID);
+            const driver = await (0, chatController_js_1.getUserById)(trip.driverID);
             return { trip, driver };
         }));
         res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
