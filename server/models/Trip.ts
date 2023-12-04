@@ -2,9 +2,6 @@ import { carSchema } from "./Car";
 const mongoose = require('mongoose');
 
 const tripSchema = new mongoose.Schema({
-    // _id: {
-    //     type: String
-    // },
     departure: {
         country: {
             type: String,
@@ -90,7 +87,6 @@ const tripSchema = new mongoose.Schema({
         },
         comments: {
             type: String,
-            // required: true
         }
     },
     car: {
@@ -134,9 +130,6 @@ const tripSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    // __v: {
-    //     type: String
-    // }
 });
 
 const Trip = mongoose.model('Trips', tripSchema);

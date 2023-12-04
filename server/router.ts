@@ -1,9 +1,7 @@
 import { Router } from "express";
-import multer from "multer";
 import tripController from './controllers/tripController.js';
 import userController from './controllers/userController.js';
 const router = Router();
-const upload = multer({ dest: "uploads/" });
 
 //Trips
 router.post('/trip/create', tripController.postCreate);
