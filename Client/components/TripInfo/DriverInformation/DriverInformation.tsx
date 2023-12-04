@@ -10,7 +10,7 @@ const DriverInformation = ({ trip, driver }) => {
 
     const contactDriver = async () => {
         const chat = await postChat(trip.driverID, user.userId, token);
-        console.log(chat);   
+        console.log(chat);
     }
 
     return (
@@ -118,7 +118,7 @@ const driver_style = StyleSheet.create({
         padding: 10,
         margin: 10,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 100
     },
     header: {
         width: '100%'

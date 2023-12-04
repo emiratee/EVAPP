@@ -260,27 +260,6 @@ const updateAccount = async (data: { currentPassword?: string, newPassword?: str
     }
 }
 
-const postChat = async (driverId: string, passengerId: string, token: string) => {
-    try {
-        const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
-            method: "POST",
-            body: data,
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const cloudinaryData = await response.json();
-
-        return cloudinaryData.secure_url;
-    } catch (err) {
-        console.error('An Error Occurred While Uploading:', err);
-        Alert.alert('An Error Occurred While Uploading');
-        throw err;
-    }
-}
-
 const cloudinaryUpload = async (data): Promise<string> => {
     try {
         const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
@@ -345,6 +324,23 @@ const getChat = async (chatId: string, token: string) => {
             headers: {
                 'Authorization': `${token}`
             }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const postChat = async (driverId: string, passengerId: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ driverId, passengerId })
         });
         return await response.json();
     } catch (error) {
