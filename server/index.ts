@@ -6,7 +6,7 @@ dotenv.config({ path: './.env' });
 import db from './models/db.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 db();
 
 app.use(cors());
