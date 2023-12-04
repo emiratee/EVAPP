@@ -23,7 +23,6 @@ router.put('/user/account/update', userController_js_1.default.putUpdateAccount)
 router.get('/user/history', userController_js_1.default.getHistory);
 router.get('/user', userController_js_1.default.getUser);
 router.put('/user/cars', userController_js_1.default.putCar);
-router.get('/user/:driverId', userController_js_1.default.getDriver);
 //User trips (add passenger aswell?)
 router.put('/user/trips/driver', userController_js_1.default.putTripsAsDriver);
 //User (all about credits)

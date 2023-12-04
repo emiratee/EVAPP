@@ -22,7 +22,6 @@ router.put('/user/account/update', userController.putUpdateAccount);
 router.get('/user/history', userController.getHistory)
 router.get('/user', userController.getUser);
 router.put('/user/cars', userController.putCar);
-router.get('/user/:driverId', userController.getDriver);
 
 //User trips (add passenger aswell?)
 router.put('/user/trips/driver', userController.putTripsAsDriver);
