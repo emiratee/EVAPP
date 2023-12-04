@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox, Icon } from '@rneui/themed';
 
 const Message = ({ item }) => {
-    const [checkMessage, setcheckMessage] = useState(false);
+    const [checkMessage, setCheckMessage] = useState(false);
     
 
     return (
@@ -42,7 +42,7 @@ const Message = ({ item }) => {
                         />
                     }
                     checked={checkMessage}
-                    onPress={() => setcheckMessage(!checkMessage)}
+                    onPress={() => setCheckMessage(!checkMessage)}
                 />
             </View>
 

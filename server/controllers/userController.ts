@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
 import { validateUser, sendPushNotification } from '../utils/userUtils.js';
+import { getUserById } from './chatController.js';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
@@ -227,7 +228,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
         const trips = [...driverTrips, ...passengerTrips];
 
         const tripsWithDrivers = await Promise.all(trips.map(async (trip) => {
-            const driver = await getDriver(trip.driverID);
+            const driver = await getUserById(trip.driverID);
             return { trip, driver };
         }));
 
