@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from 'react-native'
 import { Tab, TabView } from '@rneui/themed';
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
@@ -21,7 +21,7 @@ const history = () => {
         React.useCallback(() => {
             (async () => {
                 if (!isAuthenticated) return navigation.navigate('login');
-                const history = await getHistory(token);
+                const history = token && await getHistory(token);
 
                 const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') >= new Date() });
                 const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') < new Date() });
@@ -58,7 +58,7 @@ const history = () => {
             </Tab>
 
             <TabView value={index} onChange={setIndex} animationType="spring" >
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                     {upcomingTrips.length > 0 ? (
                         <FlatList
                             data={upcomingTrips}
@@ -96,9 +96,9 @@ const history = () => {
                     ) : (
                         <Text>No upcoming Trips</Text>
                     )}
-                </View>
+                </SafeAreaView>
 
-                <View style={styles.container}>
+                <SafeAreaView style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
                         data={previousTrips}
                         renderItem={({ item }) => (
@@ -110,7 +110,7 @@ const history = () => {
                     />) : (
                         <Text>No previous Trips</Text>
                     )}
-                </View>
+                </SafeAreaView>
             </TabView>
         </>
     )
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     pendingContainer: {
         position: 'absolute',
         top: 15,
-        left: 110,
+        left: 140,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',

@@ -14,13 +14,15 @@ export type TTrip = {
         country: string,
         city: string,
         address: string,
-        time: string
+        time: string,
+        date: string
     },
     destination: {
         country: string,
         city: string,
         address: string,
-        time: string
+        time: string,
+        date: string
     },
     date: string,
     totalTime: string,
@@ -36,30 +38,31 @@ export type TTrip = {
         luggage: boolean,
         comments?: string,
     }
-    car: TCar,
+    car: TCar | TCarNoId,
     price: string,
     driverID: string,
     passengersIDs: {
         bookingId: string,
-        userId:string,
-        name:string,
-        status:string,
-        seats:number
+        userId: string,
+        name: string,
+        status: string,
+        seats: number
     }[],
     successful: boolean
-
 }
 
 
 export type TUser = {
     _id: string,
+    userId: string,
     name: string,
+    expoPushToken?: string,
     memberSince: string,
     email: string,
     imageUrl?: string,
     phoneNumber: string,
     password: string,
-    cars: TCar[],
+    cars: TCar[] | TCarNoId[],
     passengerRating: {
         totalReviews: number,
         totalRating: number,
@@ -76,10 +79,44 @@ export type TUser = {
         available: string,
         onHold: string,
         earningsOnHold: string,
-    } 
+    }
 
 }
 
+export type TDeparture = {
+    country: string,
+    city: string,
+    address?: string,
+    time?: string,
+    date?: string
+}
+
+export type TDestination = {
+    country: string,
+    city: string,
+    address?: string,
+    time?: string,
+    date?: string
+}
+
+
+export type TTrip_search = {
+    departure: TDeparture,
+    destination?: TDestination,
+    date: string,
+    seats: number
+}
+
+export type TRegisterForm = {
+    name: string,
+    email: string,
+    phoneNumber: string,
+    password: string,
+    imageUrl?: string,
+    expoPushToken?: string
+}
+
+  
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>
 export type TUserNoId = Omit<TUser, '_id'>

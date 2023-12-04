@@ -1,19 +1,39 @@
-const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
+import { Alert } from "react-native";
+import * as types from '../types/types'
+const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
+// const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
-    if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+    if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
 
-const getFilteredTrips = async (departure, destination, date, seats): Promise<any> => {
+const getFilteredTrips = async (data: types.TTrip_search, token: string) => {
     try {
-        const response = await fetch(`${BASE_URL}/trips?departureCountry=${departure.country}&departureCity=${departure.city}&destinationCountry=${destination.country}&destinationCity=${destination.city}&date=${date}&seats=${seats}`);
-        return await response.json();
+        if (!data.destination) {
+            const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&date=${data.date}&seats=${data.seats}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `${token}`
+                }
+            });
+            return await response.json();
+
+        } else {
+            const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&destinationCountry=${data.destination?.country}&destinationCity=${data.destination?.city}&date=${data.date}&seats=${data.seats}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `${token}`
+                }
+            });
+            return await response.json();
+        }
+
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
 
-const getDriver = async (driverId): Promise<any> => {
+const getDriver = async (driverId: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/${driverId}`);
         return await response.json();
@@ -39,7 +59,7 @@ const getUser = async (token: string) => {
     }
 }
 
-const addCar = async (data, token: string) => {
+const addCar = async (data: types.TCarNoId, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/cars`, {
             method: 'PUT',
@@ -49,6 +69,7 @@ const addCar = async (data, token: string) => {
             },
             body: JSON.stringify(data),
         });
+        console.log(response)
         checkResponse(response);
         return await response.json();
     } catch (error) {
@@ -57,7 +78,7 @@ const addCar = async (data, token: string) => {
     }
 }
 
-const addNewTrip = async (data, token: string) => {
+const addNewTrip = async (data: types.TTripNoId, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/trip/create`, {
             method: 'POST',
@@ -75,7 +96,7 @@ const addNewTrip = async (data, token: string) => {
     }
 }
 
-const putTripsAsDriver = async (data, token: string) => {
+const putTripsAsDriver = async (data: { _id: string }, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/trips/driver`, {
             method: 'PUT',
@@ -93,7 +114,7 @@ const putTripsAsDriver = async (data, token: string) => {
     }
 }
 
-const postRegister = async (data) => {
+const postRegister = async (data: types.TRegisterForm) => {
     try {
         const response = await fetch(`${BASE_URL}/user/account/register`, {
             method: 'POST',
@@ -103,6 +124,7 @@ const postRegister = async (data) => {
             body: JSON.stringify(data)
         })
         checkResponse(response);
+
         return await response.json();
 
     } catch (error) {
@@ -215,34 +237,22 @@ const putRequestTrip = async (data, token: string) => {
     }
 }
 
-const uploadImage = async (data: any) => {
-    try {
-        const response = await fetch(`${BASE_URL}/user/image/upload`, {
-            method: 'POST',
-            body: data,
-        });
-        checkResponse(response);
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
 
-const updateAccount = async (data, token: string) => {
+
+const updateAccount = async (data: { currentPassword?: string, newPassword?: string, image?: string }, token: string) => {
     try {
-        const { currentPassword, newPassword, image} = data;
+        const { currentPassword, newPassword, image } = data;
         const response = await fetch(`${BASE_URL}/user/account/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `${token}`
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 currentPassword,
                 newPassword,
                 image
-             })
+            })
         })
         return await response.json();
     } catch (error) {
@@ -251,7 +261,50 @@ const updateAccount = async (data, token: string) => {
     }
 }
 
+const cloudinaryUpload = async (data): Promise<string> => {
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
+            method: "POST",
+            body: data,
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const cloudinaryData = await response.json();
+
+        return cloudinaryData.secure_url;
+    } catch (err) {
+        console.error('An Error Occurred While Uploading:', err);
+        Alert.alert('An Error Occurred While Uploading');
+        throw err;
+    }
+}
+
+
+async function sendPushNotification(expoPushToken: string): Promise<void> {
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Original Title',
+        body: 'And here is the body!',
+        data: { someData: 'goes here' },
+    };
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    });
+}
+
 export {
+    cloudinaryUpload,
     getFilteredTrips,
     getDriver,
     getUser,
@@ -265,6 +318,6 @@ export {
     putApproveTrip,
     putRejectTrip,
     putRequestTrip,
-    uploadImage,
-    updateAccount
+    updateAccount,
+    sendPushNotification
 }
