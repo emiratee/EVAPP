@@ -1,14 +1,37 @@
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import * as icons from '@expo/vector-icons';
+import moment from 'moment';
+import io from 'socket.io-client';
+import { useAuth } from '../../utils/auth';
 
-
-
-const Typebar = ({ onChangeText, onSend }) => {
+const Typebar = ({ setMessages, chat }) => {
+  const { user } = useAuth();
   const textInputRef = useRef(null);
+  const [text, setText] = useState('');
+  const socket = io('http://localhost:3000');
+  const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
+
 
   const handleSend = () => {
-    onSend();
+    const message = {
+      userId: user?.userId,
+      message: {
+        content: text,
+        time: moment().format('HH:mm')
+      }
+    }
+    console.log(user.userId, receiver);
+    
+    socket.emit('conversation', chat.chatId).emit('message', message, receiver);
+
+    if (text.trim() !== '') {
+      setMessages((prev) => [
+        ...prev,
+        { text: text, time: moment().format('HH:mm') },
+      ]);
+      setText('');
+    }
     if (textInputRef.current) {
       textInputRef.current.clear();
     }
@@ -16,23 +39,29 @@ const Typebar = ({ onChangeText, onSend }) => {
 
   return (
     <View style={styles.container}>
-      
-        <View style={{width: 300, maxHeight: 50, paddingLeft: 20, paddingVertical: 15, backgroundColor: '#fff', borderRadius: 50,}}>
-          <TextInput
-          ref={ref => (textInputRef.current = ref)}
+      <View
+        style={{
+          width: 300,
+          maxHeight: 50,
+          paddingLeft: 20,
+          paddingVertical: 15,
+          backgroundColor: '#fff',
+          borderRadius: 50,
+        }}>
+        <TextInput
+          ref={(ref) => (textInputRef.current = ref)}
           editable
           multiline
-          placeholder='Type something...'
-          onChangeText={text => onChangeText(text)}
-          />
-        </View>
-        <TouchableOpacity style={styles.button} onPress={handleSend}>
-          <icons.FontAwesome name='send' size={20} color='white' />
-        </TouchableOpacity>
-      
+          placeholder="Type something..."
+          onChangeText={(text) => setText(text)}
+        />
+      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSend}>
+        <icons.FontAwesome name="send" size={20} color="white" />
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 export default Typebar;
 
@@ -54,6 +83,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#000',
     borderRadius: 50,
-    padding:15,
-  }
-})
+    padding: 15,
+  },
+});
