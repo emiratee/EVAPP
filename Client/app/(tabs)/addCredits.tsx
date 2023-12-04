@@ -13,15 +13,15 @@ const addCredits: React.FC = () => {
     const [creditsAmount, setCreditsAmount] = useState('');
 
     const handleSubmitButton = async () => {
-        setIsLoading(true); 
+        setIsLoading(true);
 
         // simulate an asynchronous operation (e.g., API call) here
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        if (selectedMethod && creditsAmount !== '' && Number(creditsAmount) > 0) {
+        if (token && user && selectedMethod && creditsAmount !== '' && Number(creditsAmount) > 0) {
             const currentCredits = parseFloat(user.credits.available);
             user.credits.available = (currentCredits + Number(creditsAmount)).toFixed(2);
-            setUser(prev =>({ ...prev, 'credits.available': currentCredits + Number(creditsAmount)}))            
+            setUser(prev => ({ ...prev, 'credits.available': currentCredits + Number(creditsAmount) }))
             await putAvailableCredits((Number(creditsAmount)).toFixed(2), token);
 
             Alert.alert(
@@ -35,7 +35,7 @@ const addCredits: React.FC = () => {
             );
         }
 
-         setTimeout(() => {
+        setTimeout(() => {
             setIsLoading(false);
             setSelectedMethod('');
             setCreditsAmount('');
@@ -44,157 +44,158 @@ const addCredits: React.FC = () => {
 
     const handleSelectAmount = (amount: string) => {
         setCreditsAmount((prevAmount) => {
-            return prevAmount === amount ? '' : amount; 
+            return prevAmount === amount ? '' : amount;
         });
     };
 
-  return (
-    <ScrollView style={styles.container}>
-        <View style={styles.creditsBalance}>
-            <Text style={styles.title}>Credit Balance: </Text>
-            <Text style={styles.creditsValue}>{user.credits.available}€</Text>
-        </View>
-        <Text style={[styles.subtitle, {paddingHorizontal: 15, marginBottom: 10}]}>Purchase additional credits using the various payment methods shown below.</Text>
-       
+    return (
+        user && <ScrollView style={styles.container}>
+            <View style={styles.creditsBalance}>
+                <Text style={styles.title}>Credit Balance: </Text>
+                <Text style={styles.creditsValue}>{user.credits.available}€</Text>
+            </View>
+            <Text style={[styles.subtitle, { paddingHorizontal: 15, marginBottom: 10 }]}>Purchase additional credits using the various payment methods shown below.</Text>
 
-       {/* CREDITS FORM */}
-        <Text style={[styles.title, { paddingLeft: 15,}]}>Add Credits: </Text>
-        <View style={styles.shadowContainer}>
-            <TextInput 
-                style={styles.creditsInput}
-                placeholder="Add credits amount"
-                keyboardType="numeric"
-                value={creditsAmount}
-                onChangeText={(text) => setCreditsAmount(text)}
-            >
-            </TextInput>
-            <View style={[styles.container, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 0,}]}>
-                <TouchableOpacity style={styles.creditsButton}>
-                    <Text 
-                    style={styles.creditsButtonText}
-                    onPress={() => handleSelectAmount('5')}
-                    >
-                        5€
-                    </Text>
+
+            {/* CREDITS FORM */}
+            <Text style={[styles.title, { paddingLeft: 15, }]}>Add Credits: </Text>
+            <View style={styles.shadowContainer}>
+                <TextInput
+                    style={styles.creditsInput}
+                    placeholder="Add credits amount"
+                    keyboardType="numeric"
+                    value={creditsAmount}
+                    onChangeText={(text) => setCreditsAmount(text)}
+                    placeholderTextColor="#838383"
+                >
+                </TextInput>
+                <View style={[styles.container, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 0, }]}>
+                    <TouchableOpacity style={styles.creditsButton}>
+                        <Text
+                            style={styles.creditsButtonText}
+                            onPress={() => handleSelectAmount('5')}
+                        >
+                            5€
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.creditsButton}>
+                        <Text
+                            style={styles.creditsButtonText}
+                            onPress={() => handleSelectAmount('10')}
+                        >
+                            10€
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.creditsButton}>
+                        <Text
+                            style={styles.creditsButtonText}
+                            onPress={() => handleSelectAmount('20')}
+                        >
+                            20€
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.creditsButton}>
+                        <Text
+                            style={styles.creditsButtonText}
+                            onPress={() => handleSelectAmount('50')}
+                        >
+                            50€
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* PAYMENT METHODS */}
+            <Text style={[styles.title, { top: 10, paddingLeft: 15, }]}>Select Payment Method: </Text>
+            <View style={styles.payContainer}>
+                <View style={styles.payMethod}>
+                    <View style={styles.doubleImage}>
+                        <Image style={styles.image} source={require('../../assets/images/VISA.png')} />
+                        <Image style={styles.image} source={require('../../assets/images/MASTERCARD.png')} />
+                    </View>
+                    {/* <Text style={styles.title}>Card</Text> */}
+                    <View style={styles.radiusButton}>
+                        <RadioButton
+                            value='Card'
+                            status={selectedMethod === 'Card' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedMethod('Card')}
+                            uncheckedColor='#000'
+                            color='#000'
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.payMethod}>
+                    <View style={[styles.doubleImage, { width: 100 }]}>
+                        <Image style={styles.image} source={require('../../assets/images/PAYPAL.png')} />
+                    </View>
+                    {/* <Text style={styles.title}>Paypal</Text> */}
+                    <View style={styles.radiusButton}>
+                        <RadioButton
+                            value='Paypal'
+                            status={selectedMethod === 'Paypal' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedMethod('Paypal')}
+                            color='#000'
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.payMethod}>
+                    <View style={styles.doubleImage}>
+                        <Image style={styles.image} source={require('../../assets/images/KLARNA.png')} />
+                    </View>
+                    {/* <Text style={styles.title}>Klarna</Text> */}
+                    <View style={styles.radiusButton}>
+                        <RadioButton
+                            value='Klarna'
+                            status={selectedMethod === 'Klarna' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedMethod('Klarna')}
+                            color='#000'
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.payMethod}>
+                    <View style={[styles.doubleImage, { paddingLeft: 6 }]}>
+                        <Image style={styles.image} source={require('../../assets/images/GOOGLEPAY.png')} />
+                    </View>
+                    {/* <Text style={styles.title}>Google Pay</Text> */}
+                    <View style={styles.radiusButton}>
+                        <RadioButton
+                            value='Google Pay'
+                            status={selectedMethod === 'Google Pay' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedMethod('Google Pay')}
+                            color='#000'
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.payMethod}>
+                    <View style={[styles.doubleImage, { paddingLeft: 6 }]}>
+                        <Image style={styles.image} source={require('../../assets/images/APPLEPAY.png')} />
+                    </View>
+                    {/* <Text style={styles.title}>Apple Pay</Text> */}
+                    <View style={styles.radiusButton}>
+                        <RadioButton
+                            value='Apple Pay'
+                            status={selectedMethod === 'Apple Pay' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedMethod('Apple Pay')}
+                            color='#000'
+                        />
+                    </View>
+                </View>
+
+                <TouchableOpacity style={styles.button} onPress={handleSubmitButton}>
+                    {isLoading ? (
+                        <ActivityIndicator size='small' />
+                    ) : (
+                        <Text style={styles.buttonText}>Submit</Text>
+                    )}
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.creditsButton}>
-                    <Text 
-                    style={styles.creditsButtonText}
-                    onPress={() => handleSelectAmount('10')}
-                    >
-                        10€
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.creditsButton}>
-                    <Text 
-                    style={styles.creditsButtonText}
-                    onPress={() => handleSelectAmount('20')}
-                    >
-                        20€
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.creditsButton}>
-                    <Text 
-                    style={styles.creditsButtonText}
-                    onPress={() => handleSelectAmount('50')}
-                    >
-                        50€
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-        
-        {/* PAYMENT METHODS */}
-        <Text style={[styles.title, {top: 10, paddingLeft: 15,}]}>Select Payment Method: </Text>
-        <View style={styles.payContainer}>
-            <View style={styles.payMethod}>
-                <View style={styles.doubleImage}>
-                    <Image style={styles.image} source={require('../../assets/images/VISA.png')}/>
-                    <Image style={styles.image} source={require('../../assets/images/MASTERCARD.png')}/>
-                </View>
-                {/* <Text style={styles.title}>Card</Text> */}
-                <View style={styles.radiusButton}>
-                    <RadioButton 
-                        value='Card'
-                        status={ selectedMethod === 'Card' ? 'checked' : 'unchecked' }
-                        onPress={() => setSelectedMethod('Card')}
-                        uncheckedColor='#000'
-                        color='#000' 
-                    />
-                </View>   
-            </View>
 
-            <View style={styles.payMethod}>
-                <View style={[styles.doubleImage, {width: 100}]}>
-                    <Image style={styles.image} source={require('../../assets/images/PAYPAL.png')}/>
-                </View>
-                {/* <Text style={styles.title}>Paypal</Text> */}
-                <View style={styles.radiusButton}>
-                    <RadioButton 
-                        value='Paypal'
-                        status={ selectedMethod === 'Paypal' ? 'checked' : 'unchecked' }
-                        onPress={() => setSelectedMethod('Paypal')}
-                        color='#000' 
-                    />
-                </View>
             </View>
-
-            <View style={styles.payMethod}>
-                <View style={styles.doubleImage}>
-                    <Image style={styles.image} source={require('../../assets/images/KLARNA.png')}/>
-                </View>
-                {/* <Text style={styles.title}>Klarna</Text> */}
-                <View style={styles.radiusButton}>
-                    <RadioButton 
-                        value='Klarna'
-                        status={ selectedMethod === 'Klarna' ? 'checked' : 'unchecked' }
-                        onPress={() => setSelectedMethod('Klarna')}
-                        color='#000' 
-                    />
-                </View>
-            </View>
-
-            <View style={styles.payMethod}>
-                <View style={[styles.doubleImage, {paddingLeft: 6}]}>
-                    <Image style={styles.image} source={require('../../assets/images/GOOGLEPAY.png')}/>
-                </View>
-                {/* <Text style={styles.title}>Google Pay</Text> */}
-                <View style={styles.radiusButton}>
-                    <RadioButton 
-                        value='Google Pay'
-                        status={ selectedMethod === 'Google Pay' ? 'checked' : 'unchecked' }
-                        onPress={() => setSelectedMethod('Google Pay')}
-                        color='#000' 
-                    />
-                </View>
-            </View>
-
-            <View style={styles.payMethod}>
-                <View style={[styles.doubleImage, {paddingLeft: 6}]}>
-                    <Image style={styles.image} source={require('../../assets/images/APPLEPAY.png')}/>
-                </View>
-                {/* <Text style={styles.title}>Apple Pay</Text> */}
-                <View style={styles.radiusButton}>
-                    <RadioButton 
-                        value='Apple Pay'
-                        status={ selectedMethod === 'Apple Pay' ? 'checked' : 'unchecked' }
-                        onPress={() => setSelectedMethod('Apple Pay')}
-                        color='#000' 
-                    />
-                </View>
-            </View>
-
-            <TouchableOpacity style={styles.button} onPress={handleSubmitButton}>
-            {isLoading ? (
-                    <ActivityIndicator size='small' />
-                ) : (
-                    <Text style={styles.buttonText}>Submit</Text>
-                )}
-            </TouchableOpacity>
-
-        </View>
-    </ScrollView>
-  )
+        </ScrollView>
+    )
 }
 
 export default addCredits
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         backgroundColor: '#fff',
-        borderRadius: 10, 
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0 },
         shadowOpacity: 0.4,
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#fff',
-        borderRadius: 10, 
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0 },
         shadowOpacity: 0.4,
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
 
     },
     image: {
-        width:80,
+        width: 80,
         height: 50,
         alignSelf: 'flex-start',
         resizeMode: 'contain',
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        top: 30, 
+        top: 30,
         backgroundColor: '#000',
         borderRadius: 50,
         marginBottom: 90,

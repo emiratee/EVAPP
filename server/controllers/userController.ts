@@ -8,15 +8,14 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
-import { validateUser } from '../utils/userUtils.js';
-
+import { validateUser, sendPushNotification } from '../utils/userUtils.js';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const SECRET_KEY = process.env.SECRET_KEY!;
 const postRegister = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { name, email, phoneNumber, password, imageUrl } = req.body;
+        const { name, email, phoneNumber, password, imageUrl, expoPushToken } = req.body;
         if (!name || !email || !phoneNumber || !password) return res.status(400).json({ error: "Credentials not provided correctly" });
 
         const user = await User.findOne({ email });
@@ -27,6 +26,7 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
             userId,
             name,
             imageUrl,
+            expoPushToken,
             password: await bcrypt.hash(password, 10),
             email: email.toLowerCase(),
             phoneNumber,
@@ -59,15 +59,15 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-const getDriver = async (driverId): Promise<any> => {
+const getDriver = async (driverId: string): Promise<any> => {
     try {
         //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
 
         const driver = await User.findOne({ userId: driverId });
         //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
-        
+
         const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
-    
+
         return filteredDriver;
     } catch (error) {
         console.error(error);
@@ -94,7 +94,7 @@ const getUser = async (req: Request, res: Response): Promise<any> => {
 
 const putCar = async (req: Request, res: Response): Promise<any> => {
     try {
-        const validatedUser = await validateUser(req, res);
+        const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         await User.updateOne(
@@ -248,7 +248,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
             const driver = await getDriver(trip.driverID);
             return { trip, driver };
         }));
-        
+
 
         res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
     } catch (error) {
@@ -256,32 +256,6 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
         res.status(500).json({ error: "Internal server error in getHistory" });
     }
 };
-
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-async function uploadImage(req: Request, res: Response): Promise<void> {
-    try {
-        console.log("Received image upload request");
-        if (!req.file) {
-            res.status(400).json({ error: "No image uploaded" });
-        } else {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                quality: "auto",
-                fetch_format: "auto",
-            })
-            const imageUrl = result.url;
-            console.log('image here:', imageUrl)
-            res.json({ imageUrl });
-        }
-    } catch (error) {
-        console.error("Error uploading image to Cloudinary:", error);
-        res.status(500).json({ error: "Failed to upload image" });
-    }
-}
 
 
 async function putUpdateAccount(req: Request, res: Response): Promise<any> {
@@ -297,23 +271,23 @@ async function putUpdateAccount(req: Request, res: Response): Promise<any> {
             await User.updateOne({ userId: validatedUser.user.userId }, { $set: { imageUrl: image } });
             return res.status(200).json({ message: 'Image changed successfully' });
         }
-        
+
         // validate if required password parameters are provided
-        if (!currentPassword ||!newPassword) {
-            return res.status(400).json({error: 'Required parameters not provided correctly'});
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ error: 'Required parameters not provided correctly' });
         }
         const { user } = validatedUser;
         // Check if the current password is correct
         const validPassword = await bcrypt.compare(currentPassword, user.password);
         if (!validPassword) {
-            return res.status(401).json({error: 'Current password is incorrect'});
+            return res.status(401).json({ error: 'Current password is incorrect' });
         }
         // hash and update the new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await User.updateOne({ userId: user.userId }, { $set: { password: hashedPassword } });
         res.status(200).json({ message: 'Password changed successfully' });
 
-       
+
     } catch (error) {
         console.error("Error in updateAccount:", error);
         res.status(500).json({ error: "Internal server error in updateAccount" });
@@ -333,6 +307,5 @@ export default {
     postLogin,
     getHistory,
     putEarningsCredits,
-    putUpdateAccount,
-    uploadImage
+    putUpdateAccount
 }

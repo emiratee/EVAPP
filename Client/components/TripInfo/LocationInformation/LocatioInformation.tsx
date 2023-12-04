@@ -80,7 +80,9 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10,
         margin: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        zIndex: 999,
+        marginTop:-60,
     },
     timeContainer: {
         height: '100%',

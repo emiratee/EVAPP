@@ -4,6 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Request from './Request/Request';
 import DriverInformation from './DriverInformation/DriverInformation';
 import LocationInformation from './LocationInformation/LocatioInformation';
+import Map from '../../app/(tabs)/map';
 import { useAuth } from '../../utils/auth';
 
 const TripInfoModalScreen = ({ trip, driver }) => {
@@ -15,6 +16,7 @@ const TripInfoModalScreen = ({ trip, driver }) => {
                 data={[trip]}
                 renderItem={({ item }) => (
                     <>
+                        <Map departure={item.departure.address} destination={item.destination.address}/>
                         <LocationInformation trip={item} />
                         <DriverInformation trip={item} driver={driver} />
                     </>

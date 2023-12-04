@@ -1,47 +1,65 @@
-import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { Switch, useColorScheme, TextInput, Text, View } from 'react-native'
-import * as icons from '@expo/vector-icons';
-import CarPreview from '../../components/CarPreview';
-import AddNewCar from '../../components/AddNewCar';
-import * as types from '../../types/types'
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import RNPickerSelect from 'react-native-picker-select';
-import LocationSearch from '../../components/LocationSearch';
-import moment from 'moment';
-import { useAuth } from '../../utils/auth';
-import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
-import { Snackbar } from 'react-native-paper';
+import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, Switch, TextInput, Text, View } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react'
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { Overlay } from '@rneui/themed';
+import * as icons from '@expo/vector-icons';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import RNPickerSelect from 'react-native-picker-select';
+import { Snackbar } from 'react-native-paper';
+import moment from 'moment';
+
+import * as types from '../../types/types'
+
+
+import CarPreview from '../../components/CarPreview';
+import AddNewCar from '../../components/AddNewCar';
+import LocationSearch from '../../components/LocationSearch';
+import { useAuth } from '../../utils/auth';
+import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 
 
 const addTrip = () => {
-    const [addNewCar, setAddNewCar] = useState<boolean>(false)
+    const scrollViewRef = useRef<ScrollView | null>(null);
     const { user, token, isAuthenticated } = useAuth();
 
-    const [seatPrice, setSeatPrice] = useState<string>("")
+    useFocusEffect(
+        React.useCallback(() => {
+            //reset states when the screen comes in focus again. 
 
+            setSelectedCar(null)
+            setSeatPrice('')
+            setSmokingToggled(false)
+            setChildSeatToggled(false)
+            setPetsToggled(false)
+            setAlcoholToggled(false)
+            setLuggageToggled(false)
+            setCommentsValue("")
+            setNumberOfSeats(1)
+            setSnackBar(false)
+            if (scrollViewRef.current) {
+                scrollViewRef.current.scrollTo({ y: 0, animated: true });
+            }
+        }, [])
+    );
+
+    const [addNewCar, setAddNewCar] = useState<boolean>(false)
+    const [seatPrice, setSeatPrice] = useState<string>("")
     const [smokingToggled, setSmokingToggled] = useState<boolean>(false)
     const [childSeatToggled, setChildSeatToggled] = useState<boolean>(false)
     const [petsToggled, setPetsToggled] = useState<boolean>(false)
     const [alcoholToggled, setAlcoholToggled] = useState<boolean>(false)
     const [luggageToggled, setLuggageToggled] = useState<boolean>(false)
     const [commentsValue, setCommentsValue] = useState<string>('')
-    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user && user.cars.length && user.cars[0] || null)
-
-
-    const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
-
-
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [isTimePickerVisible, setIsTimePickerVisible] = useState(false);
+    const [selectedCar, setSelectedCar] = useState<types.TCar | types.TCarNoId | null>(user && user.cars.length && user.cars[0] || null)
+    const [departure, setDeparture] = useState<types.TDeparture | null>(null)
+    const [destination, setDestination] = useState<types.TDestination | null>(null)
+    const [snackBar, setSnackBar] = useState<boolean>(false)
+    const [addCarSnackBar, setAddCarSnackBar] = useState<boolean>(false)
+    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
+    const [isTimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
-    const [numberOfSeats, setNumberOfSeats] = useState(1);
-
-    const styles = getDynamicStyles(iconColor);
-
+    const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
 
     const navigation = useNavigation();
 
@@ -64,11 +82,6 @@ const addTrip = () => {
         setSeatPrice(formattedInput);
     }
 
-    const [departure, setDeparture] = useState({})
-    const [destination, setDestination] = useState({})
-    const [snackBar, setSnackBar] = useState(false)
-    const [addCarSnackBar, setAddCarSnackBar] = useState(false)
-
 
     const handleSubmit = () => {
 
@@ -77,9 +90,7 @@ const addTrip = () => {
             minute: moment(time).minute()
         });
 
-
-
-        if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
+        if (user && token && selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
             setSnackBar(true)
 
             let averageDuration = 0
@@ -99,7 +110,12 @@ const addTrip = () => {
 
 
                     const duration = moment.duration(averageDuration, 'seconds');
-                    const formattedTime = `${Math.floor(duration.asHours())}:${duration.minutes()}`;
+                    const hours = Math.floor(duration.asHours()).toString();
+                    const formattedHours = hours.length === 1 ? `0${hours}` : hours;
+                    const minutes = duration.minutes().toString();
+                    const formattedMinutes = minutes.length === 1 ? `0${minutes}` : minutes;
+
+                    const formattedTime = `${formattedHours}:${formattedMinutes}`;
 
 
                     const submitForm: types.TTripNoId = {
@@ -118,11 +134,7 @@ const addTrip = () => {
                             date: moment(combinedDateTime, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
                         },
                         date: moment(date).format('YYYY-MM-DD'),
-
-                        //here is a bug. since we store only arriving time ,not date, it removes 24h if averageduaration is more than 24hours. need to 
-                        //store destiantion day as well? 
                         totalTime: formattedTime,
-
                         seats: {
                             available: numberOfSeats,
                             total: selectedCar.seats
@@ -142,7 +154,7 @@ const addTrip = () => {
                         successful: false
                     }
 
-                    addNewTrip(submitForm, token).then(data => {
+                    addNewTrip(submitForm, token).then((data) => {
                         putTripsAsDriver({ _id: data.trip._id }, token)
                     })
 
@@ -151,6 +163,7 @@ const addTrip = () => {
                     console.error(err);
                 });
 
+            navigation.navigate('history');
 
 
 
@@ -176,7 +189,8 @@ const addTrip = () => {
     return (
 
 
-        <ScrollView
+        token && user && <ScrollView
+            ref={scrollViewRef}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}
@@ -192,7 +206,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-on' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='location-on' size={24} color={"black"} />
                         <Text>From: </Text>
                     </View>
                     <View
@@ -201,7 +215,7 @@ const addTrip = () => {
                     </View>
                     <View
                         style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-searching' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='location-searching' size={24} color={"black"} />
                         <Text>To: </Text>
                     </View>
                     <View
@@ -260,7 +274,7 @@ const addTrip = () => {
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name="ios-people" size={24} color={iconColor} />
+                        <icons.Ionicons name="ios-people" size={24} color={"black"} />
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
@@ -283,7 +297,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='smoking' size={24} color={iconColor} />
+                        <icons.MaterialCommunityIcons name='smoking' size={24} color={"black"} />
                         <Text>Smoking</Text>
                     </View>
                     <Switch
@@ -295,7 +309,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={iconColor} />
+                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={"black"} />
                         <Text>Child Seat</Text>
                     </View>
                     <Switch
@@ -307,7 +321,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='pets' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='pets' size={24} color={"black"} />
                         <Text>Pets</Text>
                     </View>
 
@@ -320,7 +334,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.FontAwesome5 name='wine-bottle' size={24} color={iconColor} />
+                        <icons.FontAwesome5 name='wine-bottle' size={24} color={"black"} />
                         <Text>Alcohol</Text>
                     </View>
                     <Switch
@@ -332,7 +346,7 @@ const addTrip = () => {
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='luggage' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='luggage' size={24} color={"black"} />
                         <Text>Luggage</Text>
                     </View>
                     <Switch
@@ -344,8 +358,7 @@ const addTrip = () => {
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={iconColor} />
-                        {/* <Text>Luggage</Text> */}
+                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
                         <Text>Additional Comments: </Text>
                     </View>
                     <TextInput
@@ -354,6 +367,8 @@ const addTrip = () => {
                         onChangeText={text => setCommentsValue(text)}
                         value={commentsValue}
                         placeholder="Type here..."
+                        placeholderTextColor="#838383"
+
                     />
                 </View>
             </View>
@@ -370,13 +385,12 @@ const addTrip = () => {
                         setSelectedCar={setSelectedCar}
                         onPress={() => { setSelectedCar(item) }}
                     />}
-                    // ItemSeparatorComponent={() => <View style={{ marginRight: 10 }} />}
                     ListFooterComponent={
                         <TouchableOpacity
                             style={styles.addNewCar}
                             onPress={() => setAddNewCar(true)}
                         >
-                            <icons.FontAwesome name='plus' size={28} color={iconColor} />
+                            <icons.FontAwesome name='plus' size={28} color={"black"} />
                         </TouchableOpacity>
                     }
                 />
@@ -384,10 +398,8 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={iconColor} />
+                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
                         <Text>Price per seat</Text>
-
-
                     </View>
                     <View style={styles.priceContainer}>
 
@@ -399,6 +411,8 @@ const addTrip = () => {
                             placeholder='Enter price per seat'
                             onChangeText={handlePriceChange}
                             value={seatPrice}
+                            placeholderTextColor="#838383"
+
                         />
                     </View>
 
@@ -414,12 +428,6 @@ const addTrip = () => {
             <Snackbar
                 visible={snackBar}
                 onDismiss={() => setSnackBar(false)}
-                // action={{
-                //     // label: 'Undo',
-                //     onPress: () => {
-                //         // Do something
-                //     },
-                // }}
                 style={{ backgroundColor: 'green', }}
             >
                 <Text style={{ textAlign: 'center' }}>
@@ -447,93 +455,94 @@ const addTrip = () => {
 }
 
 export default addTrip
-const getDynamicStyles = (textColor: string) => {
+const styles = StyleSheet.create({
+    label: {
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    
+    btn: {
+        backgroundColor: 'red',
+        alignItems: 'center',
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20
+    },
 
-    return StyleSheet.create({
-        label: {
-            fontSize: 18,
-            textAlign: 'center',
-        },
-        btn: {
-            backgroundColor: 'red',
-            alignItems: 'center',
-            padding: 20,
-            borderRadius: 10,
-            marginBottom: 20
-        },
-        container: {
-            padding: 10,
-            flex: 1
-        },
-        parameter: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 10,
-            borderColor: '#a8a8a8',
-        },
-        iconContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 10,
-        },
-        parameters: {
-            gap: 5,
-            borderRadius: 10,
-            // borderWidth: 1,
-            borderColor: '#a8a8a8',
-            padding: 5,
-            marginBottom: 10,
-            backgroundColor: '#fff'
-        },
-        input: {
-            height: 50,
-            width: '100%',
-            borderWidth: 1,
-            padding: 10,
-            borderRadius: 10,
-            borderColor: '#a8a8a8',
-            color: textColor,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            // textAlign: 'center',
-        },
+    container: {
+        padding: 10,
+        flex: 1
+    },
 
-        currency: {
-            position: 'absolute',
-            left: 10, // Adjust the position as needed
-            // Style your text as needed
-        },
-        priceContainer: {
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        inputPrice: {
-            height: 50,
-            width: '100%',
-            borderWidth: 1,
-            padding: 10,
-            borderRadius: 10,
-            borderColor: '#a8a8a8',
-            color: textColor,
-            paddingLeft: 40
-        },
-        carsContainer: {
+    parameter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderColor: '#a8a8a8',
+    },
 
-        },
-        addNewCar: {
-            padding: 10,
-            borderRadius: 10,
-            borderWidth: 1,
-            borderColor: '#a8a8a8',
-            height: 100,
-            width: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-        }
-    })
-}
+    iconContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+
+    parameters: {
+        gap: 5,
+        borderRadius: 10,
+        borderColor: '#a8a8a8',
+        padding: 5,
+        marginBottom: 10,
+        backgroundColor: '#fff'
+    },
+
+    input: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
+        borderColor: '#a8a8a8',
+        color: "black",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
+    currency: {
+        position: 'absolute',
+        left: 10, 
+    },
+    
+    priceContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+
+    inputPrice: {
+        height: 50,
+        width: '100%',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 10,
+        borderColor: '#a8a8a8',
+        color: "black",
+        paddingLeft: 40
+    },
+
+    addNewCar: {
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#a8a8a8',
+        height: 100,
+        width: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+})
+
 
 
 

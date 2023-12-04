@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { Link, useFocusEffect, useNavigation } from 'expo-router'
@@ -12,17 +12,17 @@ const login = (props: Props) => {
 
     const { login, isAuthenticated } = useAuth();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const [errEmail, setErrEmail] = useState('');
-    const [errPassword, setErrPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [errEmail, setErrEmail] = useState<string>('');
+    const [errPassword, setErrPassword] = useState<string>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const navigation = useNavigation();
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
-                navigation.navigate('search');
+                navigation.navigate('index');
             }
         }, [isAuthenticated])
     );
@@ -45,42 +45,47 @@ const login = (props: Props) => {
             }
         }
     }
-    const [showPassword, setShowPassword] = useState(false)
     return (
-        <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='E-mail'
-                    value={email}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    onChangeText={(text) => { setEmail(text) }}
-                    style={[styles.input, errEmail != '' && styles.errorInput]}
-                />
-            </View>
-            {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder='Password'
-                    value={password}
-                    secureTextEntry={!showPassword}
-                    onChangeText={(text) => { setPassword(text) }}
-                    style={[styles.input, errEmail != '' && styles.errorInput]}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View
+                style={styles.container}>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder='E-mail'
+                        value={email}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        onChangeText={(text) => { setEmail(text) }}
+                        style={[styles.input, errEmail != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
+                    />
+                </View>
+                {errEmail ? <Text style={styles.errorText}>{errEmail}</Text> : null}
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder='Password'
+                        value={password}
+                        secureTextEntry={!showPassword}
+                        onChangeText={(text) => { setPassword(text) }}
+                        style={[styles.input, errEmail != '' && styles.errorInput]}
+                        placeholderTextColor="#838383"
+
+                    />
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                    </TouchableOpacity>
+                </View>
+
+                {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
+                <TouchableOpacity style={styles.button} onPress={handleSubmit} >
+                    <Text style={{ color: '#fff' }}>Login</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
+                    <Link href={'/(tabs)/register'}>don't have an account yet?</Link>
                 </TouchableOpacity>
             </View>
-
-            {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-                <Text style={{ color: '#fff' }}>Login</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
-                <Link href={'/(tabs)/register'}>don't have an account yet?</Link>
-            </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -105,11 +110,6 @@ const styles = StyleSheet.create({
         height: 50,
         top: 8,
     },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-    },
     errorInput: {
         borderColor: 'red',
     },
@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
         color: 'red',
         marginBottom: 5
     },
-
 
     inputContainer: {
         flexDirection: 'row',
