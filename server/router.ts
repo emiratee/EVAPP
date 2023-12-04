@@ -1,9 +1,5 @@
 import { Router } from "express";
-<<<<<<< HEAD
-=======
-import multer from "multer";
 import chatController from "./controllers/chatController.js";
->>>>>>> a03a4ed (added chat be)
 import tripController from './controllers/tripController.js';
 import userController from './controllers/userController.js';
 const router = Router();
