@@ -116,6 +116,7 @@ export type TRegisterForm = {
     expoPushToken?: string
 }
 
+  
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>
 export type TUserNoId = Omit<TUser, '_id'>

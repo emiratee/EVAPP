@@ -10,6 +10,7 @@ import { postRegister, cloudinaryUpload } from '../../utils/apiService';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import * as types from '../../types/types'
 type Props = {}
 
 const register = (props: Props) => {
@@ -98,7 +99,7 @@ const register = (props: Props) => {
         setIsLoading(false)
     };
 
-    const resizeImage = async (uri, width) => {
+    const resizeImage = async (uri: string, width: number) => {
         const resizedImage = await ImageManipulator.manipulateAsync(
             uri,
             [{ resize: { width } }],
