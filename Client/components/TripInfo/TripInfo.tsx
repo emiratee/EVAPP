@@ -4,10 +4,16 @@ import { FlatList } from 'react-native-gesture-handler';
 import Request from './Request/Request';
 import DriverInformation from './DriverInformation/DriverInformation';
 import LocationInformation from './LocationInformation/LocatioInformation';
-import Map from '../../app/(tabs)/map';
+import Map from '../Map';
 import { useAuth } from '../../utils/auth';
+import * as types from '../../types/types'
 
-const TripInfoModalScreen = ({ trip, driver }) => {
+type Props = {
+    trip: types.TTrip,
+    driver: types.TUser
+}
+
+const TripInfoModalScreen = ({ trip, driver }: Props) => {
     const { user } = useAuth();
 
     return (
@@ -16,7 +22,7 @@ const TripInfoModalScreen = ({ trip, driver }) => {
                 data={[trip]}
                 renderItem={({ item }) => (
                     <>
-                        <Map departure={item.departure.address} destination={item.destination.address}/>
+                        {item.departure.address && item.destination.address && <Map departure={item.departure.address} destination={item.destination.address} />}
                         <LocationInformation trip={item} />
                         <DriverInformation trip={item} driver={driver} />
                     </>

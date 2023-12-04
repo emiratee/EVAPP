@@ -4,25 +4,22 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, ActivityIn
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-// import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../utils/auth';
 import { getFilteredTrips } from '../../utils/apiService';
+import { GOOGLE_MAPS_API_KEY } from "@env";
+import * as types from '../../types/types'
 
-//pls work
-const SearchForm: React.FC = () => {
-
+const SearchForm = () => {
 
     const { token } = useAuth();
-    const [departure, setDeparture] = useState<string>('');
-    const [destination, setDestination] = useState('');
-
-    const [date, setDate] = useState(new Date());
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [numberOfPeople, setNumberOfPeople] = useState(1);
-    const [resetForm, setResetForm] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [departure, setDeparture] = useState<types.TDeparture | undefined>(undefined);
+    const [destination, setDestination] = useState<types.TDestination | undefined>(undefined);
+    const [date, setDate] = useState<Date>(new Date());
+    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
+    const [numberOfPeople, setNumberOfPeople] = useState<number>(1);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
     const navigate = useNavigation();
@@ -53,13 +50,12 @@ const SearchForm: React.FC = () => {
                 seats: formData.numberOfPeople
             }, token);
             if (response) {
-                navigate.navigate('TripCardRedirect', { response });
+                navigate.navigate('TripCardRedirect' , { response } );
             }
 
             // simulate a delay (e.g., 2000 milliseconds) before resetting the form
             setTimeout(() => {
                 setIsLoading(false); // set loading to false to hide the spinner
-                setResetForm(true); // set the flag to trigger the form reset
             }, 2000);
         } else {
             Alert.alert('Missing fields', 'Please fill in departure!')
@@ -106,7 +102,7 @@ const SearchForm: React.FC = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDeparture(prev => ({ ...prev, city }));
+                                    city && setDeparture(prev => ({ ...prev || {}, city }));
 
                                     const country = details.address_components.find(component =>
                                         component.types.includes("country")
@@ -116,8 +112,7 @@ const SearchForm: React.FC = () => {
 
                             }}
                             query={{
-                                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
-                                // key: GOOGLE_MAPS_API_KEY,
+                                key: GOOGLE_MAPS_API_KEY,
                                 language: 'en',
                             }}
                             disableScroll={true}
@@ -161,8 +156,7 @@ const SearchForm: React.FC = () => {
                             }}
 
                             query={{
-                                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
-                                // key: GOOGLE_MAPS_API_KEY,
+                                key: GOOGLE_MAPS_API_KEY,
                                 language: 'en',
                             }}
                             disableScroll={true}

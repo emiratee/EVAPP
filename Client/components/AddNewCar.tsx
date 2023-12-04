@@ -16,10 +16,10 @@ const AddNewCar = (props: Props) => {
     const [newLicencePlates, setNewLicencePlates] = useState<string>('')
     const [newNumberOfSeats, setNewNumberOfSeats] = useState<number>(1)
 
-    const { token, setUser, } = useAuth()
+    const { token, setUser, user } = useAuth()
 
     return (
-        token && <View style={{ width: '90%' }}>
+        user && token && <View style={{ width: '90%' }}>
             <Text style={{ fontSize: 24, textAlign: 'center' }}>Add New Car</Text>
 
 
@@ -106,10 +106,10 @@ const AddNewCar = (props: Props) => {
                                 licencePlate: newLicencePlates,
                                 seats: newNumberOfSeats,
                             }
-                            addCar(formData, token).then(data => {
+                            addCar(formData, token).then((data: { car: types.TCar }) => {
                                 props.setAddNewCar(false);
-                                setUser((user) => (
-                                    { ...user, cars: [...user.cars, data.car] }
+                                setUser((user: types.TUser | null) => (
+                                    { ...user!, cars: [...user?.cars || [], data.car] }
                                 ))
                             })
                             props.setAddCarSnackBar(true)

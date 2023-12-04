@@ -4,8 +4,10 @@ import * as icons from '@expo/vector-icons';
 import { updateAccount } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 import { useNavigation } from 'expo-router';
-
-const ChangePasswordForm = ({ setVisible }) => {
+type Props = {
+    setVisible: (value: React.SetStateAction<boolean>) => void
+}
+const ChangePasswordForm = ({ setVisible }: Props) => {
     const { token } = useAuth();
     const navigation = useNavigation();
     const [currentPassword, setCurrentPassword] = useState<string>('');
@@ -34,7 +36,7 @@ const ChangePasswordForm = ({ setVisible }) => {
         if (currentPassword === newPassword) return setError("Oopsie! You cannot set the new password to your current one")
         try {
             // Call the changePassword function from your authentication utility
-            await updateAccount({ currentPassword, newPassword }, token);
+            token && await updateAccount({ currentPassword, newPassword }, token);
 
             // Password changed successfully
             // Password changed successfully
@@ -54,7 +56,7 @@ const ChangePasswordForm = ({ setVisible }) => {
                             setConfirmPassword('');
 
                             // Navigate back to the profile page
-                            navigation.navigate('profile');
+                            navigation.navigate('profile' as never);
                         },
                     },
                 ]

@@ -5,7 +5,13 @@ import { FlatList } from "react-native-gesture-handler";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
 import { putApproveTrip, putRejectTrip } from "../utils/apiService";
-
+import * as types from '../types/types'
+type Props = {
+    //     trip:types.TTrip, 
+    // //     passenger, 
+    //     bookingId: string, 
+    // //     setRequests
+}
 
 const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
     const { token } = useAuth();
@@ -49,7 +55,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        token && type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
+                        token && type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : token && await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
                     }
                 },
                 {
@@ -98,7 +104,8 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
 }
 
 export default function ModalScreen() {
-    const { trip, passengers } = useRoute().params;
+    const { trip, passengers } = useRoute().params as { trip: types.TTrip; passengers: types.TUser[] };
+
     const [requests, setRequests] = useState(passengers.filter((el: { status: string; }) => el.status === 'Pending').length)
 
     return (

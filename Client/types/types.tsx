@@ -13,14 +13,14 @@ export type TTrip = {
     departure: {
         country: string,
         city: string,
-        address: string,
+        address?: string,
         time: string,
         date: string
     },
     destination: {
         country: string,
         city: string,
-        address: string,
+        address?: string,
         time: string,
         date: string
     },
@@ -38,10 +38,10 @@ export type TTrip = {
         luggage: boolean,
         comments?: string,
     }
-    car: TCar | TCarNoId,
+    car: TCar,
     price: string,
     driverID: string,
-    passengersIDs: {
+    passengerIDs: {
         bookingId: string,
         userId: string,
         name: string,
@@ -62,7 +62,7 @@ export type TUser = {
     imageUrl?: string,
     phoneNumber: string,
     password: string,
-    cars: TCar[] | TCarNoId[],
+    cars: TCar[],
     passengerRating: {
         totalReviews: number,
         totalRating: number,

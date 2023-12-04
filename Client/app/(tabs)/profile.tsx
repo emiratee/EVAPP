@@ -18,7 +18,7 @@ const profile = () => {
     useFocusEffect(
         React.useCallback(() => {
             if (!isAuthenticated) {
-                navigate('login');
+                navigate('login' as never);
             }
         }, [isAuthenticated])
     );
@@ -45,7 +45,7 @@ const profile = () => {
                         <Text style={styles.sectionTitle}>Current Credit Balance: </Text>
                         <Text style={[styles.sectionTitle, { paddingRight: 50, fontWeight: '400' }]}>{parseFloat(user.credits.available).toFixed(2)}€</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigate('addCredits')}>
+                    <TouchableOpacity onPress={() => navigate('addCredits' as never)}>
                         <View style={[styles.sectionInfo, { paddingTop: 10 }]}>
                             <Text style={styles.sectionInfoText}>Add more credits</Text>
                             <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />
@@ -59,14 +59,14 @@ const profile = () => {
                     <View style={styles.sectionInfo}>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Passenger</Text>
-                            <Text style={styles.sectionInfoText}>{parseFloat(user.passengerRating.totalReviews)} Reviews</Text>
-                            <RatingStars rating={parseFloat(user.passengerRating.averageRating)} />
+                            <Text style={styles.sectionInfoText}>{user.passengerRating.totalReviews} Reviews</Text>
+                            <RatingStars rating={user.passengerRating.averageRating} />
                         </View>
 
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Driver</Text>
-                            <Text style={styles.sectionInfoText}>{parseFloat(user.driverRating.totalReviews)} Reviews</Text>
-                            <RatingStars rating={parseFloat(user.driverRating.averageRating)} />
+                            <Text style={styles.sectionInfoText}>{user.driverRating.totalReviews} Reviews</Text>
+                            <RatingStars rating={user.driverRating.averageRating} />
                         </View>
                     </View>
                 </View>
@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 60,
         marginVertical: 20,
         padding: 15,
-        // marginBottom: 100,
     },
     buttonText: {
         textAlign: 'center',
