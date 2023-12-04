@@ -13,8 +13,8 @@ export default function TripCardRedirect() {
     } | null>(null);
 
     useEffect(() => {
-        if (route.params && route.params.response) {
-            setResponse(route.params.response) ;
+        if (route.params && 'response' in route.params) {
+            setResponse(route.params.response as typeof response);
         }
     }, [route.params]);
 

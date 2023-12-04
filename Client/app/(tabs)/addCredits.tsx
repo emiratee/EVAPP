@@ -4,8 +4,10 @@ import { useAuth } from '../../utils/auth';
 import { RadioButton } from 'react-native-paper';
 import { putAvailableCredits } from '../../utils/apiService';
 import * as types from '../../types/types'
-const addCredits: React.FC = () => {
+import COLORS from '../../COLORS'
 
+const addCredits: React.FC = () => {
+    console.log(COLORS)
     const { token, user, setUser } = useAuth();
 
     const [selectedMethod, setSelectedMethod] = useState<string>('');
@@ -229,7 +231,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.default,
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0 },
         shadowOpacity: 0.4,

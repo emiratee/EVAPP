@@ -20,7 +20,7 @@ const history = () => {
     useFocusEffect(
         React.useCallback(() => {
             (async () => {
-                if (!isAuthenticated) return navigation.navigate('login');
+                if (!isAuthenticated) return navigation.navigate('login' as never);
                 const history = token && await getHistory(token);
 
                 const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });

@@ -46,7 +46,7 @@ const register = (props: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
-                navigation.navigate('index');
+                navigation.navigate('index' as never);
             }
         }, [isAuthenticated])
     );

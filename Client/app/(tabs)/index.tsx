@@ -50,7 +50,7 @@ const SearchForm = () => {
                 seats: formData.numberOfPeople
             }, token);
             if (response) {
-                navigate.navigate('TripCardRedirect', { response });
+                navigate.navigate('TripCardRedirect' , { response } );
             }
 
             // simulate a delay (e.g., 2000 milliseconds) before resetting the form

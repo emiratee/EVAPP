@@ -56,7 +56,7 @@ const ChangePasswordForm = ({ setVisible }: Props) => {
                             setConfirmPassword('');
 
                             // Navigate back to the profile page
-                            navigation.navigate('profile');
+                            navigation.navigate('profile' as never);
                         },
                     },
                 ]
