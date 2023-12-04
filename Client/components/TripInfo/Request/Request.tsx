@@ -40,7 +40,7 @@ const Request = ({ trip }: Props) => {
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
         if (!secondClick) {
-            user && setHasEnoughCredits(user.credits.available >= price);
+            user && setHasEnoughCredits(Number(user.credits.available) >= Number(price));
             setIsPickerVisible(false);
             setText('Send booking request');
             setSecondClick(!secondClick)

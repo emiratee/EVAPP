@@ -11,6 +11,7 @@ import ImageUploader from '../../components/ImageUploader';
 
 const profile = () => {
     const { isAuthenticated, logout, user, token } = useAuth();
+    console.log(token)
     const [visible, setVisible] = useState<boolean>(false);
 
     const { navigate } = useNavigation();
