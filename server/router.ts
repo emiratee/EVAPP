@@ -8,6 +8,7 @@ router.post('/trip/create', tripController.postCreate);
 //router.get('/trip/:id')
 router.get('/trips', tripController.getFilteredTrips);
 router.put('/trips/request', tripController.putMakeRequest);
+router.put('/trips/success', tripController.putTripSuccessful);
 
 router.put('/user/trips/approve', tripController.putApprovePassenger);
 router.put('/user/trips/reject', tripController.putRejectPassenger);
