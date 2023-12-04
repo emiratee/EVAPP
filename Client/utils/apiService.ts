@@ -321,6 +321,24 @@ const putMarkTripSuccessful = async (data, token: string) => {
     }
 }
 
+const putEarningsToAvailable = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/credits/earningsToAvailable`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export {
     cloudinaryUpload,
     getFilteredTrips,
@@ -338,5 +356,6 @@ export {
     putRequestTrip,
     updateAccount,
     sendPushNotification,
-    putMarkTripSuccessful
+    putMarkTripSuccessful,
+    putEarningsToAvailable
 }

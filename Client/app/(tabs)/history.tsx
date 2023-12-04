@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from
 import { Tab, TabView } from '@rneui/themed';
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import { getHistory, putMarkTripSuccessful } from '../../utils/apiService';
+import { getHistory, putEarningsToAvailable, putMarkTripSuccessful } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation, router } from 'expo-router';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
@@ -56,7 +56,17 @@ const history = () => {
             tripId: trip._id,
             successful: true
         }
-        putMarkTripSuccessful(formData, token)
+        
+        const price = trip.price;
+        
+        const totalSeats = trip.passengerIDs.reduce((accumulator, passenger) => {
+            return accumulator + passenger.seats;
+        }, 0);
+        
+        const totalCredits = (totalSeats * Number(price)).toString();
+        
+        putMarkTripSuccessful(formData, token);
+        putEarningsToAvailable({totalCredits}, token)
     }
 
 
@@ -143,9 +153,9 @@ const history = () => {
                     )}
                 </SafeAreaView>
 
-                {/* //ongoing trips - trips that are not marked as finished (aka sussessfull) and has passenger ID
+                {/* //ongoing trips - trips that are not marked as finished (aka sussessfull) and has passenger ID (DONE)
                 // only for trip driver (driverID) -  A button to mark them as successful - only after the destination time has passed (DONE)
-                   -> update backend for the trip - mark as successful
+                   -> update backend for the trip - mark as successful (DONE)
                 // trigger notification for review
                 //
                     // */}
@@ -153,11 +163,11 @@ const history = () => {
                     {currentTrips.length > 0 ? (<FlatList
                         data={currentTrips}
                         renderItem={({ item }) => (
-                            <View style={[styles.card, { opacity: 0.5 }]}>
+                            <View style={styles.card}>
                                 <TripCardItem trip={item.trip} driver={item.driver} />
                                 {user.userId == item.driver.userId &&
                                     (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
-                                    <TouchableOpacity onPress={()=>{handleComplete(item.trip)}}>
+                                    <TouchableOpacity onPress={() => { handleComplete(item.trip) }}>
                                         <Text>Mark as complete</Text>
                                     </TouchableOpacity>
                                 }
