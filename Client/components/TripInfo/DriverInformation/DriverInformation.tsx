@@ -4,6 +4,8 @@ import * as icons from '@expo/vector-icons';
 
 
 const DriverInformation = ({ trip, driver }) => {
+    console.log(driver);
+    
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
@@ -18,7 +20,7 @@ const DriverInformation = ({ trip, driver }) => {
                         </View>
                         <TouchableOpacity>
                             <Image
-                                source={require('../../../assets/images/driver.png')}
+                                source={{ uri: driver.imageUrl }}
                                 style={{ height: 40, width: 40, borderRadius: 50 }}
                             />
                         </TouchableOpacity>

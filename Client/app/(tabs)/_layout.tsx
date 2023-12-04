@@ -1,7 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import React from 'react';
-import { Pressable, useColorScheme } from 'react-native';
+import { Pressable, TouchableOpacity, useColorScheme, Text } from 'react-native';
 
 import Colors from '../../constants/Colors';
 
@@ -17,6 +17,9 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
+
+
+
 
     return (
         <Tabs
@@ -85,6 +88,14 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
+
+            <Tabs.Screen
+                name="chatView"
+                options={{
+                    href: null,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                }}
+            />
             
 
 
@@ -110,8 +121,17 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="messages"
                 options={{
-                    title: 'Messages',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
+                        headerTitle:'Inbox',
+                        tabBarLabel: 'Messages',
+                        tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
+                        headerRight: () => (
+                            <Link href="/messages" asChild>
+                                {/* Select button on the right*/}
+                                <TouchableOpacity >
+                                        <Text style={{paddingRight: 30, fontSize: 16, color: '#8757f7' }}>Select</Text>
+                                </TouchableOpacity>
+                            </Link>
+                        ),
                 }}
             />
             <Tabs.Screen
