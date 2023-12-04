@@ -8,7 +8,16 @@ const path_1 = __importDefault(require("path"));
 const uuid_1 = require("uuid");
 const userUtils_1 = require("../utils/userUtils");
 const Chat_1 = __importDefault(require("../models/Chat"));
+const User_1 = __importDefault(require("../models/User"));
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
+const getUserById = async (id) => {
+    try {
+        return await User_1.default.findOne({ userId: id });
+    }
+    catch (error) {
+        console.error(error);
+    }
+};
 //Creating a new chat
 const postChat = async (req, res) => {
     try {
@@ -16,9 +25,16 @@ const postChat = async (req, res) => {
         if (!validatedUser || !validatedUser.userId)
             return res.status(401).json({ error: validatedUser });
         const { driverId, passengerId } = req.body;
+        const driver = await getUserById(driverId);
+        const passenger = await getUserById(passengerId);
         const chat = await Chat_1.default.insertMany({
             chatId: (0, uuid_1.v4)(),
-            participantIDs: [driverId, passengerId]
+            'driver.userId': driver.userId,
+            'driver.name': driver.name,
+            'driver.imageUrl': driver.imageUrl,
+            'passenger.userId': passenger.userId,
+            'passenger.name': passenger.name,
+            'passenger.imageUrl': passenger.imageUrl,
         });
         if (!chat)
             return res.status(400).json({ error: "Could not post chat" });
@@ -32,10 +48,11 @@ const postChat = async (req, res) => {
 //Get all chats for message tab
 const getAllChats = async (req, res) => {
     try {
-        return res.status(200).send('ok');
         const validatedUser = await (0, userUtils_1.validateUser)(req);
         if (!validatedUser || !validatedUser.userId)
             return res.status(401).json({ error: validatedUser });
+        const chats = await Chat_1.default.find({ $or: [{ 'driver.userId': validatedUser.userId }, { 'passenger.userId': validatedUser.userId }] });
+        return res.status(200).json({ chats });
     }
     catch (error) {
         console.error("Error in getAllChats:", error);

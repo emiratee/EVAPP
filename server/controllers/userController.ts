@@ -57,22 +57,6 @@ const postRegister = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-const getDriver = async (driverId: string): Promise<any> => {
-    try {
-        //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
-
-        const driver = await User.findOne({ userId: driverId });
-        //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
-
-        const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
-
-        return filteredDriver;
-    } catch (error) {
-        console.error(error);
-        //res.status(500).json({ error: "Internal server error" });
-    }
-}
-
 
 const getUser = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -296,7 +280,6 @@ async function putUpdateAccount(req: Request, res: Response): Promise<any> {
 
 export default {
     postRegister,
-    getDriver,
     getUser,
     putCar,
     putTripsAsDriver,

@@ -33,16 +33,6 @@ const getFilteredTrips = async (data: types.TTrip_search, token: string) => {
     }
 }
 
-const getDriver = async (driverId: string) => {
-    try {
-        const response = await fetch(`${BASE_URL}/user/${driverId}`);
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
 const getUser = async (token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user`, {
@@ -299,7 +289,6 @@ async function sendPushNotification(expoPushToken: string): Promise<void> {
         },
         body: JSON.stringify(message),
     });
-
 }
 
 const getAllChats = async (token: string) => {
@@ -366,7 +355,6 @@ const postMessage = async (chatId: string, token: string) => {
 
 export {
     getFilteredTrips,
-    getDriver,
     getUser,
     addCar,
     addNewTrip,

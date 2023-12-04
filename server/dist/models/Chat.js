@@ -25,9 +25,38 @@ const chatSchema = new mongoose_1.default.Schema({
         type: String,
         required: true
     },
-    participantIDs: [{
+    driver: {
+        userId: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        imageUrl: {
             type: String
-        }],
+        },
+        lastMessage: {
+            type: String
+        }
+    },
+    passenger: {
+        userId: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        imageUrl: {
+            type: String
+        },
+        lastMessage: {
+            type: String
+        }
+    },
     chat: [{
             type: messageSchema
         }]

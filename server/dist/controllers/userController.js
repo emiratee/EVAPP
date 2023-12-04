@@ -59,19 +59,6 @@ const postRegister = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-const getDriver = async (driverId) => {
-    try {
-        //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
-        const driver = await User_js_1.default.findOne({ userId: driverId });
-        //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
-        const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
-        return filteredDriver;
-    }
-    catch (error) {
-        console.error(error);
-        //res.status(500).json({ error: "Internal server error" });
-    }
-};
 const getUser = async (req, res) => {
     try {
         const validatedUser = await (0, userUtils_js_1.validateUser)(req);
@@ -256,7 +243,6 @@ async function putUpdateAccount(req, res) {
 }
 exports.default = {
     postRegister,
-    getDriver,
     getUser,
     putCar,
     putTripsAsDriver,

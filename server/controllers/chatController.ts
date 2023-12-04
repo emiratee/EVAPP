@@ -4,7 +4,16 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { validateUser } from '../utils/userUtils';
 import Chat from '../models/Chat';
+import User from '../models/User';
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
+
+const getUserById = async (id: string): Promise<any> => {
+    try {
+        return await User.findOne({ userId: id });
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 //Creating a new chat
 const postChat = async (req: Request, res: Response): Promise<Response> => {
@@ -14,9 +23,17 @@ const postChat = async (req: Request, res: Response): Promise<Response> => {
 
         const { driverId, passengerId } = req.body;
 
+        const driver = await getUserById(driverId);
+        const passenger = await getUserById(passengerId);
+
         const chat = await Chat.insertMany({
             chatId: uuidv4(),
-            participantIDs: [driverId, passengerId]
+            'driver.userId': driver.userId,
+            'driver.name': driver.name,
+            'driver.imageUrl': driver.imageUrl,
+            'passenger.userId': passenger.userId,
+            'passenger.name': passenger.name,
+            'passenger.imageUrl': passenger.imageUrl,
         });
         if (!chat) return res.status(400).json({ error: "Could not post chat" });
 
@@ -30,15 +47,18 @@ const postChat = async (req: Request, res: Response): Promise<Response> => {
 //Get all chats for message tab
 const getAllChats = async (req: Request, res: Response): Promise<Response> => {
     try {
-        return res.status(200).send('ok')
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId) return res.status(401).json({ error: validatedUser });
 
+        const chats = await Chat.find({ $or: [ { 'driver.userId': validatedUser.userId }, { 'passenger.userId': validatedUser.userId } ] });
+                  
+        return res.status(200).json({ chats });
     } catch (error) {
         console.error("Error in getAllChats:", error);
         return res.status(500).json({ error: "Internal server error in getAllChats" });
     }
 };
+
 
 
 //Get individual chat
