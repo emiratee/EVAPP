@@ -12,6 +12,7 @@ router.post('/trip/create', tripController_js_1.default.postCreate);
 //router.get('/trip/:id')
 router.get('/trips', tripController_js_1.default.getFilteredTrips);
 router.put('/trips/request', tripController_js_1.default.putMakeRequest);
+router.put('/trips/success', tripController_js_1.default.putTripSuccessful);
 router.put('/user/trips/approve', tripController_js_1.default.putApprovePassenger);
 router.put('/user/trips/reject', tripController_js_1.default.putRejectPassenger);
 //User account (Setting etc.)
