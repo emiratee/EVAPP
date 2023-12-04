@@ -29,12 +29,12 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
             </View>
 
             <View>
-                <Text style={[styles.label, { paddingLeft: 5 }]}>{seats}x {seats === 1 ? 'seat' : 'seats'} á {parseFloat(trip.price).toFixed(2)}€</Text>
+                <Text style={[styles.label, { paddingLeft: 5 }]}>{seats}x {seats === 1 ? 'seat' : 'seats'} á {Number(trip.price).toFixed(2)}€</Text>
 
                 <View style={styles.totalCredits}>
                     <View style={styles.totalContainer}>
                         <Text style={styles.labelCredits}>Total Amount: </Text>
-                        <Text style={[styles.labelCredits, { fontSize: 20, fontWeight: '300' }]}>{parseFloat(price).toFixed(2)}€</Text>
+                        <Text style={[styles.labelCredits, { fontSize: 20, fontWeight: '300' }]}>{Number(price).toFixed(2)}€</Text>
                     </View>
                     <View style={styles.totalContainer}>
                         <icons.Ionicons name="ios-information-circle-sharp" size={10} color="black" />

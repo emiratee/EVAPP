@@ -22,7 +22,7 @@ const TripInfoModalScreen = ({ trip, driver }: Props) => {
                 data={[trip]}
                 renderItem={({ item }) => (
                     <>
-                        <Map departure={item.departure.address} destination={item.destination.address} />
+                        {item.departure.address && item.destination.address && <Map departure={item.departure.address} destination={item.destination.address} />}
                         <LocationInformation trip={item} />
                         <DriverInformation trip={item} driver={driver} />
                     </>

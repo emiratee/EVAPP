@@ -13,15 +13,15 @@ type Props = {
 const Request = ({ trip }: Props) => {
     const { user, token } = useAuth()
 
-    const [price, setPrice] = useState(trip.price);
+    const [price, setPrice] = useState<string>(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState<boolean>(true);
-    const [text, setText] = useState(`${parseFloat(price).toFixed(2)}€`);
-    const [seats, setSeats] = useState(1);
+    const [text, setText] = useState<string>(`${parseFloat(price).toFixed(2)}€`);
+    const [seats, setSeats] = useState<number>(1);
     const [hasEnoughCredits, setHasEnoughCredits] = useState<boolean>(true);
 
     const handlePriceChange = (value: string) => {
         const number: number = parseFloat(value);
-        const price: number = trip && parseFloat((trip.price * number).toFixed(2));
+        const price: number = trip && Number((Number(trip.price) * number).toFixed(2));
         setPrice(price.toString());
         setText(`${price.toFixed(2)}€`);
         setSeats(number);
@@ -69,7 +69,7 @@ const Request = ({ trip }: Props) => {
                 </View>
             </TouchableOpacity>
 
-            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
+            {!isPickerVisible && (<Bill trip={trip} price={Number(price)} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
 
             {isPickerVisible && (<Picker
                 style={request_styles.picker}
