@@ -31,18 +31,18 @@ const Message = () => {
               center
               checkedIcon={
                   <Icon
-                  name="radio-button-checked"
-                  type="material"
-                  color="#8757f7"
+                  name='radio-button-checked'
+                  type='material'
+                  color='#8757f7'
                   size={28}
                   // iconStyle={{}}
                   />
               }
               uncheckedIcon={
                   <Icon
-                  name="radio-button-unchecked"
-                  type="material"
-                  color="grey"
+                  name='radio-button-unchecked'
+                  type='material'
+                  color='grey'
                   size={28}
                   // iconStyle={{}}
                   />

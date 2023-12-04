@@ -6,7 +6,6 @@ import ChatMessage from './ChatMessage'
 const ChatBody = () => {
   return (
     <View style={{backgroundColor:'#000', height: '100%', zIndex: -1 }}>
-      <Text>ChatBody</Text>
       <ChatMessage/>
     </View>
   )
