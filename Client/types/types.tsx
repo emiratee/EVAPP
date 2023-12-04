@@ -107,6 +107,14 @@ export type TTrip_search = {
     seats: number
 }
 
+export type TRegisterForm = {
+    name: string,
+    email: string,
+    phoneNumber: string,
+    password: string,
+    imageUrl?: string,
+    expoPushToken?: string
+}
 
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>

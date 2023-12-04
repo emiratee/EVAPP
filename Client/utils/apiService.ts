@@ -114,7 +114,7 @@ const putTripsAsDriver = async (data: { _id: string }, token: string) => {
     }
 }
 
-const postRegister = async (data) => {
+const postRegister = async (data: types.TRegisterForm) => {
     try {
         const response = await fetch(`${BASE_URL}/user/account/register`, {
             method: 'POST',
