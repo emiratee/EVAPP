@@ -1,7 +1,7 @@
 import { Router } from "express";
-import chatController from "./controllers/chatController.js";
-import tripController from './controllers/tripController.js';
-import userController from './controllers/userController.js';
+import chatController from "../controllers/chatController.js";
+import tripController from '../controllers/tripController.js';
+import userController from '../controllers/userController.js';
 const router = Router();
 
 //Trips
