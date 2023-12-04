@@ -7,8 +7,7 @@ import { Request } from 'express';
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 
-//todo, change not to any
-export async function validateUser(req: Request | any): Promise<any> {
+export async function validateUser(req: Request): Promise<any> {
     try {
         const { authorization } = req.headers
 

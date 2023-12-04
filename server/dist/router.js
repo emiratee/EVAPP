@@ -30,4 +30,8 @@ router.put('/user/credits/available', userController_js_1.default.putAvailableCr
 router.put('/user/credits/hold', userController_js_1.default.putOnHoldCredits);
 router.put('/user/credits/earnings', userController_js_1.default.putEarningsCredits);
 //need also route to assign trip to user
+router.post('/user/chats', chatController.postChat);
+router.get('/user/chats', chatController.getAllChats);
+router.get('/user/chats/:chatId', chatController.getChat);
+router.post('/user/chats/:chatId', chatController.postMessage);
 exports.default = router;

@@ -1,4 +1,9 @@
 import { Router } from "express";
+<<<<<<< HEAD
+=======
+import multer from "multer";
+import chatController from "./controllers/chatController.js";
+>>>>>>> a03a4ed (added chat be)
 import tripController from './controllers/tripController.js';
 import userController from './controllers/userController.js';
 const router = Router();
@@ -30,6 +35,11 @@ router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
 router.put('/user/credits/earnings', userController.putEarningsCredits);
 //need also route to assign trip to user
+
+router.post('/user/chats', chatController.postChat)
+router.get('/user/chats', chatController.getAllChats);
+router.get('/user/chats/:chatId', chatController.getChat);
+router.post('/user/chats/:chatId', chatController.postMessage);
 
 
 
