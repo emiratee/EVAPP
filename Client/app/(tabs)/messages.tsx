@@ -26,7 +26,7 @@ export default function Messages() {
                     data={chats}
                     renderItem={({ item }) => {                        
                         return (
-                            <TouchableOpacity style={styles.container} onPress={() => { return navigate('chatView') }}>
+                            <TouchableOpacity style={styles.container} onPress={() => { return navigate('chatView', { chat: item }) }}>
                                 <Message item={item} />
                             </TouchableOpacity>
                         )
