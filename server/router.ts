@@ -31,6 +31,9 @@ router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
 router.put('/user/credits/earnings', userController.putEarningsCredits);
 router.put('/user/credits/earningsToAvailable', userController.putEarningsToAvailable);
+
+//driver review
+router.put('/user/review/driverRating', userController.putAddReview);
 //need also route to assign trip to user
 
 

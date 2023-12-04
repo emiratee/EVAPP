@@ -309,7 +309,7 @@ const putEarningsToAvailable = async (req: Request, res: Response): Promise<any>
             {
                 $set: {
                     'credits.earningsOnHold': currentOnHoldEarnings - totalCredits,
-                    'credits.available' : currentAvailable + Number(totalCredits),
+                    'credits.available': currentAvailable + Number(totalCredits),
                 },
             }
         );
@@ -320,6 +320,56 @@ const putEarningsToAvailable = async (req: Request, res: Response): Promise<any>
     } catch (error) {
         console.error("Error in putEarningsToAvailable:", error);
         res.status(500).json({ error: "Internal server error in putEarningsToAvailable" });
+    }
+};
+
+const putAddReview = async (req: Request, res: Response): Promise<any> => {
+    try {
+        console.log('alos here')
+        //validating user
+        const validatedUser = await validateUser(req);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
+
+        //driver ID
+        const { tripId, driverId, rating } = req.body.data
+
+        const driver = await User.findOne({ userId: driverId });
+        console.log(driver)
+        const currentTotalReviews = Number(driver.driverRating.totalReviews);
+        const currentTotalRating = Number(driver.driverRating.totalRating);
+
+
+        console.log(currentTotalReviews)
+        console.log(currentTotalRating)
+        console.log(tripId)
+        console.log(driverId)
+        console.log(rating)
+
+        //add reviews to driver
+        await User.updateOne(
+            { userId: driverId },
+            {
+                $set: {
+                    'driverRating.totalReviews': currentTotalReviews + 1,
+                    'driverRating.totalRating': currentTotalRating + Number(rating),
+                },
+            }
+        );
+
+        //change trip reviwed status to true for user (which is a passenger)
+        await Trip.updateOne(
+            { _id: tripId, "passengerIDs.userId": validatedUser.userId },
+            {
+                $set: { "passengerIDs.$.reviewed": true },
+            }
+        );
+
+
+
+        res.status(200).json({ message: 'putAddReview Changed ' });
+    } catch (error) {
+        console.error("Error in putAddReview:", error);
+        res.status(500).json({ error: "Internal server error in putAddReview" });
     }
 };
 
@@ -337,5 +387,6 @@ export default {
     getHistory,
     putEarningsCredits,
     putUpdateAccount,
-    putEarningsToAvailable
+    putEarningsToAvailable,
+    putAddReview
 }

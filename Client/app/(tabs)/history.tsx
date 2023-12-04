@@ -2,11 +2,13 @@ import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from
 import { Tab, TabView } from '@rneui/themed';
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import { getHistory, putEarningsToAvailable, putMarkTripSuccessful } from '../../utils/apiService';
+import { getHistory, putEarningsToAvailable, putMarkTripSuccessful, putAddReview } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation, router } from 'expo-router';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
 import * as types from '../../types/types'
+import StarRating from 'react-native-star-rating-widget';
+
 const history = () => {
     const { token, user, isAuthenticated } = useAuth();
     const { navigate } = useNavigation();
@@ -15,6 +17,8 @@ const history = () => {
     const [upcomingTrips, setUpcomingTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
     const [previousTrips, setPreviousTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
     const [currentTrips, setCurrentTrips] = useState([]);
+    let reviewed = false;
+    const [rating, setRating] = useState(0);
 
     const navigation = useNavigation();
 
@@ -45,30 +49,37 @@ const history = () => {
                 setPreviousTrips(previousTrips);
                 setCurrentTrips(currentTripsArr);
 
+                console.log(history.data)
+
             })();
         }, [isAuthenticated])
     );
 
+    const handleRating = (tripId, driverId, ratedValue) => {
+        setRating(ratedValue);
+
+        putAddReview({ tripId, driverId, rating: ratedValue }, token);
+    };
+
+
     const handleComplete = (trip) => {
         //mark trip as success
-
         const formData = {
             tripId: trip._id,
             successful: true
         }
-        
+
         const price = trip.price;
-        
+
         const totalSeats = trip.passengerIDs.reduce((accumulator, passenger) => {
             return accumulator + passenger.seats;
         }, 0);
-        
-        const totalCredits = (totalSeats * Number(price)).toString();
-        
-        putMarkTripSuccessful(formData, token);
-        putEarningsToAvailable({totalCredits}, token)
-    }
 
+        const totalCredits = (totalSeats * Number(price)).toString();
+
+        putMarkTripSuccessful(formData, token);
+        putEarningsToAvailable({ totalCredits }, token)
+    }
 
     return (
         user && <>
@@ -138,6 +149,7 @@ const history = () => {
                         <Text>No upcoming Trips</Text>
                     )}
                 </SafeAreaView>
+                {/* show review button to passengers to review drivers */}
 
                 <SafeAreaView style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
@@ -145,6 +157,27 @@ const history = () => {
                         renderItem={({ item }: { item: { trip: types.TTrip, driver: types.TUser } }) => (
                             <View style={[styles.card, { opacity: 0.5 }]}>
                                 <TripCardItem trip={item.trip} driver={item.driver} />
+
+                                {reviewed = item.trip.passengerIDs.some(
+                                        passenger => user && passenger.userId === user.userId && passenger.reviewed
+                                    )
+                                }
+
+                                {user.userId !== item.driver.userId && !reviewed &&
+                                    // <TouchableOpacity onPress={() => { handleReview(item.driver) }}>
+                                    //     <Text>Review</Text>
+                                    // </TouchableOpacity>
+
+                                    <StarRating
+                                        maxStars={5}
+                                        rating={rating}
+                                        onChange={(newRating) => { handleRating(item.trip._id, item.driver.userId, newRating) }}
+                                        starSize={30} // Customize the size of the stars
+                                        inactiveColor="#CCCCCC" // Customize the inactive star color
+                                        activeColor="#FFD700" // Customize the active star color
+                                    />
+
+                                }
                             </View>
                         )
                         }
@@ -165,8 +198,9 @@ const history = () => {
                         renderItem={({ item }) => (
                             <View style={styles.card}>
                                 <TripCardItem trip={item.trip} driver={item.driver} />
-                                {user.userId == item.driver.userId &&
+                                {user.userId === item.driver.userId &&
                                     (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
+                                    (new Date(item.trip.destination.date + 'T' + item.trip.destination.time + ':00') < new Date()) &&
                                     <TouchableOpacity onPress={() => { handleComplete(item.trip) }}>
                                         <Text>Mark as complete</Text>
                                     </TouchableOpacity>
@@ -175,7 +209,7 @@ const history = () => {
                         )
                         }
                     />) : (
-                        <Text>No on going trips</Text>
+                        <Text>No on-going trips</Text>
                     )}
                 </SafeAreaView>
             </TabView>
