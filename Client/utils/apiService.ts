@@ -238,7 +238,6 @@ const putRequestTrip = async (data, token: string) => {
 }
 
 
-
 const updateAccount = async (data: { currentPassword?: string, newPassword?: string, image?: string }, token: string) => {
     try {
         const { currentPassword, newPassword, image } = data;
@@ -258,6 +257,27 @@ const updateAccount = async (data: { currentPassword?: string, newPassword?: str
     } catch (error) {
         console.error(error);
         throw error;
+    }
+}
+
+const postChat = async (driverId: string, passengerId: string, token: string) => {
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
+            method: "POST",
+            body: data,
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const cloudinaryData = await response.json();
+
+        return cloudinaryData.secure_url;
+    } catch (err) {
+        console.error('An Error Occurred While Uploading:', err);
+        Alert.alert('An Error Occurred While Uploading');
+        throw err;
     }
 }
 
@@ -282,7 +302,6 @@ const cloudinaryUpload = async (data): Promise<string> => {
     }
 }
 
-
 async function sendPushNotification(expoPushToken: string): Promise<void> {
     const message = {
         to: expoPushToken,
@@ -301,10 +320,55 @@ async function sendPushNotification(expoPushToken: string): Promise<void> {
         },
         body: JSON.stringify(message),
     });
+
+}
+
+const getAllChats = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const getChat = async (chatId: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const postMessage = async (chatId: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 export {
-    cloudinaryUpload,
     getFilteredTrips,
     getDriver,
     getUser,
@@ -319,5 +383,10 @@ export {
     putRejectTrip,
     putRequestTrip,
     updateAccount,
-    sendPushNotification
+    sendPushNotification,
+    postChat,
+    getAllChats,
+    getChat,
+    postMessage,
+    cloudinaryUpload
 }
