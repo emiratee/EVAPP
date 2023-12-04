@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView, Act
 import { useAuth } from '../../utils/auth';
 import { RadioButton } from 'react-native-paper';
 import { putAvailableCredits } from '../../utils/apiService';
-
+import * as types from '../../types/types'
 const addCredits: React.FC = () => {
 
     const { token, user, setUser } = useAuth();
 
-    const [selectedMethod, setSelectedMethod] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [creditsAmount, setCreditsAmount] = useState('');
+    const [selectedMethod, setSelectedMethod] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [creditsAmount, setCreditsAmount] = useState<string>('');
 
     const handleSubmitButton = async () => {
         setIsLoading(true);
@@ -21,7 +21,10 @@ const addCredits: React.FC = () => {
         if (token && user && selectedMethod && creditsAmount !== '' && Number(creditsAmount) > 0) {
             const currentCredits = parseFloat(user.credits.available);
             user.credits.available = (currentCredits + Number(creditsAmount)).toFixed(2);
-            setUser(prev => ({ ...prev, 'credits.available': currentCredits + Number(creditsAmount) }))
+            setUser((user: types.TUser | null) => ({
+                ...user!,
+                'credits.available': currentCredits + Number(creditsAmount),
+            }))
             await putAvailableCredits((Number(creditsAmount)).toFixed(2), token);
 
             Alert.alert(

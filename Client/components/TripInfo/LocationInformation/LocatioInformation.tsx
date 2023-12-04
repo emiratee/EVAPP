@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Animated, Easing, StyleSheet } from 'react-native';
+import * as types from '../../../types/types'
 
+type Props = {
+    trip: types.TTrip,
+}
 
-const LocationInformation = ({ trip }) => {
-    const [lineAnimation] = useState(new Animated.Value(0));
+const LocationInformation = ({ trip }: Props) => {
+    const [lineAnimation] = useState<Animated.Value>(new Animated.Value(0));
 
     useEffect(() => {
         setTimeout(() => {
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
         margin: 10,
         marginBottom: 10,
         zIndex: 999,
-        marginTop:-60,
+        marginTop: -60,
     },
     timeContainer: {
         height: '100%',

@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../../Bill';
 import { putRequestTrip } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
+import * as types from '../../../types/types'
 
-const Request = ({ trip }) => {
+type Props = {
+    trip: types.TTrip,
+
+}
+const Request = ({ trip }: Props) => {
     const { user, token } = useAuth()
 
     const [price, setPrice] = useState(trip.price);
-    const [isPickerVisible, setIsPickerVisible] = useState(true);
+    const [isPickerVisible, setIsPickerVisible] = useState<boolean>(true);
     const [text, setText] = useState(`${parseFloat(price).toFixed(2)}€`);
     const [seats, setSeats] = useState(1);
-    const [hasEnoughCredits, setHasEnoughCredits] = useState(true);
+    const [hasEnoughCredits, setHasEnoughCredits] = useState<boolean>(true);
 
     const handlePriceChange = (value: string) => {
         const number: number = parseFloat(value);
-        const price: number = parseFloat((trip.price * number).toFixed(2));
+        const price: number = trip && parseFloat((trip.price * number).toFixed(2));
         setPrice(price.toString());
         setText(`${price.toFixed(2)}€`);
         setSeats(number);
@@ -35,7 +40,7 @@ const Request = ({ trip }) => {
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
         if (!secondClick) {
-            setHasEnoughCredits(parseFloat(user.credits.available) >= price);
+            user && setHasEnoughCredits(user.credits.available >= price);
             setIsPickerVisible(false);
             setText('Send booking request');
             setSecondClick(!secondClick)
@@ -45,7 +50,7 @@ const Request = ({ trip }) => {
                 tripId: trip._id,
                 seats: seats
             }
-            putRequestTrip(formData, token)
+            token && putRequestTrip(formData, token)
         }
     }
 

@@ -6,14 +6,14 @@ import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
-
+import * as types from '../../types/types'
 const history = () => {
     const { token, user, isAuthenticated } = useAuth();
     const { navigate } = useNavigation();
 
-    const [index, setIndex] = useState(0)
-    const [upcomingTrips, setUpcomingTrips] = useState([]);
-    const [previousTrips, setPreviousTrips] = useState([]);
+    const [index, setIndex] = useState<number>(0)
+    const [upcomingTrips, setUpcomingTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
+    const [previousTrips, setPreviousTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
 
     const navigation = useNavigation();
 
@@ -23,8 +23,8 @@ const history = () => {
                 if (!isAuthenticated) return navigation.navigate('login');
                 const history = token && await getHistory(token);
 
-                const upcomingTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') >= new Date() });
-                const previousTrips = history.data.filter(trip => { return new Date(trip.trip.date+ 'T' + trip.trip.departure.time + ':00') < new Date() });
+                const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });
+                const previousTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') < new Date() });
 
                 setUpcomingTrips(upcomingTrips);
                 setPreviousTrips(previousTrips);
@@ -62,7 +62,7 @@ const history = () => {
                     {upcomingTrips.length > 0 ? (
                         <FlatList
                             data={upcomingTrips}
-                            renderItem={({ item }) => {
+                            renderItem={({ item }: { item: { trip: types.TTrip, driver: types.TUser } }) => {
                                 const passengers = item.trip.passengerIDs;
                                 const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
 
@@ -101,7 +101,7 @@ const history = () => {
                 <SafeAreaView style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
                         data={previousTrips}
-                        renderItem={({ item }) => (
+                        renderItem={({ item }: { item: { trip: types.TTrip, driver: types.TUser } }) => (
                             <View style={[styles.card, { opacity: 0.5 }]}>
                                 <TripCardItem trip={item.trip} driver={item.driver} />
                             </View>

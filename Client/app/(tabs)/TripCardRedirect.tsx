@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import TripCard from '../../components/TripCard/TripCard';
 import { useRoute } from '@react-navigation/native';
+import * as types from '../../types/types'
 
 export default function TripCardRedirect() {
     const route = useRoute();
-    const [response, setResponse] = useState(null);
+    const [response, setResponse] = useState<{
+        trips: {
+            trip: types.TTrip,
+            driver: types.TUser
+        }[]
+    } | null>(null);
 
     useEffect(() => {
         if (route.params && route.params.response) {
-            setResponse(route.params.response);
+            setResponse(route.params.response) ;
         }
     }, [route.params]);
 

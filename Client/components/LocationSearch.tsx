@@ -1,16 +1,15 @@
-import { StyleSheet } from 'react-native'
 import React from 'react'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GOOGLE_MAPS_API_KEY } from '@env';
+import * as types from '../types/types'
 
 type Props = {
-    onPress: any
+    onPress: React.Dispatch<React.SetStateAction<types.TDeparture | types.TDestination | null>>
 }
 
 const LocationSearch = (props: Props) => {
 
-
     return (
-
         <GooglePlacesAutocomplete
             styles={{
                 container: {
@@ -46,16 +45,16 @@ const LocationSearch = (props: Props) => {
                     )?.long_name;
                     let country = details.address_components.find(component =>
                         component.types.includes("country")
-                    )?.long_name;
+                    )?.long_name || "";
                     if (!city) {
                         const addressParts = address.split(',');
-                        city = addressParts.length > 1 ? addressParts[addressParts.length - 2].trim() : undefined;
+                        city = addressParts.length > 1 ? addressParts[addressParts.length - 2].trim() : undefined || "";
                     }
                     props.onPress({ address, city, country });
                 }
             }}
             query={{
-                key: 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM',
+                key: GOOGLE_MAPS_API_KEY,
                 language: 'en',
             }}
             enablePoweredByContainer={false}
@@ -66,14 +65,3 @@ const LocationSearch = (props: Props) => {
 }
 
 export default LocationSearch
-
-const styles = StyleSheet.create({
-    input: {
-        height: 50,
-        width: '100%',
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 10,
-        borderColor: '#a8a8a8',
-    },
-})

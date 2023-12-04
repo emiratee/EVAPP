@@ -2,8 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import * as icons from '@expo/vector-icons';
 
+import * as types from '../../../types/types'
 
-const DriverInformation = ({ trip, driver }) => {
+type Props = {
+    trip: types.TTrip,
+    driver: types.TUser
+}
+
+const DriverInformation = ({ trip, driver }: Props) => {
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
@@ -18,10 +24,7 @@ const DriverInformation = ({ trip, driver }) => {
                         </View>
                         <TouchableOpacity>
                             {driver.imageUrl ? <Image source={{ uri: driver.imageUrl }} style={{ height: 40, width: 40, borderRadius: 50 }} /> :
-                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }}  />
-                        }
-                        
-                            
+                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }} />}
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -107,7 +110,7 @@ const driver_style = StyleSheet.create({
         padding: 10,
         margin: 10,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 100
     },
     header: {
         width: '100%'

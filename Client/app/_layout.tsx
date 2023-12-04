@@ -15,6 +15,8 @@ export const unstable_settings = {
     initialRouteName: '(tabs)',
 };
 
+
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -48,7 +50,7 @@ function RootLayoutNav() {
         <AuthProvider>
                 <ThemeProvider value={DefaultTheme}>
                     <Stack>
-                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false,  }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
                         <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
                     </Stack>
