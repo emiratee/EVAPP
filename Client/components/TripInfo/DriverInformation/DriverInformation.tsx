@@ -1,11 +1,18 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import * as icons from '@expo/vector-icons';
+import { postChat } from '../../../utils/apiService';
+import { useAuth } from '../../../utils/auth';
 
 
 const DriverInformation = ({ trip, driver }) => {
-    console.log(driver);
-    
+    const { user, token } = useAuth();
+
+    const contactDriver = async () => {
+        const chat = await postChat(trip.driverID, user.userId, token);
+        console.log(chat);   
+    }
+
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
@@ -84,11 +91,13 @@ const DriverInformation = ({ trip, driver }) => {
                     </View>
                 </View>
             </View>
-            <View style={driver_style.contactContainer}>
-                <TouchableOpacity style={driver_style.contactButton}>
-                    <Text style={driver_style.contactText}>Contact driver</Text>
-                </TouchableOpacity>
-            </View>
+            {user && user.userId !== trip.driverID && (
+                <View style={driver_style.contactContainer}>
+                    <TouchableOpacity style={driver_style.contactButton} onPress={contactDriver}>
+                        <Text style={driver_style.contactText}>Contact driver</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View >
     )
 }
