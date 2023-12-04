@@ -16,9 +16,9 @@ const history = () => {
     const [index, setIndex] = useState<number>(0)
     const [upcomingTrips, setUpcomingTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
     const [previousTrips, setPreviousTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
-    const [currentTrips, setCurrentTrips] = useState([]);
+    const [currentTrips, setCurrentTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
     let reviewed = false;
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState<number>(0);
 
     const navigation = useNavigation();
 
@@ -39,7 +39,7 @@ const history = () => {
                             trip.trip.successful && trip.trip.passengerIDs.length)
                     )
                 });
-                const currentTripsArr = history.data.filter(trip => {
+                const currentTripsArr = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => {
                     return (
                         (new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') <= new Date() &&
                             !trip.trip.successful && trip.trip.passengerIDs.length))
@@ -48,9 +48,6 @@ const history = () => {
                 setUpcomingTrips(upcomingTrips);
                 setPreviousTrips(previousTrips);
                 setCurrentTrips(currentTripsArr);
-
-                console.log(history.data)
-
             })();
         }, [isAuthenticated])
     );
@@ -164,9 +161,6 @@ const history = () => {
                                 }
 
                                 {user.userId !== item.driver.userId && !reviewed &&
-                                    // <TouchableOpacity onPress={() => { handleReview(item.driver) }}>
-                                    //     <Text>Review</Text>
-                                    // </TouchableOpacity>
 
                                     <StarRating
                                         maxStars={5}
