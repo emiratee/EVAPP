@@ -21,15 +21,15 @@ const Typebar = ({ setMessages, chat }) => {
         time: moment().format('HH:mm')
       }
     }
-    console.log(user.userId, receiver);
     
-    socket.emit('conversation', chat.chatId).emit('message', message, receiver);
+    socket.emit('conversation', chat.chatId)
+    socket.emit('message', message, receiver);
 
     if (text.trim() !== '') {
-      setMessages((prev) => [
-        ...prev,
-        { text: text, time: moment().format('HH:mm') },
-      ]);
+      // setMessages((prev) => [
+      //   ...prev,
+      //   { text: text, time: moment().format('HH:mm') },
+      // ]);
       setText('');
     }
     if (textInputRef.current) {
