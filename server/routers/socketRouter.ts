@@ -2,17 +2,20 @@ import { Server, Socket } from 'socket.io';
 
 const socketRouter = (io: Server) => {
     io.on('connection', (socket: Socket) => {
-        console.log('A user connected');
+        socket.on('conversation', (chatId: string) => {
+            socket.join(chatId);
 
-        socket.on('chat message', (msg: string) => {
-            console.log('message: ' + msg);
-            // Broadcast the message to everyone
-            io.emit('chat message', msg);
+            socket.on('message', (content: any, receiverId: string) => {
+                console.log(content);
+                // io.emit('message', content);
+                socket.to(chatId).to(receiverId).emit('message', content)
+            });
+
+            socket.on('disconnect', () => {
+                socket.leave(chatId);
+            })
         });
 
-        socket.on('disconnect', () => {
-            console.log('User disconnected');
-        });
     });
 };
 
