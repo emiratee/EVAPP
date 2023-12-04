@@ -35,6 +35,8 @@ const TripCardItem = ({ trip, driver }: Props) => {
         outputRange: [0, 120],
     });
 
+    // console.log("driver:" , driver)
+
     return (
         <Animated.View style={styles.cardContainer}>
             <View style={styles.locationContainer}>

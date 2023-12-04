@@ -46,7 +46,8 @@ export type TTrip = {
         userId: string,
         name: string,
         status: string,
-        seats: number
+        seats: number,
+        reviewed: boolean,
     }[],
     successful: boolean
 }

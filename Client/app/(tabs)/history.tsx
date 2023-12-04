@@ -14,6 +14,7 @@ const history = () => {
     const [index, setIndex] = useState<number>(0)
     const [upcomingTrips, setUpcomingTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
     const [previousTrips, setPreviousTrips] = useState<{ trip: types.TTrip, driver: types.TUser }[]>([]);
+    const [currentTrips, setCurrentTrips] = useState([]);
 
     const navigation = useNavigation();
 
@@ -25,15 +26,32 @@ const history = () => {
                 // navigation.navigate('login');
                 const history = token && await getHistory(token);
 
-                const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });
-                const previousTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') < new Date() });
+                const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date  + 'T' + trip.trip.departure.time + ':00') >= new Date() });
+                const previousTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => {
+                    return (
+                        (new Date(trip.trip.date  + 'T' + trip.trip.departure.time + ':00') < new Date() &&
+                            !trip.trip.successful && !trip.trip.passengerIDs.length) ||
+                        (new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') < new Date() &&
+                            trip.trip.successful && trip.trip.passengerIDs.length)
+                    )
+                });
+                const currentTripsArr = history.data.filter(trip => {
+                    return (
+                        (new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') <= new Date() &&
+                            !trip.trip.successful && trip.trip.passengerIDs.length))
+                });
 
                 setUpcomingTrips(upcomingTrips);
                 setPreviousTrips(previousTrips);
+                setCurrentTrips(currentTripsArr);
 
             })();
         }, [isAuthenticated])
     );
+
+    const handleComplete = () => {
+        //mark trip as success
+    }
 
 
     return (
@@ -56,6 +74,11 @@ const history = () => {
                     title="Previous"
                     titleStyle={{ fontSize: 12 }}
                     icon={<icons.MaterialIcons name="history" size={24} color="white" />}
+                />
+                <Tab.Item
+                    title="On going"
+                    titleStyle={{ fontSize: 12 }}
+                    icon={<icons.FontAwesome5 name="car-side" size={24} color="white" />}
                 />
             </Tab>
 
@@ -111,6 +134,32 @@ const history = () => {
                         }
                     />) : (
                         <Text>No previous Trips</Text>
+                    )}
+                </SafeAreaView>
+
+                {/* //ongoing trips - trips that are not marked as finished (aka sussessfull) and has passenger ID
+                // only for trip driver (driverID) -  A button to mark them as successful - only after the destination time has passed (DONE)
+                   -> update backend for the trip - mark as successful
+                // trigger notification for review
+                //
+                    // */}
+                <SafeAreaView style={styles.container}>
+                    {currentTrips.length > 0 ? (<FlatList
+                        data={currentTrips}
+                        renderItem={({ item }) => (
+                            <View style={[styles.card, { opacity: 0.5 }]}>
+                                <TripCardItem trip={item.trip} driver={item.driver} />
+                                {user.userId == item.driver.userId &&
+                                    (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
+                                    <TouchableOpacity onPress={handleComplete}>
+                                        <Text>Mark as complete</Text>
+                                    </TouchableOpacity>
+                                }
+                            </View>
+                        )
+                        }
+                    />) : (
+                        <Text>No on going trips</Text>
                     )}
                 </SafeAreaView>
             </TabView>
