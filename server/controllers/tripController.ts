@@ -6,12 +6,18 @@ import { sendPushNotification, validateUser } from '../utils/userUtils.js';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
 import userController from './userController.js'
+import { TTrip } from '../types/types.js';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-const postCreate = async (req: Request, res: Response): Promise<any> => {
+type FormedTrip = {
+    trip: TTrip;
+    driver: any
+}
+
+const postCreate = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const validUser = validateUser(req);
+        const validUser = await validateUser(req);
         if (!validUser) return res.status(401).json({ error: "Authentication failed" });
 
 
@@ -20,11 +26,11 @@ const postCreate = async (req: Request, res: Response): Promise<any> => {
         return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
-const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
+const getFilteredTrips = async (req: Request, res: Response): Promise<Response>  => {
     try {
         const validatedUser = await validateUser(req);
         const { departureCountry, departureCity, destinationCountry, destinationCity, date, seats } = req.query;
@@ -51,7 +57,7 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         }
         //todo remove any
         const trips = await Trip.find(params);
-        let formedTrips: any[] = [];
+        let formedTrips: FormedTrip[] = [];
         for (const trip of trips) {
             const driver = await userController.getDriver(trip.driverID);
             formedTrips.push({ trip, driver });
@@ -59,12 +65,12 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         return res.status(200).json({ trips: formedTrips })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
 
-const putApprovePassenger = async (req: Request, res: Response): Promise<any> => {
+const putApprovePassenger = async (req: Request, res: Response): Promise<Response>  => {
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
@@ -103,16 +109,16 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putCar:", error);
-        res.status(500).json({ error: "Internal server error in putCar" });
+        return res.status(500).json({ error: "Internal server error in putCar" });
     }
 };
 
 
 
-const putRejectPassenger = async (req: Request, res: Response): Promise<any> => {
+const putRejectPassenger = async (req: Request, res: Response): Promise<Response> => {
     try {
 
         //what we need? 
@@ -172,10 +178,10 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putRejectPassenger:", error);
-        res.status(500).json({ error: "Internal server error in putRejectPassenger" });
+        return res.status(500).json({ error: "Internal server error in putRejectPassenger" });
     }
 };
 //on reject update seats available of trip
