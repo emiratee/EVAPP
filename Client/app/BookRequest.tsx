@@ -49,7 +49,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
                         setStatus(type);
                         setRequests((prev: number) => (prev - 1));
                         const totalCredits = (passenger.seats * Number(trip.price)).toString();
-                        type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
+                        token && type === 'Approved' ? await putApproveTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token) : await putRejectTrip({ tripId: trip._id, bookingId, passengerId: passenger.userId, totalCredits }, token)
                     }
                 },
                 {

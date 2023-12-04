@@ -10,8 +10,8 @@ import { useAuth } from '../utils/auth';
 
 const ImageUploader = ({ }) => {
     const { token, user } = useAuth()
-    const [image, setImage] = useState(user.imageUrl);
-    const [isLoading, setIsLoading] = useState(false);
+    const [image, setImage] = useState<string>(user && user.imageUrl || "");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const pickImage = async () => {
         setIsLoading(true);
@@ -39,7 +39,7 @@ const ImageUploader = ({ }) => {
             const imageUrl = await cloudinaryUpload(formData)
 
             setImage(imageUrl);
-            await updateAccount({ image: imageUrl }, token);
+            token && await updateAccount({ image: imageUrl }, token);
 
             setIsLoading(false);
         } else {
@@ -47,9 +47,9 @@ const ImageUploader = ({ }) => {
         }
     };
 
-    
 
-    const resizeImage = async (uri, width) => {
+
+    const resizeImage = async (uri: string, width: number) => {
         const resizedImage = await ImageManipulator.manipulateAsync(
             uri,
             [{ resize: { width } }],

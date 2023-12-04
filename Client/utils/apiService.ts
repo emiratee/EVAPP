@@ -1,16 +1,14 @@
 import { Alert } from "react-native";
-
+import * as types from '../types/types'
 const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
 // const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; //not working
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
 
-const getFilteredTrips = async (data, token): Promise<any> => {
+const getFilteredTrips = async (data: types.TTrip_search, token: string) => {
     try {
         if (!data.destination) {
-            // const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&date=${data.date}&seats=${data.seats}`);
-
             const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&date=${data.date}&seats=${data.seats}`, {
                 method: 'GET',
                 headers: {
@@ -29,17 +27,13 @@ const getFilteredTrips = async (data, token): Promise<any> => {
             return await response.json();
         }
 
-
-
-
-
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
 
-const getDriver = async (driverId: string): Promise<any> => {
+const getDriver = async (driverId: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/${driverId}`);
         return await response.json();
@@ -65,7 +59,7 @@ const getUser = async (token: string) => {
     }
 }
 
-const addCar = async (data, token: string) => {
+const addCar = async (data: types.TCarNoId, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/cars`, {
             method: 'PUT',
@@ -84,7 +78,7 @@ const addCar = async (data, token: string) => {
     }
 }
 
-const addNewTrip = async (data, token: string) => {
+const addNewTrip = async (data: types.TTripNoId, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/trip/create`, {
             method: 'POST',
@@ -102,7 +96,7 @@ const addNewTrip = async (data, token: string) => {
     }
 }
 
-const putTripsAsDriver = async (data, token: string) => {
+const putTripsAsDriver = async (data: { _id: string }, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/trips/driver`, {
             method: 'PUT',
@@ -245,7 +239,7 @@ const putRequestTrip = async (data, token: string) => {
 
 
 
-const updateAccount = async (data, token: string) => {
+const updateAccount = async (data: { currentPassword?: string, newPassword?: string, image?: string }, token: string) => {
     try {
         const { currentPassword, newPassword, image } = data;
         const response = await fetch(`${BASE_URL}/user/account/update`, {
@@ -267,7 +261,7 @@ const updateAccount = async (data, token: string) => {
     }
 }
 
-const cloudinaryUpload = async (data) => {
+const cloudinaryUpload = async (data): Promise<string> => {
     try {
         const response = await fetch("https://api.cloudinary.com/v1_1/dzfbxhrtf/upload", {
             method: "POST",
@@ -289,25 +283,25 @@ const cloudinaryUpload = async (data) => {
 }
 
 
-async function sendPushNotification(expoPushToken:string) {
+async function sendPushNotification(expoPushToken: string): Promise<void> {
     const message = {
-      to: expoPushToken,
-      sound: 'default',
-      title: 'Original Title',
-      body: 'And here is the body!',
-      data: { someData: 'goes here' },
+        to: expoPushToken,
+        sound: 'default',
+        title: 'Original Title',
+        body: 'And here is the body!',
+        data: { someData: 'goes here' },
     };
-  
+
     await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
     });
-  }
+}
 
 export {
     cloudinaryUpload,

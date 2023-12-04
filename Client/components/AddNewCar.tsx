@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, useColorScheme, Dimensions, TouchableOpacity, Alert, Text, View } from 'react-native'
+import { StyleSheet, TextInput, Dimensions, TouchableOpacity, Alert, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -11,24 +11,22 @@ type Props = {
 }
 
 const AddNewCar = (props: Props) => {
-    const [newModel, setNewModel] = useState('')
-    const [newColor, setNewColor] = useState('')
-    const [newLicencePlates, setNewLicencePlates] = useState('')
-    const [newNumberOfSeats, setNewNumberOfSeats] = useState(1)
+    const [newModel, setNewModel] = useState<string>('')
+    const [newColor, setNewColor] = useState<string>('')
+    const [newLicencePlates, setNewLicencePlates] = useState<string>('')
+    const [newNumberOfSeats, setNewNumberOfSeats] = useState<number>(1)
 
-    const { token, setUser } = useAuth()
-
-    const iconColor = useColorScheme() === 'light' ? 'black' : 'white'
+    const { token, setUser, } = useAuth()
 
     return (
-        <View style={{ width: '90%' }}>
+        token && <View style={{ width: '90%' }}>
             <Text style={{ fontSize: 24, textAlign: 'center' }}>Add New Car</Text>
 
 
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.FontAwesome5 name='car' size={24} color={iconColor} />
+                        <icons.FontAwesome5 name='car' size={24} color={'black'} />
                         <Text>Model: </Text>
                     </View>
                     <TextInput
@@ -43,7 +41,7 @@ const AddNewCar = (props: Props) => {
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name='color-fill' size={24} color={iconColor} />
+                        <icons.Ionicons name='color-fill' size={24} color={'black'} />
                         <Text>Color: </Text>
                     </View>
                     <TextInput
@@ -58,7 +56,7 @@ const AddNewCar = (props: Props) => {
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name='documents' size={24} color={iconColor} />
+                        <icons.Ionicons name='documents' size={24} color={'black'} />
                         <Text>Licence Plates: </Text>
                     </View>
                     <TextInput
@@ -74,7 +72,7 @@ const AddNewCar = (props: Props) => {
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name="ios-people" size={24} color={iconColor} />
+                        <icons.Ionicons name="ios-people" size={24} color={'black'} />
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
@@ -124,8 +122,6 @@ const AddNewCar = (props: Props) => {
                     <Text >Add a car</Text>
                 </TouchableOpacity>
             </View>
-
-
         </View >
     )
 }
@@ -141,7 +137,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10,
         borderColor: '#a8a8a8',
-        // color: textColor
     },
     iconContainer: {
         flexDirection: 'row',
@@ -152,15 +147,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // borderWidth: 1,
-        // borderRadius: 10,
         padding: 10,
         borderColor: '#a8a8a8'
     },
     parameters: {
         gap: 5,
         borderRadius: 10,
-        // borderWidth: 1,
         borderColor: '#a8a8a8',
         padding: 5,
         marginBottom: 10,

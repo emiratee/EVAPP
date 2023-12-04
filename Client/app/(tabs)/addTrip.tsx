@@ -1,6 +1,6 @@
 import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import { Switch, useColorScheme, TextInput, Text, View } from 'react-native'
+import { Switch, TextInput, Text, View } from 'react-native'
 import * as icons from '@expo/vector-icons';
 import CarPreview from '../../components/CarPreview';
 import AddNewCar from '../../components/AddNewCar';
@@ -18,10 +18,12 @@ import { Overlay } from '@rneui/themed';
 
 const addTrip = () => {
     const scrollViewRef = useRef(null);
+    const { user, token, isAuthenticated } = useAuth();
 
     useFocusEffect(
         React.useCallback(() => {
             //reset states when the screen comes in focus again. 
+
             setSelectedCar(null)
             setSeatPrice('')
             setSmokingToggled(false)
@@ -39,27 +41,23 @@ const addTrip = () => {
     );
 
     const [addNewCar, setAddNewCar] = useState<boolean>(false)
-    const { user, token, isAuthenticated } = useAuth();
-
     const [seatPrice, setSeatPrice] = useState<string>("")
-
     const [smokingToggled, setSmokingToggled] = useState<boolean>(false)
     const [childSeatToggled, setChildSeatToggled] = useState<boolean>(false)
     const [petsToggled, setPetsToggled] = useState<boolean>(false)
     const [alcoholToggled, setAlcoholToggled] = useState<boolean>(false)
     const [luggageToggled, setLuggageToggled] = useState<boolean>(false)
     const [commentsValue, setCommentsValue] = useState<string>('')
-    const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user && user.cars.length && user.cars[0] || null)
-
-
-
-
-
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [isTimePickerVisible, setIsTimePickerVisible] = useState(false);
+    const [selectedCar, setSelectedCar] = useState<types.TCar | types.TCarNoId | null>(user && user.cars.length && user.cars[0] || null)
+    const [departure, setDeparture] = useState<types.TDeparture | null>(null)
+    const [destination, setDestination] = useState<types.TDestination | null>(null)
+    const [snackBar, setSnackBar] = useState<boolean>(false)
+    const [addCarSnackBar, setAddCarSnackBar] = useState<boolean>(false)
+    const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
+    const [isTimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
-    const [numberOfSeats, setNumberOfSeats] = useState(1);
+    const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
 
     const navigation = useNavigation();
 
@@ -82,10 +80,6 @@ const addTrip = () => {
         setSeatPrice(formattedInput);
     }
 
-    const [departure, setDeparture] = useState({})
-    const [destination, setDestination] = useState({})
-    const [snackBar, setSnackBar] = useState(false)
-    const [addCarSnackBar, setAddCarSnackBar] = useState(false)
 
     const handleSubmit = () => {
 
@@ -94,7 +88,7 @@ const addTrip = () => {
             minute: moment(time).minute()
         });
 
-        if (selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
+        if (user && token && selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
             setSnackBar(true)
 
             let averageDuration = 0
@@ -138,11 +132,7 @@ const addTrip = () => {
                             date: moment(combinedDateTime, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
                         },
                         date: moment(date).format('YYYY-MM-DD'),
-
-                        //here is a bug. since we store only arriving time ,not date, it removes 24h if averageduaration is more than 24hours. need to 
-                        //store destiantion day as well? 
                         totalTime: formattedTime,
-
                         seats: {
                             available: numberOfSeats,
                             total: selectedCar.seats
@@ -162,7 +152,7 @@ const addTrip = () => {
                         successful: false
                     }
 
-                    addNewTrip(submitForm, token).then(data => {
+                    addNewTrip(submitForm, token).then((data) => {
                         putTripsAsDriver({ _id: data.trip._id }, token)
                     })
 
@@ -197,7 +187,7 @@ const addTrip = () => {
     return (
 
 
-        <ScrollView
+        token && user && <ScrollView
             ref={scrollViewRef}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
