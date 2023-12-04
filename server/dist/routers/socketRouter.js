@@ -7,7 +7,8 @@ const socketRouter = (io) => {
             socket.on('message', (content, receiverId) => {
                 console.log(content);
                 // io.emit('message', content);
-                socket.to(chatId).to(receiverId).emit('message', content);
+                socket.in(chatId).to(receiverId).emit('message', content, receiverId);
+                console.log(`Send to ${receiverId} in ${chatId}`);
             });
             socket.on('disconnect', () => {
                 socket.leave(chatId);

@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(router);
 socketRouter(io);
 
+
 server.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
