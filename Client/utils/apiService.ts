@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-const BASE_URL = process.env.ATLAR_URL || 'https://evap-pserver-r1s4.vercel.app';
+const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app/';
 // const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
