@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const chatController_js_1 = __importDefault(require("./controllers/chatController.js"));
 const tripController_js_1 = __importDefault(require("./controllers/tripController.js"));
 const userController_js_1 = __importDefault(require("./controllers/userController.js"));
 const router = (0, express_1.Router)();
@@ -30,8 +31,8 @@ router.put('/user/credits/available', userController_js_1.default.putAvailableCr
 router.put('/user/credits/hold', userController_js_1.default.putOnHoldCredits);
 router.put('/user/credits/earnings', userController_js_1.default.putEarningsCredits);
 //need also route to assign trip to user
-router.post('/user/chats', chatController.postChat);
-router.get('/user/chats', chatController.getAllChats);
-router.get('/user/chats/:chatId', chatController.getChat);
-router.post('/user/chats/:chatId', chatController.postMessage);
+router.post('/user/chats', chatController_js_1.default.postChat);
+router.get('/user/chats', chatController_js_1.default.getAllChats);
+router.get('/user/chats/:chatId', chatController_js_1.default.getChat);
+router.post('/user/chats/:chatId', chatController_js_1.default.postMessage);
 exports.default = router;
