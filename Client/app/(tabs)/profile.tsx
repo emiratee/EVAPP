@@ -11,7 +11,6 @@ import ImageUploader from '../../components/ImageUploader';
 
 const profile = () => {
     const { isAuthenticated, logout, user, token } = useAuth();
-    console.log(token)
     const [visible, setVisible] = useState<boolean>(false);
 
     const { navigate } = useNavigation();
@@ -19,7 +18,7 @@ const profile = () => {
     useFocusEffect(
         React.useCallback(() => {
             if (!isAuthenticated) {
-                navigate('login' as never);
+                navigate('login');
             }
         }, [isAuthenticated])
     );
@@ -46,7 +45,7 @@ const profile = () => {
                         <Text style={styles.sectionTitle}>Current Credit Balance: </Text>
                         <Text style={[styles.sectionTitle, { paddingRight: 50, fontWeight: '400' }]}>{parseFloat(user.credits.available).toFixed(2)}€</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigate('addCredits' as never)}>
+                    <TouchableOpacity onPress={() => navigate('addCredits')}>
                         <View style={[styles.sectionInfo, { paddingTop: 10 }]}>
                             <Text style={styles.sectionInfoText}>Add more credits</Text>
                             <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />

@@ -116,6 +116,9 @@ export type TRegisterForm = {
     expoPushToken?: string
 }
 
+export type TImageFormData = {
+    append: (name: string, value: any, fileName?: string) => void,
+}
   
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>

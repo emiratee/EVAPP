@@ -154,7 +154,6 @@ const SearchForm = () => {
                                     country && setDestination(prev => ({ ...prev, country }));
                                 }
                             }}
-
                             query={{
                                 key: GOOGLE_MAPS_API_KEY,
                                 language: 'en',
@@ -300,9 +299,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // borderWidth: 1,
-        // borderRadius: 10,
-        // padding: 10,
         borderColor: '#a8a8a8'
     },
     iconContainer: {
@@ -313,9 +309,7 @@ const styles = StyleSheet.create({
     parameters: {
         gap: 5,
         borderRadius: 10,
-        // borderWidth: 1,
         borderColor: '#a8a8a8',
-        // padding: 5,
         marginBottom: 10
     },
 });

@@ -66,7 +66,7 @@ const addTrip = () => {
     useFocusEffect(
         React.useCallback(() => {
             if (!isAuthenticated) {
-                navigation.navigate('login' as never);
+                navigation.navigate('login');
             }
         }, [isAuthenticated])
     );
@@ -163,7 +163,7 @@ const addTrip = () => {
                     console.error(err);
                 });
 
-            navigation.navigate('history' as never);
+            navigation.navigate('history');
 
 
 
