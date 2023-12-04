@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from 'expo-router';
 import { useAuth } from '../../utils/auth';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getAllChats } from '../../utils/apiService';
 import { FlatList } from 'react-native-gesture-handler';
 import Message from '../../components/Message';
@@ -24,11 +24,11 @@ export default function Messages() {
             {chats.length > 0 && (
                 <FlatList
                     data={chats}
-                    renderItem={({ item }) => {
+                    renderItem={({ item }) => {                        
                         return (
-                            <View style={styles.container}>
+                            <TouchableOpacity style={styles.container} onPress={() => { return navigate('/chatView', { chat: item }) }}>
                                 <Message item={item} />
-                            </View>
+                            </TouchableOpacity>
                         )
                     }}
                     keyExtractor={(item) => item._id}

@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { CheckBox, Icon } from '@rneui/themed';
+import { useAuth } from '../utils/auth';
+import * as icons from '@expo/vector-icons';
+
 
 const Message = ({ item }) => {
+    const { user } = useAuth();    
     const [checkMessage, setCheckMessage] = useState(false);
-    
+    const name = item.driver.userId === user.userId ? item.passenger.name : item.driver.name;
+    const imageUrl = item.driver.userId === user.userId ? item.passenger.imageUrl : item.driver.imageUrl;
+    const lastMessage = item.chat && item.chat[item.chat.length - 1].message.content;
 
     return (
         <View style={[styles.message, { justifyContent: 'space-between' }]}>
             <View style={styles.message}>
-                {/* Here we will use the imageUrl of the driver or user -> {user.imageUrl} */}
-                <View style={styles.image}>
-                    <Text style={{ height: 20, width: 20, textAlign: 'center' }}>M</Text>
-                </View>
-                <View>
-                    {/* Here we will use the name of the driver or user -> {user.name} */}
-                    <Text>Manolo García</Text>
-                    <Text>Hey, I'm waiting for you in...</Text>
-                </View>
+                {imageUrl ? (
+                    <Image source={{ uri: imageUrl }} style={styles.image} />
+                ) : (
+                    <icons.AntDesign name="user" size={40} color="black" />
+                )}
+                {lastMessage ? (
+                    <View>
+                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
+                        <Text style={{ fontSize: 12, fontWeight: '300', fontStyle: 'italic' }}>{lastMessage.length >= 35 ? lastMessage.substring(0,32) + '...' : lastMessage}</Text>
+                    </View>
+                ) : (
+                    <View>
+                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
+                    </View>
+                )}
             </View>
 
             <View>
@@ -29,7 +41,6 @@ const Message = ({ item }) => {
                             type='material'
                             color='#8757f7'
                             size={28}
-                        // iconStyle={{}}
                         />
                     }
                     uncheckedIcon={
@@ -60,10 +71,12 @@ const styles = StyleSheet.create({
         gap: 15,
     },
     image: {
+        height: 50,
+        width: 50,
         padding: 8,
         borderWidth: 1,
+        borderRadius: 50,
         borderColor: '#000',
-        borderRadius: 20,
     },
 
 });

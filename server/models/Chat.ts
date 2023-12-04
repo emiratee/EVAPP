@@ -33,9 +33,6 @@ const chatSchema = new mongoose.Schema({
         },
         imageUrl: {
             type: String
-        },
-        lastMessage: {
-            type: String
         }
     },
     passenger: {
@@ -48,9 +45,6 @@ const chatSchema = new mongoose.Schema({
             required: true
         },
         imageUrl: {
-            type: String
-        },
-        lastMessage: {
             type: String
         }
     },
