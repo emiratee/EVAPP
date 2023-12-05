@@ -21,8 +21,8 @@ const history = () => {
         React.useCallback(() => {
             (async () => {
                 if (!isAuthenticated) return navigation.navigate('login');
-                // if (!isAuthenticated) return router.push('login')
-                // navigation.navigate('login');
+                // if (!isAuthenticated) return router.push('./login')
+
                 const history = token && await getHistory(token);
 
                 const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });

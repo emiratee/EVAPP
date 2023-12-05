@@ -22,7 +22,7 @@ const SearchForm = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
-    const navigate = useNavigation();
+    const navigation = useNavigation();
 
     const handleConfirm = (selectedDate: Date) => {
         setDatePickerVisibility(false);
@@ -50,7 +50,7 @@ const SearchForm = () => {
                 seats: formData.numberOfPeople
             }, token);
             if (response) {
-                navigate.navigate('TripCardRedirect' , { response } );
+                navigation.navigate('TripCardRedirect', { response });
             }
 
             // simulate a delay (e.g., 2000 milliseconds) before resetting the form

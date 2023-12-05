@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../../Bill';
 import { putRequestTrip } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
-import * as types from '../../../types/types'
+import * as types from '../../../types/types';
+import { useNavigation, router } from 'expo-router';
 
 type Props = {
     trip: types.TTrip,
 
 }
 const Request = ({ trip }: Props) => {
+    const navigation = useNavigation();
     const { user, token } = useAuth()
 
     const [price, setPrice] = useState<string>(trip.price);
@@ -51,6 +53,11 @@ const Request = ({ trip }: Props) => {
                 seats: seats
             }
             token && putRequestTrip(formData, token)
+            router.push('(tabs)/history')
+            Alert.alert(
+                'Yuuuhu!',
+                'The trip has been succesfully booked!  ',
+            );
         }
     }
 

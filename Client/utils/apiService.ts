@@ -202,6 +202,7 @@ const putApproveTrip = async (data, token: string) => {
     }
 }
 const putRejectTrip = async (data, token: string) => {
+    console.log('here')
     try {
         const response = await fetch(`${BASE_URL}/user/trips/reject`, {
             method: 'PUT',
