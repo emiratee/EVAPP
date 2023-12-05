@@ -134,7 +134,7 @@ const register = (props: Props) => {
             postRegister(data).then(data => {
                 login(data.token)
             }).catch(error => {
-                alert(error)
+                Alert.alert(error)
             })
         }
     }
