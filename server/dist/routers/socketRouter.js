@@ -10,8 +10,7 @@ const socketRouter = (io) => {
                 socket.in(chatId).to(receiverId).emit('message', content);
                 const senderUser = await (0, chatController_1.getUserById)(content.userId);
                 const recieverUser = await (0, chatController_1.getUserById)(receiverId);
-                console.log(senderUser);
-                recieverUser.expoPushToken && senderUser.expoPushToken && await (0, userUtils_1.sendPushNotification)(recieverUser.expoPushToken, senderUser.name, content.message.content);
+                recieverUser.expoPushToken && senderUser.name && await (0, userUtils_1.sendPushNotification)(recieverUser.expoPushToken, senderUser.name, content.message.content);
             });
             socket.on('disconnect', () => {
                 socket.leave(chatId);
