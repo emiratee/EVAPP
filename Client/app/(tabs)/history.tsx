@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from
 import { Tab, TabView } from '@rneui/themed';
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
-import { getHistory } from '../../utils/apiService';
+import { getHistory, putMarkTripSuccessful } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation, router } from 'expo-router';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
@@ -49,8 +49,14 @@ const history = () => {
         }, [isAuthenticated])
     );
 
-    const handleComplete = () => {
+    const handleComplete = (trip) => {
         //mark trip as success
+
+        const formData = {
+            tripId: trip._id,
+            successful: true
+        }
+        putMarkTripSuccessful(formData, token)
     }
 
 
@@ -151,7 +157,7 @@ const history = () => {
                                 <TripCardItem trip={item.trip} driver={item.driver} />
                                 {user.userId == item.driver.userId &&
                                     (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
-                                    <TouchableOpacity onPress={handleComplete}>
+                                    <TouchableOpacity onPress={()=>{handleComplete(item.trip)}}>
                                         <Text>Mark as complete</Text>
                                     </TouchableOpacity>
                                 }
