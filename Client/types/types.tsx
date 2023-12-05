@@ -120,6 +120,16 @@ export type TRegisterForm = {
 export type TImageFormData = {
     append: (name: string, value: any, fileName?: string) => void,
 }
+  
+export type TAuth = {
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    login: (token: string) => Promise<void>;
+    logout: () => Promise<void>;
+    isAuthenticated: boolean;
+    user: TUser | null;
+    setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
+};
 
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>

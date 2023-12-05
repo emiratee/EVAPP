@@ -81,7 +81,6 @@ const addTrip = () => {
         setSeatPrice(formattedInput);
     }
 
-
     const handleSubmit = () => {
 
         const combinedDateTime = moment(date).set({
@@ -130,8 +129,11 @@ const addTrip = () => {
                             time: moment(time, 'HH:mm').add(averageDuration, 'seconds').format('HH:mm'),
                             date: moment(combinedDateTime, 'HH:mm').add(averageDuration, 'seconds').format('YYYY-MM-DD'),
                         },
+
                         date: moment(date).format('YYYY-MM-DD'),
-                        totalTime: formattedTime,
+
+                        totalTime: moment().startOf('day').add(averageDuration, 'seconds').format('HH:mm'),
+
                         seats: {
                             available: numberOfSeats,
                             total: selectedCar.seats
@@ -151,9 +153,21 @@ const addTrip = () => {
                         successful: false
                     }
 
-                    addNewTrip(submitForm, token).then((data) => {
+
+                    addNewTrip(submitForm, token).then(data => {
                         putTripsAsDriver({ _id: data.trip._id }, token)
                     })
+
+
+                    // setTrips([...trips, submitForm])
+                    // // refactor when server comes?
+                    // setMockUsers((prevState: types.TUser[]) => (prevState.map((user: types.TUser) =>
+                    //     user.id === user.id
+                    //         ? { ...user, tripsAsDriverIDs: [...user.tripsAsDriverIDs, submitForm.id] }
+                    //         : user
+                    // )));
+
+
 
                 })
                 .catch(err => {
@@ -235,7 +249,10 @@ const addTrip = () => {
                             mode="date"
                             onConfirm={(selectedDate: Date) => {
                                 setDatePickerVisibility(false)
+
+
                                 setDate(selectedDate);
+
                                 setTimeout(() => {
                                     setIsTimePickerVisible(true);
                                 }, 500)
@@ -256,6 +273,7 @@ const addTrip = () => {
                             onConfirm={(selectedTime: Date) => {
                                 setIsTimePickerVisible(false)
                                 setTime(selectedTime);
+
                                 const combinedDateTime = moment(date).set({
                                     hour: moment(selectedTime).hour(),
                                     minute: moment(selectedTime).minute()
@@ -267,10 +285,16 @@ const addTrip = () => {
                             }
                             }
                             onCancel={() => setIsTimePickerVisible(false)}
+                        // minimumDate={new Date()} 
                         />
                         <icons.FontAwesome5 name="clock" size={24} color="black" />
                         <Text style={styles.label}>{moment(time).format('HH:mm')}</Text>
                     </TouchableOpacity>
+                    {/* todo forgot to add time */}
+
+
+
+
                 </View>
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
@@ -279,6 +303,7 @@ const addTrip = () => {
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
+                        // TODO: modify onValueChange for form submit -> value doesn't go back to 0 after submitr
                         key={selectedCar && selectedCar._id}
                         onValueChange={(value) => { setNumberOfSeats(value) }}
                         style={{
@@ -293,7 +318,12 @@ const addTrip = () => {
                     />
                 </View>
 
+
+
             </View>
+
+
+
 
             <View style={styles.parameters}>
                 <View style={styles.parameter}>

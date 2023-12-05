@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from './apiService';
-import * as types from '../types/types';
+import { TUser, TAuth } from '../types/types';
 
 type AuthContextType = {
-    token: string | undefined;
-    setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
-    user: types.TUser | null;
-    setUser: React.Dispatch<React.SetStateAction<types.TUser | null>>;
+    token: string | null;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    user: TUser | null;
+    setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
     login: (token: string) => Promise<void>;
     logout: () => Promise<void>;
     isAuthenticated: boolean;
@@ -30,15 +30,16 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [token, setToken] = useState<string | undefined>(undefined);
-    const [user, setUser] = useState<types.TUser | null>(null);
+    const [token, setToken] = useState<string | null>(null);
+    const [user, setUser] = useState<TUser | null>(null);
 
     useEffect(() => {
-        if (token) {
-            getUser(token).then((data) => {
-                setUser(data)
-            })
-        }
+        (async () => {
+            if (token) {
+                const data = await getUser(token);
+                setUser(data);
+            }
+        })();
     }, [token])
 
     const login = async (token: string): Promise<void> => {
@@ -47,7 +48,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(token);
         } catch (error) {
             console.error('Error storing token:', error);
-
         }
     };
 
@@ -64,10 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const getData = async (): Promise<void> => {
         try {
             const value = await AsyncStorage.getItem('token');
-            if (value !== null) {
-                // value previously stored
-                setToken(value);
-            }
+            if (value !== null) setToken(value);
         } catch (error) {
             console.log(error)
         }

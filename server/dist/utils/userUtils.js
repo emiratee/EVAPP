@@ -9,19 +9,18 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const User_1 = __importDefault(require("../models/User"));
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
-//todo, change not to any
 async function validateUser(req) {
     try {
         const { authorization } = req.headers;
         if (!authorization)
-            return false;
+            return Promise.resolve(false);
         const userId = tokenToUserId(authorization);
         if (!userId)
-            return false;
+            return Promise.resolve(false);
         const user = await User_1.default.findOne({ userId });
         if (!user)
-            return false;
-        return { userId, user };
+            return Promise.resolve(false);
+        return Promise.resolve({ userId, user });
     }
     catch (error) {
         throw error;
