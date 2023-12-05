@@ -22,10 +22,9 @@ const chatView = () => {
 
     socket.on('message', (msg, receiver) => {
       //if (user?.userId === receiver) return;
-      console.log('Received message');
       setMessages((prev) => [
         ...prev,
-        { text: msg.message.content, time: msg.message.time },
+        { userId: msg.userId, content: msg.message.content, time: msg.message.time },
       ]);
     });
   }, [])

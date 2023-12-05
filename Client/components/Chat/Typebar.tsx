@@ -4,16 +4,17 @@ import * as icons from '@expo/vector-icons';
 import moment from 'moment';
 import io from 'socket.io-client';
 import { useAuth } from '../../utils/auth';
+import { postMessage } from '../../utils/apiService';
 
 const Typebar = ({ setMessages, chat }) => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
   const socket = io('http://localhost:3000');
   const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
 
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const message = {
       userId: user?.userId,
       message: {
@@ -24,6 +25,7 @@ const Typebar = ({ setMessages, chat }) => {
     
     socket.emit('conversation', chat.chatId)
     socket.emit('message', message, receiver);
+    await postMessage(chat.chatId, message, token);    
 
     if (text.trim() !== '') {
       // setMessages((prev) => [

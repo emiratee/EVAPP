@@ -339,14 +339,16 @@ const postChat = async (driverId: string, passengerId: string, token: string) =>
     }
 }
 
-const postMessage = async (chatId: string, token: string) => {
+const postMessage = async (chatId: string, message: any, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `${token}`
-            }
-        });
+            },
+            body: JSON.stringify({ content: message.message.content, time: message.message.time })
+        });        
         return await response.json();
     } catch (error) {
         console.error(error);

@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView, ImageBackground } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import React from 'react'
 import ChatMessage from './ChatMessage'
 
@@ -7,7 +7,7 @@ const ChatBody = ({ messages }) => {
   return (
       <ScrollView style={{backgroundColor:'#fbfafc', height: '100%', zIndex: -1 }}>
         {messages.map((message, index) => (
-          <ChatMessage key={index} text={message.text} time={message.time} />
+          <ChatMessage key={index} message={message} />
         ))}
       </ScrollView>
   )
