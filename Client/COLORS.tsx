@@ -7,6 +7,10 @@ const COLORS = {
     borderColor: "#01b4e1",
     activeTab: "#393939",
     textColour: '#43b3b3',
+    buttonBackground: "#43b3b3",
+    iconColor: "#9576e0",
+    inputFields: "#fcfcfc",
+    boarderBottomColor: "#ccc"
 };
 
 export const ThemeColors = {
