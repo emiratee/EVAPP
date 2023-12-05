@@ -11,6 +11,8 @@ const socketRouter = (io: Server) => {
                 socket.in(chatId).to(receiverId).emit('message', content);
                 const senderUser = await getUserById(content.userId);
                 const recieverUser = await getUserById(receiverId);
+                console.log(senderUser);
+                
                 recieverUser.expoPushToken && senderUser.expoPushToken && await sendPushNotification(recieverUser.expoPushToken, senderUser.name, content.message.content);
             });
 
