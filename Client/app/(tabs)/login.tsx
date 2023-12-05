@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { Link, useFocusEffect, useNavigation } from 'expo-router'
@@ -41,7 +41,7 @@ const login= (props: Props) => {
             if (response.token) {
                 login(response.token)
             } else {
-                alert(response.error);
+                Alert.alert(response.error);
                 setEmail('')
                 setPassword('');
             }
