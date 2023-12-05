@@ -97,14 +97,6 @@ export default function TabLayout() {
                         headerTitle:'Inbox',
                         tabBarLabel: 'Messages',
                         tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
-                        headerRight: () => (
-                            <Link href="/messages" asChild>
-                                {/* Select button on the right*/}
-                                <TouchableOpacity >
-                                        <Text style={{paddingRight: 30, fontSize: 16, color: '#8757f7' }}>Select</Text>
-                                </TouchableOpacity>
-                            </Link>
-                        ),
                 }}
             />
             <Tabs.Screen
