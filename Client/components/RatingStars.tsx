@@ -15,7 +15,7 @@ const renderStars = (rating: number) => {
                 : i - 0.5 === rating
                     ? 'star-half'
                     : 'star-border';
-        stars.push(<icons.MaterialIcons key={i} name={iconName} size={24} color="black" />);
+        stars.push(<Text key={i} testID='star-icon'><icons.MaterialIcons key={i} name={iconName} size={24} color="black" /></Text>);
     }
     return stars;
 };

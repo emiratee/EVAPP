@@ -36,6 +36,7 @@ const AddNewCar = (props: Props) => {
                         value={newModel}
                         placeholder="Type here..."
                         placeholderTextColor="#838383"
+                        testID="model-input" 
 
                     />
                 </View>
@@ -51,7 +52,7 @@ const AddNewCar = (props: Props) => {
                         value={newColor}
                         placeholder="Type here..."
                         placeholderTextColor="#838383"
-
+                        testID="color-input" 
                     />
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
@@ -66,7 +67,7 @@ const AddNewCar = (props: Props) => {
                         value={newLicencePlates}
                         placeholder="Type here..."
                         placeholderTextColor="#838383"
-
+                        testID="licence-plates-input"
                     />
                 </View>
 

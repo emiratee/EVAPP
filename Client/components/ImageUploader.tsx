@@ -65,7 +65,8 @@ const ImageUploader = ({ }) => {
                 {isLoading ? (
                     <ActivityIndicator size={'large'} />
                 ) : image ? (
-                    <Image source={{ uri: image }} style={styles.picture} />
+                    <Image source={{ uri: image }} 
+                    style={styles.picture} />
                 ) : (
                     <icons.AntDesign
                         name="user"
