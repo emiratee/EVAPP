@@ -7,7 +7,6 @@ import { useNavigation } from 'expo-router';
 
 const Navbar = () => {
   const { user } = useAuth();
-  // console.log(user);
   
   const { navigate } = useNavigation();
 

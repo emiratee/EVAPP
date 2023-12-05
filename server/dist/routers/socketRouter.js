@@ -5,7 +5,6 @@ const socketRouter = (io) => {
         socket.on('conversation', (chatId) => {
             socket.join(chatId);
             socket.on('message', (content, receiverId) => {
-                console.log(content);
                 socket.in(chatId).to(receiverId).emit('message', content);
             });
             socket.on('disconnect', () => {

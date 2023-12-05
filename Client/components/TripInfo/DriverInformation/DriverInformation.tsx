@@ -15,7 +15,6 @@ const DriverInformation = ({ trip, driver }) => {
 
     const contactDriver = async () => {
         const chat = await postChat(trip.driverID, user.userId, token);
-        console.log(chat);
     }
 
 const DriverInformation = ({ trip, driver }: Props) => {

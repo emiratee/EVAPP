@@ -10,7 +10,6 @@ import moment from 'moment';
 
 const chatView = () => {
   const { chat } = useRoute().params;
-  console.log(chat);
   
   const { user } = useAuth()
   const [messages, setMessages] = useState<any>(chat.chat);
@@ -22,18 +21,17 @@ const chatView = () => {
     });
 
     socket.on('message', (msg) => {
+      //just pass in msg?!
       setMessages((prev) => [
         ...prev,
         { userId: msg.userId, message: { content: msg.message.content, time: msg.message.time } },
       ]);
     });
-  }, [])
-
-
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
-      <Navbar />
+      {/* <Navbar /> */}
       <ChatBody messages={messages} />
       <Typebar setMessages={setMessages} chat={chat} />
     </View>

@@ -6,7 +6,6 @@ const socketRouter = (io: Server) => {
             socket.join(chatId);
             
             socket.on('message', (content: any, receiverId: string) => {
-                console.log(content);
                 socket.in(chatId).to(receiverId).emit('message', content);
             });
             

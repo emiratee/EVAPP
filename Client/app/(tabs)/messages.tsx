@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from 'expo-router';
 import { useAuth } from '../../utils/auth';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { getAllChats } from '../../utils/apiService';
 import { FlatList } from 'react-native-gesture-handler';
 import Message from '../../components/Message';
@@ -9,12 +9,12 @@ import Message from '../../components/Message';
 export default function Messages() {
     const { isAuthenticated, token } = useAuth();
     const [chats, setChats] = useState([]);
-    const { navigate } = useNavigation(); 
+    const { navigate } = useNavigation();
 
     useEffect(() => {
         if (!isAuthenticated) return navigate('login');
         (async () => {
-            const fetchedChats = await getAllChats(token);            
+            const fetchedChats = await getAllChats(token);
             setChats(fetchedChats.chats);
         })();
     }, [isAuthenticated, token]);
@@ -24,9 +24,9 @@ export default function Messages() {
             {chats && chats.length > 0 && (
                 <FlatList
                     data={chats}
-                    renderItem={({ item }) => {                        
+                    renderItem={({ item }) => {
                         return (
-                            <TouchableOpacity style={styles.container} onPress={() => { return navigate('chatView', { chat: item }) }}>
+                            <TouchableOpacity style={styles.container} onPress={() => { navigate('chatView', { chat: item }) }}>
                                 <Message item={item} />
                             </TouchableOpacity>
                         )

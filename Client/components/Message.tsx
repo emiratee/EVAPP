@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { CheckBox, Icon } from '@rneui/themed';
 import { useAuth } from '../utils/auth';
 import * as icons from '@expo/vector-icons';
+import { useChat } from '../utils/chat';
 
 
 const Message = ({ item }) => {    
     const { user } = useAuth();    
+    const { setName, setImageUrl } = useChat();
     const [checkMessage, setCheckMessage] = useState(false);
     const name = item.driver.userId === user.userId ? item.passenger.name : item.driver.name;
     const imageUrl = item.driver.userId === user.userId ? item.passenger.imageUrl : item.driver.imageUrl;
     const lastMessage = item.chat.length > 0 && item.chat[item.chat.length - 1].message.content;
-
+    
+    useEffect(() => {
+        setName(name);
+        setImageUrl(imageUrl);
+    })
     return (
         <View style={[styles.message, { justifyContent: 'space-between' }]}>
             <View style={styles.message}>

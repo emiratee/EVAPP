@@ -4,7 +4,8 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { AuthProvider } from '../utils/auth' 
+import { AuthProvider } from '../utils/auth'
+import { ChatProvider } from '../utils/chat';
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -47,13 +48,15 @@ export default function RootLayout() {
 function RootLayoutNav() {
     return (
         <AuthProvider>
-                <ThemeProvider value={ThemeColors}>
+            <ChatProvider>
+                <ThemeProvider value={DefaultTheme}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{ headerShown: false,  }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
                         <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
                     </Stack>
                 </ThemeProvider>
+            </ChatProvider>
         </AuthProvider>
     );
 }

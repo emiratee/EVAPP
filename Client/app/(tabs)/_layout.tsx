@@ -1,27 +1,20 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { useNavigation } from 'expo-router';
+import * as icons from '@expo/vector-icons';
+import { Link, Tabs } from 'expo-router';
+import { TouchableOpacity, Text, Image } from 'react-native';
+import { useChat } from '../../utils/chat';
+
 
 
 function TabBarIcon(props: {
-    name: React.ComponentProps<typeof FontAwesome>['name'];
+    name: React.ComponentProps<typeof icons.FontAwesome>['name'];
     color: string;
 }) {
-    return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+    return <icons.FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
-
-    // const leftHeader = () => (
-    //     <TouchableOpacity onPress={() => navigation.goBack()}>
-    //         <Text style={{marginLeft:20}}>
-    //             <FontAwesome name="chevron-left" size={24} color="black" /> 
-    //         </Text>
-    //     </TouchableOpacity>
-    // )
-    const navigation = useNavigation();
+    const { name, imageUrl } = useChat();
     return (
         <Tabs
             screenOptions={{
@@ -69,6 +62,44 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
+
+            <Tabs.Screen
+                name="chatView"
+                options={{
+                    headerTitle: name,
+                    href: null,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                    headerLeft: () => (
+                        <Link href="/messages" asChild>
+                            <TouchableOpacity >
+                                <Text style={{ paddingLeft: 20, fontSize: 16, color: '#8757f7' }}>Back</Text>
+                            </TouchableOpacity>
+                        </Link>
+                    ),
+                    headerRight: () => (
+                        imageUrl ? (
+                            <Image source={{ uri: imageUrl }} style={{ marginRight: 20, height: 40, width: 40, borderWidth: 1, borderRadius: 50, borderColor: '#000' }} />
+                        ) : (
+                            <icons.AntDesign name="user" size={40} color="black" style={{ marginRight: 20 }} />
+                        )
+                    )
+
+                }}
+            />
+            {/* height: 50,
+        width: 50,
+        padding: 8,
+        borderWidth: 1,
+        borderRadius: 50,
+        borderColor: '#000', */}
+
+
+
+            {/* These on top are hidden from navbar, saved to be as reference for something for now.  */}
+
+
+
+
             <Tabs.Screen
                 name="index"
                 options={{
@@ -86,17 +117,17 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="messages"
                 options={{
-                        headerTitle:'Inbox',
-                        tabBarLabel: 'Messages',
-                        tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
-                        headerRight: () => (
-                            <Link href="/messages" asChild>
-                                {/* Select button on the right*/}
-                                <TouchableOpacity >
-                                        <Text style={{paddingRight: 30, fontSize: 16, color: '#8757f7' }}>Select</Text>
-                                </TouchableOpacity>
-                            </Link>
-                        ),
+                    headerTitle: 'Inbox',
+                    tabBarLabel: 'Messages',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="envelope" color={color} />,
+                    headerRight: () => (
+                        <Link href="/messages" asChild>
+                            {/* Select button on the right*/}
+                            <TouchableOpacity >
+                                <Text style={{ paddingRight: 30, fontSize: 16, color: '#8757f7' }}>Select</Text>
+                            </TouchableOpacity>
+                        </Link>
+                    ),
                 }}
             />
             <Tabs.Screen
