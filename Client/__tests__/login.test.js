@@ -5,14 +5,14 @@ import Login from '../app/(tabs)/login';
 import { postLogin } from '../utils/apiService';
 
 
-
 // Mock useAuth
-jest.mock('../utils/auth', () => ({
-    useAuth: () => ({
-        login: jest.fn(),
-        isAuthenticated: false, // Modify this to match your useAuth implementation
-    }),
-}));
+// jest.mock('../utils/auth', () => ({
+//     useAuth: () => ({
+//         login: jest.fn(),
+//         isAuthenticated: false, // Modify this to match your useAuth implementation
+//     }),
+// }));
+
 
 // Mock postLogin
 jest.mock('../utils/apiService', () => ({
