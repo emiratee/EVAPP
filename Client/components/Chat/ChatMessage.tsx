@@ -2,8 +2,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useAuth } from '../../utils/auth';
 
-
-
 const ChatMessage = ({ message }) => {
   const { user } = useAuth();
   return (
@@ -46,7 +44,4 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 5,
   }
-
-
-
 });

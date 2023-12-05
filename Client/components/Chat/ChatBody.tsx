@@ -1,7 +1,6 @@
-import { StyleSheet, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import React from 'react'
 import ChatMessage from './ChatMessage'
-
 
 const ChatBody = ({ messages }) => {
   return (
@@ -13,12 +12,4 @@ const ChatBody = ({ messages }) => {
   )
 }
 
-export default ChatBody
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: -1,
-    resizeMode: 'contain', // or 'contain' based on your preference
-    justifyContent: 'center',
-  },
-});
+export default ChatBody;

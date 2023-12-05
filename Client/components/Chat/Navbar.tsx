@@ -3,7 +3,6 @@ import React from 'react';
 import { useAuth } from '../../utils/auth';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from 'expo-router';
- 
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -16,10 +15,10 @@ const Navbar = () => {
         <TouchableOpacity onPress={() => navigate('messages') }>
           <Text>Back</Text>
         </TouchableOpacity>
-        <Text style={styles.name}>{user.name}</Text>
+        <Text style={styles.name}>{user?.name}</Text>
         <TouchableOpacity>
           <View>
-            <Image source={{uri: user.imageUrl}} style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: '#000' }}/>
+            <Image source={{uri: user?.imageUrl}} style={{ height: 50, width: 50, borderRadius: 50, borderWidth: 1, borderColor: '#000' }}/>
           </View>
         </TouchableOpacity>
       

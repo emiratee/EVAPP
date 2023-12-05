@@ -1,17 +1,17 @@
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import * as icons from '@expo/vector-icons';
 import moment from 'moment';
 import io from 'socket.io-client';
 import { useAuth } from '../../utils/auth';
 import { postMessage } from '../../utils/apiService';
 
-const Typebar = ({ setMessages, chat }) => {
+const Typebar = ({ chat }) => {
   const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
   const socket = io('http://localhost:3000');
-  const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
+  const receiver = chat.driver.userId === user?.userId ? chat.passenger.userId : chat.driver.userId;
 
 
   const handleSend = async () => {
