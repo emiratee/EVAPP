@@ -36,7 +36,6 @@ const addTrip = () => {
             setLuggageToggled(false)
             setCommentsValue("")
             setNumberOfSeats(1)
-            setSnackBar(false)
 
             scrollViewRef.current && scrollViewRef.current.scrollTo({ y: 0, animated: true });
         }, [])
@@ -53,7 +52,7 @@ const addTrip = () => {
     const [selectedCar, setSelectedCar] = useState<types.TCar | null>(user && user.cars.length && user.cars[0] || null)
     const [departure, setDeparture] = useState<types.TDeparture | null>(null)
     const [destination, setDestination] = useState<types.TDestination | null>(null)
-    const [snackBar, setSnackBar] = useState<boolean>(false)
+
     const [addCarSnackBar, setAddCarSnackBar] = useState<boolean>(false)
     const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
     const [isTimePickerVisible, setIsTimePickerVisible] = useState<boolean>(false);
@@ -91,8 +90,6 @@ const addTrip = () => {
         });
 
         if (user && token && selectedCar && departure && destination && seatPrice && !combinedDateTime.isBefore(moment().add(2, 'hours'))) {
-            setSnackBar(true)
-
             let averageDuration = 0
 
 
@@ -164,6 +161,10 @@ const addTrip = () => {
                 });
 
             navigation.navigate('history');
+            Alert.alert(
+                'Yuuuhu!',
+                'The trip has been created!',
+            );
 
 
 
@@ -425,15 +426,6 @@ const addTrip = () => {
             >
                 <Text >Create a trip</Text>
             </TouchableOpacity>
-            <Snackbar
-                visible={snackBar}
-                onDismiss={() => setSnackBar(false)}
-                style={{ backgroundColor: 'green', }}
-            >
-                <Text style={{ textAlign: 'center' }}>
-                    The trip has been created succefully!
-                </Text>
-            </Snackbar>
             <Snackbar
                 visible={addCarSnackBar}
                 onDismiss={() => setAddCarSnackBar(false)}
