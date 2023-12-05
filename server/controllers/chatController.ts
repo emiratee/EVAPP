@@ -82,10 +82,6 @@ const postMessage = async (req: Request, res: Response) => {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId) return res.status(401).json({ error: validatedUser });
 
-        console.log('before');
-        await sendPushNotification('ExponentPushToken[cGfdt0J2Nohp1otJihDyRh]', 'Test1', 'Test2')
-        console.log('after');
-
         const { chatId } = req.params;
         const { content, time } = req.body;
 
