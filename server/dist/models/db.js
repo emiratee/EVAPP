@@ -11,7 +11,7 @@ async function db() {
     if (!URL)
         throw new Error('ATLAS_URL is not defined in the environment variables.');
     await mongoose_1.default.connect(URL);
-    console.log("Connected to db ✅");
+    console.log("Connected to db ✅ dev");
     return mongoose_1.default.connection;
 }
 exports.default = db;

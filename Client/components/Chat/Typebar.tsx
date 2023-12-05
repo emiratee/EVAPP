@@ -4,7 +4,7 @@ import * as icons from '@expo/vector-icons';
 import moment from 'moment';
 import io from 'socket.io-client';
 import { useAuth } from '../../utils/auth';
-import { postMessage } from '../../utils/apiService';
+import { postMessage, sendPushNotification } from '../../utils/apiService';
 
 const Typebar = ({ chat }) => {
   const { user, token } = useAuth();

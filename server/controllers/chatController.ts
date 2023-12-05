@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import dotenv from "dotenv";
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { validateUser } from '../utils/userUtils';
+import { sendPushNotification, validateUser } from '../utils/userUtils';
 import Chat from '../models/Chat';
 import User from '../models/User';
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
