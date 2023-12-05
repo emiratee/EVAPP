@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import * as icons from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
 import StarRating from 'react-native-star-rating-widget';
 import * as types from '../../types/types';
@@ -213,16 +212,6 @@ const History2 = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#f2f2f2',
-    position: 'relative',
-    height: '100%',
-    width: '100%',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
   buttonContainer: {
     height: 40,
     backgroundColor: '#f2f2f2',
@@ -233,10 +222,19 @@ const styles = StyleSheet.create({
   selectedButton: {
     backgroundColor: '#000',
   },
+  container: {
+    backgroundColor: '#f2f2f2',
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
   card: {
     minWidth: '95%',
     backgroundColor: '#f2f2f2',
-    marginVertical: 10,
   },
   pendingContainer: {
     position: 'absolute',
@@ -249,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 40,
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
 });
 
