@@ -32,7 +32,7 @@ const history = () => {
                 setPreviousTrips(previousTrips);
 
             })();
-        }, [isAuthenticated])
+        }, [])
     );
 
 
