@@ -15,17 +15,27 @@ type Props = {
 const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Props) => {
     const { user } = useAuth();
     const navigate = useNavigation();
+
     const handleButtonPress = () => {
         setIsPickerVisible(true);
 
         navigate.navigate('addCredits')
     }
 
+    const handleCloseBill = () => {
+        navigate.goBack()
+      }
+
     return (
         user && <View style={styles.container}>
-            <View style={styles.creditsContainer}>
-                <Text style={styles.title}>Credits:</Text>
-                <Text style={styles.credits}>{user.credits.available}€</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderColor: '#000'}}>
+                <View style={styles.creditsContainer}>
+                    <Text style={styles.title}>Credits:</Text>
+                    <Text style={styles.credits}>{user.credits.available}€</Text>
+                </View>
+                <TouchableOpacity onPress={handleCloseBill}>
+                    <icons.AntDesign name="close" size={24} color='black' style={{bottom: 5}}/>
+                </TouchableOpacity>
             </View>
 
             <View>
@@ -80,8 +90,6 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         gap: 5,
         paddingBottom: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#000',
     },
     title: {
         fontSize: 20,
