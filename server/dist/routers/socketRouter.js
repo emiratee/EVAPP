@@ -8,8 +8,9 @@ const socketRouter = (io) => {
             socket.join(chatId);
             socket.on('message', async (content, receiverId) => {
                 socket.in(chatId).to(receiverId).emit('message', content);
-                const user = await (0, chatController_1.getUserById)(receiverId);
-                user.expoPushToken && await (0, userUtils_1.sendPushNotification)(user.expoPushToken, 'Message', content.message.content);
+                const senderUser = await (0, chatController_1.getUserById)(content.userId);
+                const recieverUser = await (0, chatController_1.getUserById)(receiverId);
+                recieverUser.expoPushToken && senderUser.expoPushToken && await (0, userUtils_1.sendPushNotification)(recieverUser.expoPushToken, senderUser.name, content.message.content);
             });
             socket.on('disconnect', () => {
                 socket.leave(chatId);
