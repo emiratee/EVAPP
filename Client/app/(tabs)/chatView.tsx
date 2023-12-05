@@ -10,21 +10,21 @@ import moment from 'moment';
 
 const chatView = () => {
   const { chat } = useRoute().params;
+  console.log(chat);
+  
   const { user } = useAuth()
-  const [messages, setMessages] = useState<any>([]);
+  const [messages, setMessages] = useState<any>(chat.chat);
   const socket = io('http://localhost:3000');
 
   useEffect(() => {
     socket.on('connect', () => {
-      console.log(`Connected as ${user?.userId} in ${chat.chatId}`);
       socket.emit('conversation', chat.chatId);
     });
 
-    socket.on('message', (msg, receiver) => {
-      //if (user?.userId === receiver) return;
+    socket.on('message', (msg) => {
       setMessages((prev) => [
         ...prev,
-        { userId: msg.userId, content: msg.message.content, time: msg.message.time },
+        { userId: msg.userId, message: { content: msg.message.content, time: msg.message.time } },
       ]);
     });
   }, [])
