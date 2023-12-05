@@ -10,6 +10,13 @@ type Props = {
     trip: types.TTrip,
     driver: types.TUser
 }
+const DriverInformation = ({ trip, driver }) => {
+    const { user, token } = useAuth();
+
+    const contactDriver = async () => {
+        const chat = await postChat(trip.driverID, user.userId, token);
+        console.log(chat);
+    }
 
 const DriverInformation = ({ trip, driver }: Props) => {
     return (
