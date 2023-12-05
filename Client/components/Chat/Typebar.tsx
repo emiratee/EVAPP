@@ -1,26 +1,32 @@
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useRef } from 'react';
 import * as icons from '@expo/vector-icons';
 
 
 
-const Typebar = () => {
+const Typebar = ({ onChangeText, onSend }) => {
+  const textInputRef = useRef(null);
 
-  const [value, onChangeText] = React.useState('');
+  const handleSend = () => {
+    onSend();
+    if (textInputRef.current) {
+      textInputRef.current.clear();
+    }
+  };
 
   return (
     <View style={styles.container}>
       
         <View style={{width: 300, maxHeight: 50, paddingLeft: 20, paddingVertical: 15, backgroundColor: '#fff', borderRadius: 50,}}>
           <TextInput
+          ref={ref => (textInputRef.current = ref)}
           editable
           multiline
           placeholder='Type something...'
           onChangeText={text => onChangeText(text)}
-          value={value}
           />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSend}>
           <icons.FontAwesome name='send' size={20} color='white' />
         </TouchableOpacity>
       
@@ -36,12 +42,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#000',
     paddingVertical: 10,
     bottom: 0,
     position: 'absolute',
-    backgroundColor: '#efefef'
+    backgroundColor: '#efefef',
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
   },
   button: {
     backgroundColor: '#000',

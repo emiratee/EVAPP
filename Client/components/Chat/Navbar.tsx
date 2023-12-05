@@ -36,9 +36,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
     paddingVertical: 10,
+    backgroundColor:'#efefef',
   
   },
   name: {
