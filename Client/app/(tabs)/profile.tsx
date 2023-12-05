@@ -28,7 +28,6 @@ const profile = () => {
         }, [token])
     );
 
-
     return (
         isAuthenticated && user && <ScrollView style={styles.scrollContainer}>
 

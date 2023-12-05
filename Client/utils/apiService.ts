@@ -1,12 +1,12 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-// const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app';
-const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
+//const BASE_URL = 'https://evapp.vercel.app';
+const BASE_URL = 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
 
-const getFilteredTrips = async (data: types.TTrip_search, token?: string) => {
+const getFilteredTrips = async (data: types.TTrip_search, token: string) => {
     try {
         if (!data.destination) {
             const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&date=${data.date}&seats=${data.seats}`, {
@@ -27,16 +27,6 @@ const getFilteredTrips = async (data: types.TTrip_search, token?: string) => {
             return await response.json();
         }
 
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
-
-const getDriver = async (driverId: string) => {
-    try {
-        const response = await fetch(`${BASE_URL}/user/${driverId}`);
-        return await response.json();
     } catch (error) {
         console.error(error);
         throw error;
@@ -202,7 +192,6 @@ const putApproveTrip = async (data, token: string) => {
     }
 }
 const putRejectTrip = async (data, token: string) => {
-    console.log('here')
     try {
         const response = await fetch(`${BASE_URL}/user/trips/reject`, {
             method: 'PUT',
@@ -237,7 +226,6 @@ const putRequestTrip = async (data, token: string) => {
         throw error;
     }
 }
-
 
 
 const updateAccount = async (data: { currentPassword?: string, newPassword?: string, image?: string }, token: string) => {
@@ -283,7 +271,6 @@ const cloudinaryUpload = async (data): Promise<string> => {
     }
 }
 
-
 async function sendPushNotification(expoPushToken: string): Promise<void> {
     const message = {
         to: expoPushToken,
@@ -304,10 +291,72 @@ async function sendPushNotification(expoPushToken: string): Promise<void> {
     });
 }
 
+const getAllChats = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const getChat = async (chatId: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const postChat = async (driverId: string, passengerId: string, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ driverId, passengerId })
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const postMessage = async (chatId: string, message: any, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ content: message.message.content, time: message.message.time })
+        });        
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 export {
-    cloudinaryUpload,
     getFilteredTrips,
-    getDriver,
     getUser,
     addCar,
     addNewTrip,
@@ -320,5 +369,10 @@ export {
     putRejectTrip,
     putRequestTrip,
     updateAccount,
-    sendPushNotification
+    sendPushNotification,
+    postChat,
+    getAllChats,
+    getChat,
+    postMessage,
+    cloudinaryUpload
 }

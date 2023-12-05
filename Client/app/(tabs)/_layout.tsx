@@ -1,27 +1,20 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import * as icons from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { TouchableOpacity, Text, Image } from 'react-native';
+import { useChat } from '../../utils/chat';
 
 
 function TabBarIcon(props: {
-    name: React.ComponentProps<typeof FontAwesome>['name'];
+    name: React.ComponentProps<typeof icons.FontAwesome>['name'];
     color: string;
 }) {
-    return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+    return <icons.FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
-
-    // const leftHeader = () => (
-    //     <TouchableOpacity onPress={() => navigation.goBack()}>
-    //         <Text style={{marginLeft:20}}>
-    //             <FontAwesome name="chevron-left" size={24} color="black" /> 
-    //         </Text>
-    //     </TouchableOpacity>
-    // )
-    const navigation = useNavigation();
+    const { name, imageUrl } = useChat();
+    
     return (
         <Tabs
             screenOptions={{
@@ -42,15 +35,6 @@ export default function TabLayout() {
                     title: 'Add Credits',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                     // headerLeft: leftHeader
-                }}
-
-            />
-            <Tabs.Screen
-                name="map"
-                options={{
-                    href: null,
-                    title: 'map',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -102,7 +86,30 @@ export default function TabLayout() {
                 options={{
                     title: 'Profile',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                   
+
+                }}
+            />
+            <Tabs.Screen
+                name="chatView"
+                options={{
+                    headerTitle: name,
+                    href: null,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                    headerLeft: () => (
+                        <Link href="/messages" asChild>
+                            <TouchableOpacity >
+                                <Text style={{ paddingLeft: 20, fontSize: 16, color: '#8757f7' }}>Back</Text>
+                            </TouchableOpacity>
+                        </Link>
+                    ),
+                    headerRight: () => (
+                        imageUrl ? (
+                            <Image source={{ uri: imageUrl }} style={{ marginRight: 20, height: 40, width: 40, borderWidth: 1, borderRadius: 50, borderColor: '#000' }} />
+                        ) : (
+                            <icons.AntDesign name="user" size={40} color="black" style={{ marginRight: 20 }} />
+                        )
+                    )
+
                 }}
             />
         </Tabs>

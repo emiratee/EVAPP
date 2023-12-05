@@ -20,6 +20,7 @@ import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { GOOGLE_MAPS_API_KEY } from '@env';
 
 const addTrip = () => {
+    if (GOOGLE_MAPS_API_KEY) {}
     const scrollViewRef = useRef<ScrollView>(null);
     const { user, token, isAuthenticated } = useAuth();
 
