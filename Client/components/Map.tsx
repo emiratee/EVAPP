@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Geocoder from 'react-native-geocoding';
 import { GOOGLE_MAPS_API_KEY } from '@env';
-import * as types from '../types/types'
+
 type Props = {
     departure: string,
     destination: string
@@ -12,7 +12,7 @@ type Props = {
 
 
 const Map = ({ departure, destination }: Props) => {
-
+    if (GOOGLE_MAPS_API_KEY) {}
     type TForMap =
         {
             latitude: number;
