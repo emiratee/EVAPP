@@ -19,6 +19,8 @@ jest.mock('../utils/apiService', () => ({
     postLogin: jest.fn(() => ({ token: 'mockToken' })), // Modify this mock response as needed
 }));
 
+
+
 describe('Login Page', () => {
     it('renders correctly', () => {
         const tree = renderer.create(<Login />).toJSON();

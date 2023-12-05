@@ -22,6 +22,7 @@ const profile = () => {
             }
         }, [isAuthenticated])
     );
+    
     useFocusEffect(
         React.useCallback(() => {
 
