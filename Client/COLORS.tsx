@@ -6,11 +6,12 @@ const COLORS = {
 
     borderColor: "#01b4e1",
     activeTab: "#393939",
+    textColour: '#43b3b3',
 };
 
 export const ThemeColors = {
     colors: {
-        background: "rgb(242, 242, 242)",
+        background: "#a9d9d9",
         border: "rgb(216, 216, 216)",
         card: "rgb(255, 255, 255)",
         notification: "rgb(255, 59, 48)",
