@@ -354,6 +354,60 @@ const postMessage = async (chatId: string, message: any, token: string) => {
         throw error;
     }
 }
+const putMarkTripSuccessful = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/trips/success`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putEarningsToAvailable = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/credits/earningsToAvailable`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putAddReview = async (data, token: string) => {
+    console.log('managed upto here')
+    try {
+        const response = await fetch(`${BASE_URL}/user/review/driverRating`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 export {
     getFilteredTrips,
@@ -374,5 +428,8 @@ export {
     getAllChats,
     getChat,
     postMessage,
-    cloudinaryUpload
+    cloudinaryUpload,
+    putMarkTripSuccessful,
+    putEarningsToAvailable,
+    putAddReview
 }
