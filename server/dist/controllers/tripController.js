@@ -141,7 +141,8 @@ const putMakeRequest = async (req, res) => {
                     userId: validatedUser.user.userId,
                     name: validatedUser.user.name,
                     status: 'Pending',
-                    seats: seats
+                    seats: seats,
+                    reviewed: false,
                 },
             },
             $inc: { "seats.available": -seats },

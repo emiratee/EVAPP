@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-// const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app';
-const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
+const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app';
+// const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
@@ -15,6 +15,7 @@ const getFilteredTrips = async (data: types.TTrip_search, token?: string) => {
                     'Authorization': `${token}`
                 }
             });
+
             return await response.json();
 
         } else {
@@ -304,6 +305,64 @@ async function sendPushNotification(expoPushToken: string): Promise<void> {
     });
 }
 
+
+const putMarkTripSuccessful = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/trips/success`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putEarningsToAvailable = async (data, token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/credits/earningsToAvailable`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const putAddReview = async (data, token: string) => {
+    console.log('managed upto here')
+    try {
+        const response = await fetch(`${BASE_URL}/user/review/driverRating`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ data })
+        })
+        //checkResponse(response);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+
 export {
     cloudinaryUpload,
     getFilteredTrips,
@@ -320,5 +379,8 @@ export {
     putRejectTrip,
     putRequestTrip,
     updateAccount,
-    sendPushNotification
+    sendPushNotification,
+    putMarkTripSuccessful,
+    putEarningsToAvailable,
+    putAddReview
 }

@@ -45,14 +45,7 @@ export default function TabLayout() {
                 }}
 
             />
-            <Tabs.Screen
-                name="map"
-                options={{
-                    href: null,
-                    title: 'map',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                }}
-            />
+        
             <Tabs.Screen
                 name="login"
                 options={{

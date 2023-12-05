@@ -64,7 +64,7 @@ const getDriver = async (driverId) => {
         //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
         const driver = await User_js_1.default.findOne({ userId: driverId });
         //if (!driver) return res.status(400).json({ error: "No driver with this ID" });
-        const { _id, userId, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
+        const { _id, password, email, phoneNumber, credits, __v, ...filteredDriver } = driver.toObject();
         return filteredDriver;
     }
     catch (error) {
