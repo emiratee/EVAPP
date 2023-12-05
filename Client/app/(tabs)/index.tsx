@@ -10,6 +10,7 @@ import { useAuth } from '../../utils/auth';
 import { getFilteredTrips } from '../../utils/apiService';
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as types from '../../types/types'
+import COLORS from '../../COLORS';
 
 const SearchForm = () => {
     if (GOOGLE_MAPS_API_KEY) {}
@@ -254,7 +255,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: COLORS.textColour,
 
     },
     subtitle: {
@@ -262,6 +264,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'normal',
         paddingVertical: 5,
+        color: COLORS.textColour,
     },
     image: {
         width: 150,
