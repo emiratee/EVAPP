@@ -9,6 +9,8 @@ router.post('/trip/create', tripController.postCreate);
 //router.get('/trip/:id')
 router.get('/trips', tripController.getFilteredTrips);
 router.put('/trips/request', tripController.putMakeRequest);
+router.put('/trips/success', tripController.putTripSuccessful);
+
 
 router.put('/user/trips/approve', tripController.putApprovePassenger);
 router.put('/user/trips/reject', tripController.putRejectPassenger);
@@ -29,7 +31,11 @@ router.put('/user/trips/driver', userController.putTripsAsDriver);
 router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
 router.put('/user/credits/earnings', userController.putEarningsCredits);
+router.put('/user/credits/earningsToAvailable', userController.putEarningsToAvailable);
 //need also route to assign trip to user
+
+//driver review
+router.put('/user/review/driverRating', userController.putAddReview);
 
 router.post('/user/chats', chatController.postChat)
 router.get('/user/chats', chatController.getAllChats);

@@ -15,12 +15,11 @@ type Props = {
 const DriverInformation = ({ trip, driver }: Props) => {
     const { user, token } = useAuth();
     const { navigate } = useNavigation();
-    
+
     const createConversation = async () => {
         await postChat(trip.driverID, user.userId, token);
-        navigate('messages');
+        navigate('messages')
     }
-
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
