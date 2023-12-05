@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../../Bill';
-import { putRequestTrip } from '../../../utils/apiService';
+import { putRequestTrip, putAvailableCredits  } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import * as types from '../../../types/types';
 import { router } from 'expo-router';
@@ -13,13 +13,15 @@ type Props = {
 }
 const Request = ({ trip }: Props) => {
 
-    const { user, token } = useAuth()
+    const { user, token, setUser } = useAuth()
 
     const [price, setPrice] = useState<string>(trip.price);
     const [isPickerVisible, setIsPickerVisible] = useState<boolean>(true);
     const [text, setText] = useState<string>(`${parseFloat(price).toFixed(2)}€`);
     const [seats, setSeats] = useState<number>(1);
     const [hasEnoughCredits, setHasEnoughCredits] = useState<boolean>(true);
+    const [deductedCredits, setDeductedCredits] = useState<boolean>(false);
+
 
     const handlePriceChange = (value: string) => {
         const number: number = parseFloat(value);
@@ -39,7 +41,7 @@ const Request = ({ trip }: Props) => {
     const [secondClick, setSecondClick] = useState(false)
 
 
-    const handleButtonClick = () => {
+    const handleButtonClick = async () => {
         // additional logic to execute when the button is clicked
         if (!secondClick) {
             user && setHasEnoughCredits(Number(user.credits.available) >= Number(price));
@@ -52,12 +54,32 @@ const Request = ({ trip }: Props) => {
                 tripId: trip._id,
                 seats: seats
             }
-            token && putRequestTrip(formData, token)
-            router.push('(tabs)/history')
-            Alert.alert(
-                'Yuuuhu!',
-                'The trip has been succesfully booked!  ',
-            );
+            try {
+                // Deduct credits only once
+                if (!deductedCredits && user) {
+                    const newCredits = parseFloat(user.credits.available) - (parseFloat(trip.price) * seats);
+                    setUser((prevUser) => ({
+                        ...prevUser!,
+                        'credits.available': newCredits.toFixed(2),
+                    }));
+                    await putAvailableCredits(newCredits.toFixed(2), token);
+                    setDeductedCredits(true);
+                }
+
+                // Make the API call to request the trip
+                token && (await putRequestTrip(formData, token));
+
+                // Navigate to the history screen
+                router.push('(tabs)/history');
+
+                Alert.alert(
+                    'Yuuuhu!',
+                    'The trip has been successfully booked!  ',
+                );
+            } catch (error) {
+                console.error('Error booking trip:', error);
+                // Handle error appropriately
+            }
         }
     }
 
