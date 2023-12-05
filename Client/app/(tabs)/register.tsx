@@ -1,7 +1,8 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import * as icons from '@expo/vector-icons';
-import { TextInput } from 'react-native-gesture-handler'
+// import { TextInput } from 'react-native-gesture-handler'
+import { TextInput } from 'react-native'
 import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import * as ImagePicker from 'expo-image-picker';

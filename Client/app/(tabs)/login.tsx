@@ -48,7 +48,7 @@ const login= (props: Props) => {
         }
     }
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        !isAuthenticated && <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View
                 style={styles.container}>
                 <View style={styles.inputContainer}>
