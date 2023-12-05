@@ -8,7 +8,7 @@ async function db(): Promise<Connection> {
     if (!URL) throw new Error('ATLAS_URL is not defined in the environment variables.');
 
     await mongoose.connect(URL);
-    console.log("Connected to db ✅");
+    console.log("Connected to db ✅ dev");
     return mongoose.connection;
 }
 

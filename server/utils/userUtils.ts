@@ -37,7 +37,7 @@ export function tokenToUserId(token: string) {
 }
 
 export async function sendPushNotification(expoPushToken: string, title: string, body: string) {
-    const message = {
+        const message = {
         to: expoPushToken,
         sound: 'default',
         title,
