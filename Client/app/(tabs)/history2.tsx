@@ -86,104 +86,113 @@ const History2 = () => {
   const renderUpcomingTrips = () => {
     return (
 
-      upcomingTrips.length > 0 ? (
-        <FlatList
-          data={upcomingTrips}
-          renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
-            const passengers = item.trip.passengerIDs;
-            const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
+      <View style={styles.container}>
+        {upcomingTrips.length > 0 ? (
+          <FlatList
+            data={upcomingTrips}
+            renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
+              const passengers = item.trip.passengerIDs;
+              const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
 
-            return (
-              <TouchableOpacity style={styles.card} onPress={() => {
-                user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers: item.trip.passengerIDs });
-              }}>
+              return (
+                <TouchableOpacity style={styles.card} onPress={() => {
+                  user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers: item.trip.passengerIDs });
+                }}>
 
-                <TripCardItem trip={item.trip} driver={item.driver} />
-                {user.userId === item.trip.driverID ? (
-                  <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
-                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
-                  </View>
-                ) : (
-                  <>
-                    {passengers.map(passenger => (
-                      passenger.userId === user.userId && (
-                        <View key={passenger.userId} style={[styles.pendingContainer, {
-                          backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
-                            passenger.status === 'Pending' ? '#e29257' : '#ff0000'
-                        }]}>
-                          <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
-                        </View>
-                      )
-                    ))}
-                  </>
-                )}
-              </TouchableOpacity>
-            );
-          }}
-        />
+                  <TripCardItem trip={item.trip} driver={item.driver} />
+                  {user.userId === item.trip.driverID ? (
+                    <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                      <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
+                    </View>
+                  ) : (
+                    <>
+                      {passengers.map(passenger => (
+                        passenger.userId === user.userId && (
+                          <View key={passenger.userId} style={[styles.pendingContainer, {
+                            backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
+                              passenger.status === 'Pending' ? '#e29257' : '#ff0000'
+                          }]}>
+                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                          </View>
+                        )
+                      ))}
+                    </>
+                  )}
+                </TouchableOpacity>
+              );
+            }}
+          />
 
-      ) : (
-        <Text>No upcoming Trips</Text>
-      )
+        ) : (
+          <Text>No upcoming Trips</Text>
+        )}
 
-    );
+      </View>
+
+    )
   };
 
   const renderPreviousTrips = () => {
     return (
-      previousTrips.length > 0 ? (<FlatList
-        data={previousTrips}
-        renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
-          {
-            reviewed = item.trip.passengerIDs.some(
-              passenger => user && passenger.userId === user.userId && passenger.reviewed
-            )
-          }
-          return <View style={[styles.card, { opacity: 0.5 }]}>
-            <TripCardItem trip={item.trip} driver={item.driver} />
-
-
-            {user.userId !== item.trip.driverID && !reviewed && <StarRating
-              maxStars={5}
-              rating={rating}
-              onChange={(newRating) => { handleRating(item.trip._id, item.driver.userId, newRating) }}
-              starSize={30} // Customize the size of the stars
-              inactiveColor="#CCCCCC" // Customize the inactive star color
-              activeColor="#FFD700" // Customize the active star color
-            />
-
+      <View style={styles.container}>
+        {previousTrips.length > 0 ? (<FlatList
+          data={previousTrips}
+          renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
+            {
+              reviewed = item.trip.passengerIDs.some(
+                passenger => user && passenger.userId === user.userId && passenger.reviewed
+              )
             }
-          </View>
-        }}
-      />) : (
-        <Text>No previous Trips</Text>
-      )
-    );
+            return <View style={[styles.card, { opacity: 0.5 }]}>
+              <TripCardItem trip={item.trip} driver={item.driver} />
+
+
+              {user.userId !== item.trip.driverID && !reviewed && <StarRating
+                maxStars={5}
+                rating={rating}
+                onChange={(newRating) => { handleRating(item.trip._id, item.driver.userId, newRating) }}
+                starSize={30} // Customize the size of the stars
+                inactiveColor="#CCCCCC" // Customize the inactive star color
+                activeColor="#FFD700" // Customize the active star color
+              />
+
+              }
+            </View>
+          }}
+        />) : (
+          <Text>No previous Trips</Text>
+        )}
+
+      </View>
+    )
   };
 
   const renderCurrentTrips = () => {
     return (
-      currentTrips.length > 0 ? (<FlatList
-        data={currentTrips}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <TripCardItem trip={item.trip} driver={item.driver} />
-            {user.userId === item.trip.driverID &&
-              (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
-              (new Date(item.trip.destination.date + 'T' + item.trip.destination.time + ':00') < new Date()) &&
-              <TouchableOpacity onPress={() => { handleComplete(item.trip) }}>
-                <Text>Mark as complete</Text>
-              </TouchableOpacity>
-            }
-          </View>
-        )
-        }
-      />) : (
-        <Text>No on-going trips</Text>
-      )
+      <View style={styles.container}>
+        {currentTrips.length > 0 ? (<FlatList
+          data={currentTrips}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <TripCardItem trip={item.trip} driver={item.driver} />
+              {user.userId === item.trip.driverID &&
+                (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
+                (new Date(item.trip.destination.date + 'T' + item.trip.destination.time + ':00') < new Date()) &&
+                <TouchableOpacity onPress={() => { handleComplete(item.trip) }}>
+                  <Text>Mark as complete</Text>
+                </TouchableOpacity>
+              }
+            </View>
+          )
+          }
+        />) : (
+          <Text>No on-going trips</Text>
+        )}
+
+      </View>
 
 
-    );
+    )
   };
 
   return (
@@ -205,8 +214,14 @@ const History2 = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#f2f2f2',
+    position: 'relative',
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
   buttonContainer: {
     height: 40,
