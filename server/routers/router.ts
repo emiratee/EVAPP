@@ -1,6 +1,7 @@
 import { Router } from "express";
-import tripController from './controllers/tripController.js';
-import userController from './controllers/userController.js';
+import chatController from "../controllers/chatController.js";
+import tripController from '../controllers/tripController.js';
+import userController from '../controllers/userController.js';
 const router = Router();
 
 //Trips
@@ -21,7 +22,6 @@ router.put('/user/account/update', userController.putUpdateAccount);
 router.get('/user/history', userController.getHistory)
 router.get('/user', userController.getUser);
 router.put('/user/cars', userController.putCar);
-router.get('/user/:driverId', userController.getDriver);
 
 //User trips (add passenger aswell?)
 router.put('/user/trips/driver', userController.putTripsAsDriver);
@@ -30,6 +30,11 @@ router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
 router.put('/user/credits/earnings', userController.putEarningsCredits);
 //need also route to assign trip to user
+
+router.post('/user/chats', chatController.postChat)
+router.get('/user/chats', chatController.getAllChats);
+router.get('/user/chats/:chatId', chatController.getChat);
+router.post('/user/chats/:chatId', chatController.postMessage);
 
 
 

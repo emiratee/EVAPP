@@ -1,76 +1,40 @@
-import React from 'react';
-import { useFocusEffect, useNavigation } from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from 'expo-router';
 import { useAuth } from '../../utils/auth';
-import { StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { getAllChats } from '../../utils/apiService';
+import { FlatList } from 'react-native-gesture-handler';
+import Message from '../../components/Message';
 
-export default function messages() {
-    const { isAuthenticated, user } = useAuth();
-    const navigation = useNavigation();
+export default function Messages() {
+    const { isAuthenticated, token } = useAuth();
+    const [chats, setChats] = useState([]);
+    const { navigate } = useNavigation();
 
-    useFocusEffect(
-        React.useCallback(() => {
-            if (!isAuthenticated) {
-                navigation.navigate('login');
-            }
-        }, [isAuthenticated])
-    );
+    useEffect(() => {
+        if (!isAuthenticated) return navigate('login');
+        (async () => {
+            const fetchedChats = await getAllChats(token);
+            setChats(fetchedChats.chats);
+        })();
+    }, [isAuthenticated, token]);
+
     return (
-        <ScrollView style={styles.scrollContainer}>
-
-            {/* TOP MESSAGE BUTTONS */}
-            <View style={styles.topButtons}> 
-                <TouchableOpacity style={[styles.inbox, {backgroundColor: '#000', borderBottomWidth: 4, borderBottomColor:'#9980f2'}]}>
-                    <Text style={{color: '#fff'}}>Inbox Messages</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.inbox}>
-                    <Text>Sent Messages</Text>
-                </TouchableOpacity>
-            </View>
-
-            {/* MESSAGES BODY w/ fake messages for now */}
-            <View style={styles.container}>
-                <View style={styles.message}>
-                    {/* Here we will use the imageUrl of the driver or user -> {user.imageUrl} */}
-                    <View style={styles.image}>
-                        <Text style={{height: 20, width: 20, textAlign: 'center'}}>M</Text>
-                    </View>
-                    <View>
-                        {/* Here we will use the name of the driver or user -> {user.name} */}
-                        <Text>Manolo García</Text> 
-                        <Text>Hey, I'm waiting for you in...</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.container}>
-                <View style={styles.message}>
-                    {/* Here we will use the imageUrl of the driver or user -> {user.imageUrl} */}
-                    <View style={styles.image}>
-                        <Text style={{height: 20, width: 20, textAlign: 'center'}}>B</Text>
-                    </View>
-                    <View>
-                        {/* Here we will use the name of the driver or user -> {user.name} */}
-                        <Text>Britney Spears</Text> 
-                        <Text>It's Britney b*tch💕 </Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.container}>
-                <View style={styles.message}>
-                    {/* Here we will use the imageUrl of the driver or user -> {user.imageUrl} */}
-                    <View style={styles.image}>
-                        <Text style={{height: 20, width: 20, textAlign: 'center'}}>C</Text>
-                    </View>
-                    <View>
-                        {/* Here we will use the name of the driver or user -> {user.name} */}
-                        <Text>Chuck Norris</Text> 
-                        <Text>Hi Magdalena, do you need help with...</Text>
-                    </View>
-                </View>
-            </View>
-
-        </ScrollView>
+        <>
+            {chats && chats.length > 0 && (
+                <FlatList
+                    data={chats}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity style={styles.container} onPress={() => { navigate('chatView', { chat: item }) }}>
+                                <Message item={item} />
+                            </TouchableOpacity>
+                        )
+                    }}
+                    keyExtractor={(item) => item._id}
+                />
+            )}
+        </>
     );
 }
 
@@ -81,19 +45,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
-    topButtons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignContent: 'center',
-    },
-    inbox: {
-        borderWidth: 1,
-        borderColor: '#000',
-        padding: 10,
-        marginBottom: 20,
-    },
     container: {
         flex: 1,
+        width: '95%',
+        alignSelf: 'center',
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 10,
@@ -103,19 +58,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0.5, height: 0 },
         shadowOpacity: 0.4,
         shadowRadius: 2,
-        marginBottom: 10,   
+        marginTop: 10,
     },
-    message: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        gap: 15,
-    },
-    image: {
-        padding: 8,
-        borderWidth: 1,
-        borderColor: '#000',
-        borderRadius: 20,
-    }
-
 });
