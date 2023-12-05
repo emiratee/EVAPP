@@ -10,7 +10,8 @@ const Typebar = ({ chat }) => {
   const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
-  const socket = io('https://evapp-git-reimplementing-eriks-projects-08925273.vercel.app');
+//  const socket = io('https://evapp.vercel.app');
+  const socket = io('http://127.0.0.1:3000');
   const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
 
 

@@ -17,7 +17,7 @@ export default function Messages() {
             const fetchedChats = await getAllChats(token);
             setChats(fetchedChats.chats);
         })();
-    }, [isAuthenticated, token]);
+    }, [chats]);
 
     return (
         <>

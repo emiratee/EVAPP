@@ -2,7 +2,6 @@ import * as icons from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
 import React from 'react';
 import { TouchableOpacity, Text, Image } from 'react-native';
-import { useNavigation } from 'expo-router';
 import { useChat } from '../../utils/chat';
 
 
@@ -14,7 +13,6 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-    const { navigate } = useNavigation();
     const { name, imageUrl } = useChat();
     
     return (

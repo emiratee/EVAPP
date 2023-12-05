@@ -10,7 +10,7 @@ const Message = ({ item }) => {
     const { setName, setImageUrl } = useChat();
     const name = item.driver.userId === user.userId ? item.passenger.name : item.driver.name;
     const imageUrl = item.driver.userId === user.userId ? item.passenger.imageUrl : item.driver.imageUrl;
-    const lastMessage = item.chat.length > 0 && item.chat[item.chat.length - 1].message.content;
+    const lastMessage = item.chat.length > 0 && item.chat[item.chat.length - 1].message.content.replace(/[\r\n]+/g, '•');
 
     useEffect(() => {
         setName(name);
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 15,
+        maxHeight: 50
     },
     image: {
         height: 50,
