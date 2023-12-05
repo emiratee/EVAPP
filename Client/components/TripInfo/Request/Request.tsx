@@ -5,14 +5,14 @@ import Bill from '../../Bill';
 import { putRequestTrip } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import * as types from '../../../types/types';
-import { useNavigation, router } from 'expo-router';
+import { router } from 'expo-router';
 
 type Props = {
     trip: types.TTrip,
 
 }
 const Request = ({ trip }: Props) => {
-    const navigation = useNavigation();
+
     const { user, token } = useAuth()
 
     const [price, setPrice] = useState<string>(trip.price);
