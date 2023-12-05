@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { CheckBox, Icon } from '@rneui/themed';
 import { useAuth } from '../utils/auth';
 import * as icons from '@expo/vector-icons';
+import { Swipeable } from 'react-native-gesture-handler';
 
 
-const Message = ({ item }) => {
-    const { user } = useAuth();    
-    const [checkMessage, setCheckMessage] = useState(false);
+const Message = ({ item, onDelete }) => {
+    const { user } = useAuth();   
     const name = item.driver.userId === user.userId ? item.passenger.name : item.driver.name;
     const imageUrl = item.driver.userId === user.userId ? item.passenger.imageUrl : item.driver.imageUrl;
-    const lastMessage = item.chat && item.chat[item.chat.length - 1].message.content;
+    const lastMessage = item.chat.length > 0 && item.chat[item.chat.length - 1].message.content;
 
+    
+    const renderSwipeDelete = () => {
+        return (
+          <View style={{ width: 70, justifyContent: 'center', alignItems: 'center', backgroundColor: '#b0221d', borderRadius: 5, height: 40, marginTop: 5, }}>
+            <Text style={{ color: 'white' }}>Delete</Text>
+          </View>
+        );
+    };
+    
     return (
-        <View style={[styles.message, { justifyContent: 'space-between' }]}>
-            <View style={styles.message}>
+        <Swipeable
+          renderRightActions={renderSwipeDelete}
+          onSwipeableOpen={() => onDelete(item.id)}
+        >
+            <View style={[styles.message, { justifyContent: 'space-between' }]}>
+                <View style={styles.message}>
                 {imageUrl ? (
                     <Image source={{ uri: imageUrl }} style={styles.image} />
                 ) : (
@@ -22,44 +34,22 @@ const Message = ({ item }) => {
                 )}
                 {lastMessage ? (
                     <View>
-                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
-                        <Text style={{ fontSize: 12, fontWeight: '300', fontStyle: 'italic' }}>{lastMessage.length >= 35 ? lastMessage.substring(0,32) + '...' : lastMessage}</Text>
+                    <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
+                    <Text style={{ fontSize: 12, fontWeight: '300', fontStyle: 'italic' }}>
+                        {lastMessage.length >= 35 ? lastMessage.substring(0, 32) + '...' : lastMessage}
+                    </Text>
                     </View>
                 ) : (
                     <View>
-                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
+                    <Text style={{ fontSize: 20, fontWeight: '600' }}>{name}</Text>
                     </View>
                 )}
+                </View>
+        
             </View>
-
-            <View>
-                <CheckBox
-                    center
-                    checkedIcon={
-                        <Icon
-                            name='radio-button-checked'
-                            type='material'
-                            color='#8757f7'
-                            size={28}
-                        />
-                    }
-                    uncheckedIcon={
-                        <Icon
-                            name='radio-button-unchecked'
-                            type='material'
-                            color='grey'
-                            size={28}
-                        // iconStyle={{}}
-                        />
-                    }
-                    checked={checkMessage}
-                    onPress={() => setCheckMessage(!checkMessage)}
-                />
-            </View>
-
-        </View>
-    )
-}
+        </Swipeable>
+    );
+};
 
 export default Message;
 
@@ -81,27 +71,3 @@ const styles = StyleSheet.create({
 
 });
 
-// HARCODING EXAMPLES
-/* <TouchableOpacity style={styles.container}>
-                        <View style={styles.message}>
-                            <View style={styles.image}>
-                                <Text style={{height: 20, width: 20, textAlign: 'center'}}>B</Text>
-                            </View>
-                            <View>
-                                <Text>Britney Spears</Text> 
-                                <Text>It's Britney b*tch💕 </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.container}>
-                        <View style={styles.message}>
-                            <View style={styles.image}>
-                                <Text style={{height: 20, width: 20, textAlign: 'center'}}>C</Text>
-                            </View>
-                            <View>
-                                <Text>Chuck Norris</Text> 
-                                <Text>Hi Magdalena, do you need help with...</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity> */

@@ -19,6 +19,13 @@ export default function Messages() {
         })();
     }, [isAuthenticated, token]);
 
+
+
+    const handleDelete = (messageId) => {
+        setChats((prevChats) => prevChats.filter((chat) => chat._id !== messageId));
+    };
+
+
     return (
         <>
             {chats.length > 0 && (
@@ -27,7 +34,7 @@ export default function Messages() {
                     renderItem={({ item }) => {                        
                         return (
                             <TouchableOpacity style={styles.container} onPress={() => { return navigate('chatView', { chat: item }) }}>
-                                <Message item={item} />
+                                <Message item={item} onDelete={() => handleDelete(item._id)} />
                             </TouchableOpacity>
                         )
                     }}
