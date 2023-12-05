@@ -8,7 +8,7 @@ import io from 'socket.io-client';
 const chatView = () => {
   const { chat } = useRoute().params;
   const [messages, setMessages] = useState<any>(chat.chat);
-  const socket = io('https://evapp-production.up.railway.app');
+  const socket = io('https://enchanting-suggestion-production.up.railway.app');
   // const socket = io('http://127.0.0.1:3000');
 
   useEffect(() => {
