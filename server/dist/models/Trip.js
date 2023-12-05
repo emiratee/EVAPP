@@ -123,7 +123,11 @@ const tripSchema = new mongoose.Schema({
             seats: {
                 type: Number,
                 required: true
-            }
+            },
+            reviewed: {
+                type: Boolean,
+                required: true
+            },
         }
     ],
     successful: {

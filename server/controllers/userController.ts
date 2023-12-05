@@ -325,7 +325,6 @@ const putEarningsToAvailable = async (req: Request, res: Response): Promise<any>
 
 const putAddReview = async (req: Request, res: Response): Promise<any> => {
     try {
-        console.log('alos here')
         //validating user
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
@@ -333,8 +332,14 @@ const putAddReview = async (req: Request, res: Response): Promise<any> => {
         //driver ID
         const { tripId, driverId, rating } = req.body.data
 
+        console.log(tripId);
+        console.log(driverId);
+        console.log(rating);
+        
+        
+
         const driver = await User.findOne({ userId: driverId });
-        console.log(driver)
+        console.log('here: ', driver)
         const currentTotalReviews = Number(driver.driverRating.totalReviews);
         const currentTotalRating = Number(driver.driverRating.totalRating);
 

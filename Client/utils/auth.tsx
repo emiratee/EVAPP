@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [token]);
 
 
     const isAuthenticated: boolean = !!token;

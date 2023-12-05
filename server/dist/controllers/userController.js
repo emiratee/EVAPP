@@ -280,15 +280,17 @@ const putEarningsToAvailable = async (req, res) => {
 };
 const putAddReview = async (req, res) => {
     try {
-        console.log('alos here');
         //validating user
         const validatedUser = await (0, userUtils_js_1.validateUser)(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user)
             return res.status(401).json({ error: validatedUser });
         //driver ID
         const { tripId, driverId, rating } = req.body.data;
+        console.log(tripId);
+        console.log(driverId);
+        console.log(rating);
         const driver = await User_js_1.default.findOne({ userId: driverId });
-        console.log(driver);
+        console.log('here: ', driver);
         const currentTotalReviews = Number(driver.driverRating.totalReviews);
         const currentTotalRating = Number(driver.driverRating.totalRating);
         //add reviews to driver
