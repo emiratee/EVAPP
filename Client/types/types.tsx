@@ -41,16 +41,17 @@ export type TTrip = {
     car: TCar,
     price: string,
     driverID: string,
-    passengerIDs: {
-        bookingId: string,
-        userId: string,
-        name: string,
-        status: string,
-        seats: number
-    }[],
+    passengerIDs: TPassengerIDs[],
     successful: boolean
 }
 
+export type TPassengerIDs = {
+    bookingId: string,
+    userId: string,
+    name: string,
+    status: string,
+    seats: number
+}
 
 export type TUser = {
     _id: string,
@@ -116,7 +117,10 @@ export type TRegisterForm = {
     expoPushToken?: string
 }
 
-  
+export type TImageFormData = {
+    append: (name: string, value: any, fileName?: string) => void,
+}
+
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>
 export type TUserNoId = Omit<TUser, '_id'>

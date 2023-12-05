@@ -46,7 +46,7 @@ const register = (props: Props) => {
     useFocusEffect(
         React.useCallback(() => {
             if (isAuthenticated) {
-                navigation.navigate('index' as never);
+                navigation.navigate('index');
             }
         }, [isAuthenticated])
     );
@@ -81,8 +81,8 @@ const register = (props: Props) => {
 
             const uriParts = result.assets[0].uri.split('.');
             const fileType = uriParts[uriParts.length - 1];
-
-            const formData = new FormData();
+            
+            const formData: types.TImageFormData = new FormData();
             formData.append('file', {
                 uri: resizedImage.uri,
                 name: `photo.${fileType}`,

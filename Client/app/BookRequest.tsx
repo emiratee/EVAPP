@@ -6,19 +6,20 @@ import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
 import { putApproveTrip, putRejectTrip } from "../utils/apiService";
 import * as types from '../types/types'
+
 type Props = {
-    //     trip:types.TTrip, 
-    // //     passenger, 
-    //     bookingId: string, 
-    // //     setRequests
+    trip: types.TTrip,
+    passenger: types.TPassengerIDs,
+    bookingId: string,
+    setRequests: React.Dispatch<React.SetStateAction<number>>
 }
 
-const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
+const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
     const { token } = useAuth();
 
-    const [icon, setIcon] = useState<any>();
-    const [statusColor, setStatusColor] = useState('#5aa363');
-    const [status, setStatus] = useState(passenger.status);
+    const [icon, setIcon] = useState<React.JSX.Element | undefined>(undefined);
+    const [statusColor, setStatusColor] = useState<string>('#5aa363');
+    const [status, setStatus] = useState<string>(passenger.status);
 
     useEffect(() => {
         switch (status) {
@@ -104,15 +105,15 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }) => {
 }
 
 export default function ModalScreen() {
-    const { trip, passengers } = useRoute().params as { trip: types.TTrip; passengers: types.TUser[] };
+    const { trip, passengers } = useRoute().params as { trip: types.TTrip; passengers: types.TPassengerIDs[] };
 
-    const [requests, setRequests] = useState(passengers.filter((el: { status: string; }) => el.status === 'Pending').length)
+    const [requests, setRequests] = useState<number>(passengers.filter((el: { status: string; }) => el.status === 'Pending').length)
 
     return (
         <View style={request.container}>
             <Text style={request.title}>{`You have ${requests} booking requests`}</Text>
             <FlatList
-                data={passengers.slice().sort((a: { status: string; }, b: { status: string; }) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))} //Sort so that 'Pending' is always first
+                data={passengers.slice().sort((a, b) => (a.status === 'Pending' ? -1 : b.status === 'Pending' ? 1 : 0))} //Sort so that 'Pending' is always first
                 renderItem={({ item }) => (
                     <BookingCard trip={trip} passenger={item} bookingId={item.bookingId} setRequests={setRequests} />
                 )}

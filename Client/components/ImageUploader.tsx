@@ -6,7 +6,7 @@ import * as icons from '@expo/vector-icons';
 import { updateAccount, cloudinaryUpload } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 
-
+import * as types from '../types/types'
 
 const ImageUploader = ({ }) => {
     const { token, user } = useAuth()
@@ -28,7 +28,7 @@ const ImageUploader = ({ }) => {
             const uriParts = result.assets[0].uri.split('.');
             const fileType = uriParts[uriParts.length - 1];
 
-            const formData = new FormData();
+            const formData: types.TImageFormData = new FormData();
             formData.append('file', {
                 uri: resizedImage.uri,
                 name: `photo.${fileType}`,

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import { getHistory } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth';
-import { useFocusEffect, useNavigation } from 'expo-router';
+import { useFocusEffect, useNavigation, router } from 'expo-router';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
 import * as types from '../../types/types'
 const history = () => {
@@ -20,7 +20,9 @@ const history = () => {
     useFocusEffect(
         React.useCallback(() => {
             (async () => {
-                if (!isAuthenticated) return navigation.navigate('login' as never);
+                if (!isAuthenticated) return navigation.navigate('login');
+                // if (!isAuthenticated) return router.push('./login')
+
                 const history = token && await getHistory(token);
 
                 const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });

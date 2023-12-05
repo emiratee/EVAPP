@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-// const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app/';
+// const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app';
 const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
@@ -202,6 +202,7 @@ const putApproveTrip = async (data, token: string) => {
     }
 }
 const putRejectTrip = async (data, token: string) => {
+    console.log('here')
     try {
         const response = await fetch(`${BASE_URL}/user/trips/reject`, {
             method: 'PUT',

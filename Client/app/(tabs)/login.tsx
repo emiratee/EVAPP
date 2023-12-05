@@ -8,7 +8,9 @@ import * as icons from '@expo/vector-icons';
 
 type Props = {}
 
-const login = (props: Props) => {
+
+
+const login= (props: Props) => {
 
     const { login, isAuthenticated } = useAuth();
 

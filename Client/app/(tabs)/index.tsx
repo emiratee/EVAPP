@@ -22,7 +22,7 @@ const SearchForm = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
-    const navigate = useNavigation();
+    const navigation = useNavigation();
 
     const handleConfirm = (selectedDate: Date) => {
         setDatePickerVisibility(false);
@@ -50,7 +50,7 @@ const SearchForm = () => {
                 seats: formData.numberOfPeople
             }, token);
             if (response) {
-                navigate.navigate('TripCardRedirect' , { response } );
+                navigation.navigate('TripCardRedirect', { response });
             }
 
             // simulate a delay (e.g., 2000 milliseconds) before resetting the form
@@ -102,12 +102,19 @@ const SearchForm = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDeparture(prev => ({ ...prev || {}, city }));
+                                    city && setDeparture(prev => ({
+                                        city: city,
+                                        country: prev?.country || "",
+                                    }));
 
                                     const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    country && setDeparture(prev => ({ ...prev, country }));
+                                    country && setDeparture(prev => ({
+                                        city: prev?.city || "",
+                                        country: country,
+                                    }));
+
                                 }
 
                             }}
@@ -143,18 +150,23 @@ const SearchForm = () => {
 
                             onPress={(data, details = null) => {
                                 if (details) {
-                                    let city = details.address_components.find(component =>
+                                    const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDestination(prev => ({ ...prev, city }));
+                                    city && setDestination(prev => ({
+                                        city: city,
+                                        country: prev?.country || ""
+                                    }));
 
                                     const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    country && setDestination(prev => ({ ...prev, country }));
+                                    country && setDestination(prev => ({
+                                        city: prev?.city || "",
+                                        country: country
+                                    }));
                                 }
                             }}
-
                             query={{
                                 key: GOOGLE_MAPS_API_KEY,
                                 language: 'en',
@@ -300,9 +312,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        // borderWidth: 1,
-        // borderRadius: 10,
-        // padding: 10,
         borderColor: '#a8a8a8'
     },
     iconContainer: {
@@ -313,9 +322,7 @@ const styles = StyleSheet.create({
     parameters: {
         gap: 5,
         borderRadius: 10,
-        // borderWidth: 1,
         borderColor: '#a8a8a8',
-        // padding: 5,
         marginBottom: 10
     },
 });

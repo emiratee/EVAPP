@@ -18,7 +18,7 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
     const handleButtonPress = () => {
         setIsPickerVisible(true);
 
-        navigate.navigate('addCredits' as never)
+        navigate.navigate('addCredits')
     }
 
     return (
