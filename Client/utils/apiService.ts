@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-const BASE_URL = 'https://enchanting-suggestion-production.up.railway.app';
+const BASE_URL = 'https://evapp-production.up.railway.app';
 // const BASE_URL = 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
