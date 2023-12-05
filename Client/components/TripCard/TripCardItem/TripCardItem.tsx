@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
 import * as types from '../../../types/types'
+import COLORS from '../../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -64,7 +65,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                         <Text style={styles.price}>{`${parseFloat(trip.price).toFixed(2)}€`}</Text>
                     </View>
                     <View style={styles.seatContainer}>
-                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color={COLORS.iconColor} />
                         <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
                     </View>
                 </View>
@@ -72,7 +73,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                     <View>
                         <Text style={styles.name}>{driver.name}</Text>
                         <View style={styles.ratingContainer}>
-                            <icons.AntDesign name='star' size={12} />
+                            <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
                             <Text style={styles.rating}>{driver.driverRating.averageRating}</Text>
                         </View>
                     </View>
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     },
     line: {
         position: 'absolute',
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
         width: 6,
         height: 120,
         top: 10,
@@ -164,6 +165,11 @@ const styles = StyleSheet.create({
         borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
+        
     },
     city: {
         fontSize: 18,
@@ -187,17 +193,21 @@ const styles = StyleSheet.create({
     },
     priceContainer: {
         flex: 1,
-        backgroundColor: '#000',
-        borderColor: '#000',
+        // backgroundColor: '#000',
+        borderColor: 'transparent',
         borderWidth: 1,
         borderRadius: 12,
         maxHeight: 40,
         justifyContent: 'center',
         paddingHorizontal: 10,
+        shadowColor: COLORS.boarderBottomColor,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
     },
     price: {
-        color: '#fff',
-        fontSize: 20,
+        color: COLORS.textColour,
+        fontSize: 24,
         fontWeight: 'bold'
     },
     seatContainer: {
