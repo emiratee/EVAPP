@@ -102,12 +102,19 @@ const SearchForm = () => {
                                     const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDeparture(prev => ({ ...prev || {}, city }));
+                                    city && setDeparture(prev => ({
+                                        city: city,
+                                        country: prev?.country || "",
+                                    }));
 
                                     const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    country && setDeparture(prev => ({ ...prev, country }));
+                                    country && setDeparture(prev => ({
+                                        city: prev?.city || "",
+                                        country: country,
+                                    }));
+
                                 }
 
                             }}
@@ -143,15 +150,21 @@ const SearchForm = () => {
 
                             onPress={(data, details = null) => {
                                 if (details) {
-                                    let city = details.address_components.find(component =>
+                                    const city = details.address_components.find(component =>
                                         component.types.includes("locality")
                                     )?.long_name;
-                                    city && setDestination(prev => ({ ...prev, city }));
+                                    city && setDestination(prev => ({
+                                        city: city,
+                                        country: prev?.country || ""
+                                    }));
 
                                     const country = details.address_components.find(component =>
                                         component.types.includes("country")
                                     )?.long_name;
-                                    country && setDestination(prev => ({ ...prev, country }));
+                                    country && setDestination(prev => ({
+                                        city: prev?.city || "",
+                                        country: country
+                                    }));
                                 }
                             }}
                             query={{
