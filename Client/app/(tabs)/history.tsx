@@ -78,6 +78,8 @@ const history = () => {
         putEarningsToAvailable({ totalCredits }, token)
     }
 
+    console.log('reviewed: ', reviewed)
+    
     return (
         user && <>
             <Tab
@@ -151,18 +153,17 @@ const history = () => {
                 <SafeAreaView style={styles.container}>
                     {previousTrips.length > 0 ? (<FlatList
                         data={previousTrips}
-                        renderItem={({ item }: { item: { trip: types.TTrip, driver: types.TUser } }) => (
-                            <View style={[styles.card, { opacity: 0.5 }]}>
-                                <TripCardItem trip={item.trip} driver={item.driver} />
+                        renderItem={({ item }: { item: { trip: types.TTrip, driver: types.TUser } }) => {
 
                                 {reviewed = item.trip.passengerIDs.some(
                                         passenger => user && passenger.userId === user.userId && passenger.reviewed
                                     )
                                 }
+                            return <View style={[styles.card, { opacity: 0.5 }]}>
+                                <TripCardItem trip={item.trip} driver={item.driver} />
 
-                                {user.userId !== item.driver.userId && !reviewed &&
 
-                                    <StarRating
+                                {user.userId !== item.trip.driverID && !reviewed && <StarRating
                                         maxStars={5}
                                         rating={rating}
                                         onChange={(newRating) => { handleRating(item.trip._id, item.driver.userId, newRating) }}
@@ -173,7 +174,7 @@ const history = () => {
 
                                 }
                             </View>
-                        )
+                        }
                         }
                     />) : (
                         <Text>No previous Trips</Text>
@@ -192,7 +193,7 @@ const history = () => {
                         renderItem={({ item }) => (
                             <View style={styles.card}>
                                 <TripCardItem trip={item.trip} driver={item.driver} />
-                                {user.userId === item.driver.userId &&
+                                {user.userId === item.trip.driverID &&
                                     (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
                                     (new Date(item.trip.destination.date + 'T' + item.trip.destination.time + ':00') < new Date()) &&
                                     <TouchableOpacity onPress={() => { handleComplete(item.trip) }}>
