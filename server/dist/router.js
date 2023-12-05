@@ -30,5 +30,6 @@ router.put('/user/trips/driver', userController_js_1.default.putTripsAsDriver);
 router.put('/user/credits/available', userController_js_1.default.putAvailableCredits);
 router.put('/user/credits/hold', userController_js_1.default.putOnHoldCredits);
 router.put('/user/credits/earnings', userController_js_1.default.putEarningsCredits);
+router.put('/user/credits/earningsToAvailable', userController_js_1.default.putEarningsToAvailable);
 //need also route to assign trip to user
 exports.default = router;

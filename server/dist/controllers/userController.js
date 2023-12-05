@@ -254,6 +254,30 @@ async function putUpdateAccount(req, res) {
         res.status(500).json({ error: "Internal server error in updateAccount" });
     }
 }
+const putEarningsToAvailable = async (req, res) => {
+    try {
+        //validating user
+        const validatedUser = await (0, userUtils_js_1.validateUser)(req);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user)
+            return res.status(401).json({ error: validatedUser });
+        //current on hold credits
+        const currentOnHoldEarnings = Number(validatedUser.user.credits.earningsOnHold);
+        const currentAvailable = Number(validatedUser.user.credits.available);
+        const { totalCredits } = req.body.data;
+        await User_js_1.default.updateOne({ userId: validatedUser.userId }, {
+            $set: {
+                'credits.earningsOnHold': currentOnHoldEarnings - totalCredits,
+                'credits.available': currentAvailable + Number(totalCredits),
+            },
+        });
+        const updatedUser = await User_js_1.default.findOne({ userId: validatedUser.userId });
+        res.status(200).json({ message: 'putEarningsToAvailable Credits Changed ', credits: updatedUser.credits });
+    }
+    catch (error) {
+        console.error("Error in putEarningsToAvailable:", error);
+        res.status(500).json({ error: "Internal server error in putEarningsToAvailable" });
+    }
+};
 exports.default = {
     postRegister,
     getDriver,
@@ -265,5 +289,6 @@ exports.default = {
     postLogin,
     getHistory,
     putEarningsCredits,
-    putUpdateAccount
+    putUpdateAccount,
+    putEarningsToAvailable
 };
