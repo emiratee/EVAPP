@@ -8,10 +8,11 @@ const socketRouter = (io: Server) => {
             socket.join(chatId);
             
             socket.on('message', async (content: any, receiverId: string) => {
-                socket.in(chatId).to(receiverId).emit('message', content);
+                console.log(content);
                 const receiverUser = await getUserById(receiverId);
                 console.log(receiverUser);
                 receiverUser.expoPushToken && await sendPushNotification(receiverUser.expoPushToken, 'New message', 'Test');
+                socket.in(chatId).to(receiverId).emit('message', content);
             });
             
             socket.on('disconnect', () => {
