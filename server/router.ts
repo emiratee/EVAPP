@@ -30,6 +30,7 @@ router.put('/user/trips/driver', userController.putTripsAsDriver);
 router.put('/user/credits/available', userController.putAvailableCredits);
 router.put('/user/credits/hold', userController.putOnHoldCredits);
 router.put('/user/credits/earnings', userController.putEarningsCredits);
+router.put('/user/credits/earningsToAvailable', userController.putEarningsToAvailable);
 //need also route to assign trip to user
 
 
