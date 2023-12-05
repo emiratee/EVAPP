@@ -54,8 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = async (): Promise<void> => {
         try {
             await AsyncStorage.removeItem('token')
-            setToken(null);
-            setUser(null);
+            setToken(undefined);
         } catch (error) {
             console.error('Error removing token:', error)
         }
