@@ -31,5 +31,7 @@ router.put('/user/credits/available', userController_js_1.default.putAvailableCr
 router.put('/user/credits/hold', userController_js_1.default.putOnHoldCredits);
 router.put('/user/credits/earnings', userController_js_1.default.putEarningsCredits);
 router.put('/user/credits/earningsToAvailable', userController_js_1.default.putEarningsToAvailable);
+//driver review
+router.put('/user/review/driverRating', userController_js_1.default.putAddReview);
 //need also route to assign trip to user
 exports.default = router;
