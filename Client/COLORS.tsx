@@ -3,6 +3,8 @@ const COLORS = {
     SECONDARY: "#4b8f8f",
 
     backgroundColor: "#a9d9d9",
+    backgroundColor2: "#cabbed",
+
 
     borderColor: "#01b4e1",
     activeTab: "#393939",
