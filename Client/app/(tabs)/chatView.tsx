@@ -8,7 +8,7 @@ import io from 'socket.io-client';
 const chatView = () => {
   const { chat } = useRoute().params;
   const [messages, setMessages] = useState<any>(chat.chat);
-  const socket = io('https://evapp.vercel.app');
+  const socket = io('https://evapp-git-reimplementing-eriks-projects-08925273.vercel.app');
 
   useEffect(() => {
     socket.on('connect', () => {
