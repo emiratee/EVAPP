@@ -54,7 +54,6 @@ const history = () => {
 
     const handleRating = (tripId, driverId, ratedValue) => {
         setRating(ratedValue);
-
         putAddReview({ tripId, driverId, rating: ratedValue }, token);
     };
 
