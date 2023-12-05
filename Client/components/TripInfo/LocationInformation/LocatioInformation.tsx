@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Animated, Easing, StyleSheet } from 'react-native';
 import * as types from '../../../types/types'
+import COLORS from '../../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     },
     line: {
         position: 'absolute',
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
         width: 6,
         height: 120,
         top: 10,

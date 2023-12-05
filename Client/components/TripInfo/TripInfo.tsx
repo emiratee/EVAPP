@@ -7,6 +7,7 @@ import LocationInformation from './LocationInformation/LocatioInformation';
 import Map from '../Map';
 import { useAuth } from '../../utils/auth';
 import * as types from '../../types/types'
+import COLORS from '../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -39,7 +40,7 @@ export default TripInfoModalScreen;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.backgroundColor,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
