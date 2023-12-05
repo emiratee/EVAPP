@@ -3,15 +3,29 @@ import React, { useEffect, useRef, useState } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Geocoder from 'react-native-geocoding';
+import { GOOGLE_MAPS_API_KEY } from '@env';
+import * as types from '../types/types'
+type Props = {
+    departure: string,
+    destination: string
+}
 
-const Map = ({ departure, destination }) => {
 
-    const [locationA, setLocationA] = useState({ latitude: 0, longitude: 0 });
-    const [locationB, setLocationB] = useState({ latitude: 0, longitude: 0 });
+const Map = ({ departure, destination }: Props) => {
 
-    Geocoder.init('AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM');
+    type TForMap =
+        {
+            latitude: number;
+            longitude: number;
+        }
 
-    const getCoordinates = async (locationName) => {
+    const [locationA, setLocationA] = useState<TForMap>({ latitude: 0, longitude: 0 });
+    const [locationB, setLocationB] = useState<TForMap>({ latitude: 0, longitude: 0 });
+    const mapViewRef = useRef<MapView>(null);
+
+    Geocoder.init(GOOGLE_MAPS_API_KEY);
+
+    const getCoordinates = async (locationName: string) => {
         try {
             const response = await Geocoder.from(locationName);
             const { lat, lng } = response.results[0].geometry.location;
@@ -35,19 +49,18 @@ const Map = ({ departure, destination }) => {
         fetchCoordinates();
     }, [departure, destination]);
 
-    const mapViewRef = useRef(null);
 
     useEffect(() => {
         // Check if both locations are available
         if (locationA.latitude && locationB.latitude && mapViewRef.current) {
-          const coordinates = [locationA, locationB];
-    
-          mapViewRef.current.fitToCoordinates(coordinates, {
-            edgePadding: { top: 50, right: 50, bottom: 50, left: 50 }, // Adjust padding as needed
-            animated: true,
-          });
+            const coordinates = [locationA, locationB];
+
+            mapViewRef.current.fitToCoordinates(coordinates, {
+                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                animated: true,
+            });
         }
-      }, [locationA, locationB]);
+    }, [locationA, locationB]);
 
 
 
@@ -78,7 +91,7 @@ const Map = ({ departure, destination }) => {
                 <MapViewDirections
                     origin={locationA}
                     destination={locationB}
-                    apikey={'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM'}
+                    apikey={GOOGLE_MAPS_API_KEY}
                     strokeWidth={3}
                     strokeColor="hotpink"
                 />
@@ -97,8 +110,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     map: {
-        width: '100%', 
-        height: 300,  
+        width: '100%',
+        height: 300,
         zIndex: 1,
     },
 })

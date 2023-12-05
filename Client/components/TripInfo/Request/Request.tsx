@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../../Bill';
 import { putRequestTrip } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
+import * as types from '../../../types/types';
+import { router } from 'expo-router';
 
-const Request = ({ trip }) => {
+type Props = {
+    trip: types.TTrip,
+
+}
+const Request = ({ trip }: Props) => {
+
     const { user, token } = useAuth()
 
-    const [price, setPrice] = useState(trip.price);
-    const [isPickerVisible, setIsPickerVisible] = useState(true);
-    const [text, setText] = useState(`${parseFloat(price).toFixed(2)}€`);
-    const [seats, setSeats] = useState(1);
-    const [hasEnoughCredits, setHasEnoughCredits] = useState(true);
+    const [price, setPrice] = useState<string>(trip.price);
+    const [isPickerVisible, setIsPickerVisible] = useState<boolean>(true);
+    const [text, setText] = useState<string>(`${parseFloat(price).toFixed(2)}€`);
+    const [seats, setSeats] = useState<number>(1);
+    const [hasEnoughCredits, setHasEnoughCredits] = useState<boolean>(true);
 
     const handlePriceChange = (value: string) => {
         const number: number = parseFloat(value);
-        const price: number = parseFloat((trip.price * number).toFixed(2));
+        const price: number = trip && Number((Number(trip.price) * number).toFixed(2));
         setPrice(price.toString());
         setText(`${price.toFixed(2)}€`);
         setSeats(number);
@@ -35,7 +42,7 @@ const Request = ({ trip }) => {
     const handleButtonClick = () => {
         // additional logic to execute when the button is clicked
         if (!secondClick) {
-            setHasEnoughCredits(parseFloat(user.credits.available) >= price);
+            user && setHasEnoughCredits(Number(user.credits.available) >= Number(price));
             setIsPickerVisible(false);
             setText('Send booking request');
             setSecondClick(!secondClick)
@@ -45,7 +52,12 @@ const Request = ({ trip }) => {
                 tripId: trip._id,
                 seats: seats
             }
-            putRequestTrip(formData, token)
+            token && putRequestTrip(formData, token)
+            router.push('(tabs)/history')
+            Alert.alert(
+                'Yuuuhu!',
+                'The trip has been succesfully booked!  ',
+            );
         }
     }
 
@@ -64,7 +76,7 @@ const Request = ({ trip }) => {
                 </View>
             </TouchableOpacity>
 
-            {!isPickerVisible && (<Bill trip={trip} price={price} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
+            {!isPickerVisible && (<Bill trip={trip} price={Number(price)} seats={seats} setIsPickerVisible={setIsPickerVisible} hasEnoughCredits={hasEnoughCredits} />)}
 
             {isPickerVisible && (<Picker
                 style={request_styles.picker}

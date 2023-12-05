@@ -1,8 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import React from 'react';
-import { Pressable, TouchableOpacity, useColorScheme, Text } from 'react-native';
-
+import { TouchableOpacity, Text } from 'react-native';
+import { useNavigation } from 'expo-router';
 
 
 function TabBarIcon(props: {
@@ -13,8 +13,15 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-   
 
+    // const leftHeader = () => (
+    //     <TouchableOpacity onPress={() => navigation.goBack()}>
+    //         <Text style={{marginLeft:20}}>
+    //             <FontAwesome name="chevron-left" size={24} color="black" /> 
+    //         </Text>
+    //     </TouchableOpacity>
+    // )
+    const navigation = useNavigation();
     return (
         <Tabs
             screenOptions={{
@@ -34,9 +41,10 @@ export default function TabLayout() {
                     href: null,
                     title: 'Add Credits',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                    // headerLeft: leftHeader
                 }}
-            />
 
+            />
             <Tabs.Screen
                 name="map"
                 options={{
@@ -111,6 +119,7 @@ export default function TabLayout() {
                 options={{
                     title: 'Profile',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                   
                 }}
             />
         </Tabs>

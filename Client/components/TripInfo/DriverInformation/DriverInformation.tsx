@@ -4,15 +4,14 @@ import * as icons from '@expo/vector-icons';
 import { postChat } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 
+import * as types from '../../../types/types'
 
-const DriverInformation = ({ trip, driver }) => {
-    const { user, token } = useAuth();
+type Props = {
+    trip: types.TTrip,
+    driver: types.TUser
+}
 
-    const contactDriver = async () => {
-        const chat = await postChat(trip.driverID, user.userId, token);
-        console.log(chat);
-    }
-
+const DriverInformation = ({ trip, driver }: Props) => {
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
@@ -27,10 +26,7 @@ const DriverInformation = ({ trip, driver }) => {
                         </View>
                         <TouchableOpacity>
                             {driver.imageUrl ? <Image source={{ uri: driver.imageUrl }} style={{ height: 40, width: 40, borderRadius: 50 }} /> :
-                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }}  />
-                        }
-                        
-                            
+                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }} />}
                         </TouchableOpacity>
                     </View>
                 </View>

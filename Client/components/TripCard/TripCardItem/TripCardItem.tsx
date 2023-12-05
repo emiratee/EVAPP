@@ -3,8 +3,15 @@ import * as icons from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const TripCardItem = ({ trip, driver }) => {
-    const [lineAnimation, setLineAnimation] = useState(new Animated.Value(0));
+import * as types from '../../../types/types'
+
+type Props = {
+    trip: types.TTrip,
+    driver: types.TUser
+}
+
+const TripCardItem = ({ trip, driver }: Props) => {
+    const [lineAnimation, setLineAnimation] = useState<Animated.Value>(new Animated.Value(0));
 
     useEffect(() => {
         animateLine();

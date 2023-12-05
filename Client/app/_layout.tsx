@@ -15,6 +15,8 @@ export const unstable_settings = {
     initialRouteName: '(tabs)',
 };
 
+import { ThemeColors } from '../COLORS';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -43,12 +45,11 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-
     return (
         <AuthProvider>
-                <ThemeProvider value={DefaultTheme}>
+                <ThemeProvider value={ThemeColors}>
                     <Stack>
-                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false,  }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
                         <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
                     </Stack>

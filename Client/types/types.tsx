@@ -13,14 +13,14 @@ export type TTrip = {
     departure: {
         country: string,
         city: string,
-        address: string,
+        address?: string,
         time: string,
         date: string
     },
     destination: {
         country: string,
         city: string,
-        address: string,
+        address?: string,
         time: string,
         date: string
     },
@@ -38,19 +38,20 @@ export type TTrip = {
         luggage: boolean,
         comments?: string,
     }
-    car: TCar | TCarNoId,
+    car: TCar,
     price: string,
     driverID: string,
-    passengersIDs: {
-        bookingId: string,
-        userId: string,
-        name: string,
-        status: string,
-        seats: number
-    }[],
+    passengerIDs: TPassengerIDs[],
     successful: boolean
 }
 
+export type TPassengerIDs = {
+    bookingId: string,
+    userId: string,
+    name: string,
+    status: string,
+    seats: number
+}
 
 export type TUser = {
     _id: string,
@@ -62,7 +63,7 @@ export type TUser = {
     imageUrl?: string,
     phoneNumber: string,
     password: string,
-    cars: TCar[] | TCarNoId[],
+    cars: TCar[],
     passengerRating: {
         totalReviews: number,
         totalRating: number,
@@ -116,16 +117,9 @@ export type TRegisterForm = {
     expoPushToken?: string
 }
 
-  
-export type TAuth = {
-    token: string | null;
-    setToken: React.Dispatch<React.SetStateAction<string | null>>;
-    login: (token: string) => Promise<void>;
-    logout: () => Promise<void>;
-    isAuthenticated: boolean;
-    user: TUser | null;
-    setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
-};
+export type TImageFormData = {
+    append: (name: string, value: any, fileName?: string) => void,
+}
 
 export type TCarNoId = Omit<TCar, '_id'>
 export type TTripNoId = Omit<TTrip, '_id'>

@@ -4,17 +4,17 @@ import { getUser } from './apiService';
 import { TUser, TAuth } from '../types/types';
 
 type AuthContextType = {
-    token: string | null;
-    setToken: React.Dispatch<React.SetStateAction<string | null>>;
-    user: TUser | null;
-    setUser: React.Dispatch<React.SetStateAction<TUser | null>>;
+    token: string | undefined;
+    setToken: React.Dispatch<React.SetStateAction<string | undefined>>;
+    user: types.TUser | null;
+    setUser: React.Dispatch<React.SetStateAction<types.TUser | null>>;
     login: (token: string) => Promise<void>;
     logout: () => Promise<void>;
     isAuthenticated: boolean;
 }
 
 const defaultAuthContext: AuthContextType = {
-    token: null,
+    token: undefined,
     setToken: () => { },
     user: null,
     setUser: () => { },
@@ -30,8 +30,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [token, setToken] = useState<string | null>(null);
-    const [user, setUser] = useState<TUser | null>(null);
+    const [token, setToken] = useState<string | undefined>(undefined);
+    const [user, setUser] = useState<types.TUser | null>(null);
 
     useEffect(() => {
         (async () => {

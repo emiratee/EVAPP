@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
@@ -15,12 +15,13 @@ type Props = {}
 
 const register = (props: Props) => {
     const { token, login, isAuthenticated } = useAuth();
-    const [expoPushToken, setExpoPushToken] = useState('');
-    const scrollViewRef = useRef(null);
+    const [expoPushToken, setExpoPushToken] = useState<string>('');
+    const scrollViewRef = useRef<ScrollView>(null);
 
     useFocusEffect(
         React.useCallback(() => {
             //reset states when the screen comes in focus again. 
+
             setName('')
             setEmail('')
             setNumber('')
@@ -39,8 +40,7 @@ const register = (props: Props) => {
 
     const navigation = useNavigation();
     useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-        console.log(expoPushToken)
+        registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
     }, []);
 
     useFocusEffect(
@@ -81,8 +81,8 @@ const register = (props: Props) => {
 
             const uriParts = result.assets[0].uri.split('.');
             const fileType = uriParts[uriParts.length - 1];
-
-            const formData = new FormData();
+            
+            const formData: types.TImageFormData = new FormData();
             formData.append('file', {
                 uri: resizedImage.uri,
                 name: `photo.${fileType}`,
@@ -324,10 +324,7 @@ async function registerForPushNotificationsAsync() {
             alert('Failed to get push token for push notification!');
             return;
         }
-        // Learn more about projectId:
-        // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
         token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e742dc1b-029a-4980-8364-e2d0e7b1f40e' })).data;
-        console.log(token);
     } else {
         alert('Must use physical device for Push Notifications');
     }

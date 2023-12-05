@@ -1,10 +1,20 @@
-import { StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useNavigation } from 'expo-router';
 import TripCardItem from './TripCardItem/TripCardItem';
+import * as types from '../../types/types'
 
+type Props = {
+    response: {
+        trips: {
+            trip: types.TTrip,
+            driver: types.TUser
+        }[]
+    }
 
-const TripCard = ({ response }) => {
+}
+
+const TripCard = ({ response }: Props) => {
     const { navigate } = useNavigation();
     return (
         <View style={styles.list}>
