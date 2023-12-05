@@ -36,7 +36,7 @@ const LocationInformation = ({ trip }: Props) => {
                     <Text style={styles.time}>{trip.departure.time}</Text>
                 </View>
                 <View>
-                    <Text style={styles.totalTime}>{trip.totalTime}</Text>
+                    <Text style={styles.totalTime}>{`${trip.totalTime}h`}</Text>
                 </View>
                 <View>
                     <Text style={styles.time}>{trip.destination.time}</Text>
