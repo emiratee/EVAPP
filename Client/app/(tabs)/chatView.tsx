@@ -13,7 +13,7 @@ const chatView = () => {
   
   const { user } = useAuth()
   const [messages, setMessages] = useState<any>(chat.chat);
-  const socket = io('http://localhost:3000');
+  const socket = io('https://evapp.vercel.app');
 
   useEffect(() => {
     socket.on('connect', () => {
