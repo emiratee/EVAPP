@@ -236,7 +236,7 @@ const register = (props: Props) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
-                    <Link href={'/(tabs)/login'}>already have an account?</Link>
+                    <Link href={'/(tabs)/login'}>Already have an account?</Link>
                 </TouchableOpacity>
 
             </View>

@@ -84,7 +84,7 @@ const login= (props: Props) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
-                    <Link href={'/(tabs)/register'}>don't have an account yet?</Link>
+                    <Link href={'/(tabs)/register'}>Don't have an account yet?</Link>
                 </TouchableOpacity>
             </View>
         </TouchableWithoutFeedback>
