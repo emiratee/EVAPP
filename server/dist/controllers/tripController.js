@@ -53,7 +53,7 @@ const getFilteredTrips = async (req, res) => {
         const trips = await Trip_js_1.default.find(params);
         let formedTrips = [];
         for (const trip of trips) {
-            const driver = await userController_js_1.default.getDriver(trip.driverID);
+            const driver = await userController_js_1.default.getUserById(trip.driverID);
             formedTrips.push({ trip, driver });
         }
         return res.status(200).json({ trips: formedTrips });

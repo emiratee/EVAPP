@@ -6,12 +6,18 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import Trip from '../models/Trip.js';
 import User from '../models/User.js';
-import { validateUser, sendPushNotification } from '../utils/userUtils.js';
-import { getUserById } from './chatController.js';
-
+import { validateUser } from '../utils/userUtils.js';
+const SECRET_KEY = process.env.SECRET_KEY!;
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-const SECRET_KEY = process.env.SECRET_KEY!;
+const getUserById = async (userId): Promise<any> => {
+    try {
+        return await User.findOne({ userId });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 const postRegister = async (req: Request, res: Response): Promise<any> => {
     try {
         const { name, email, phoneNumber, password, imageUrl, expoPushToken } = req.body;
@@ -280,6 +286,7 @@ async function putUpdateAccount(req: Request, res: Response): Promise<any> {
 
 
 export default {
+    getUserById,
     postRegister,
     getUser,
     putCar,

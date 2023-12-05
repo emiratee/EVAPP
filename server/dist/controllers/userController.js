@@ -11,9 +11,16 @@ const uuid_1 = require("uuid");
 const Trip_js_1 = __importDefault(require("../models/Trip.js"));
 const User_js_1 = __importDefault(require("../models/User.js"));
 const userUtils_js_1 = require("../utils/userUtils.js");
-const chatController_js_1 = require("./chatController.js");
-dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
 const SECRET_KEY = process.env.SECRET_KEY;
+dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
+const getUserById = async (userId) => {
+    try {
+        return await User_js_1.default.findOne({ userId });
+    }
+    catch (error) {
+        console.error(error);
+    }
+};
 const postRegister = async (req, res) => {
     try {
         const { name, email, phoneNumber, password, imageUrl, expoPushToken } = req.body;
@@ -200,7 +207,7 @@ const getHistory = async (req, res) => {
         const passengerTrips = await Trip_js_1.default.find({ _id: { $in: user.tripsAsPassengerIDs } });
         const trips = [...driverTrips, ...passengerTrips];
         const tripsWithDrivers = await Promise.all(trips.map(async (trip) => {
-            const driver = await (0, chatController_js_1.getUserById)(trip.driverID);
+            const driver = await getUserById(trip.driverID);
             return { trip, driver };
         }));
         res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
@@ -243,6 +250,7 @@ async function putUpdateAccount(req, res) {
     }
 }
 exports.default = {
+    getUserById,
     postRegister,
     getUser,
     putCar,

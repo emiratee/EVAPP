@@ -28,10 +28,6 @@ const Typebar = ({ setMessages, chat }) => {
     await postMessage(chat.chatId, message, token);    
 
     if (text.trim() !== '') {
-      // setMessages((prev) => [
-      //   ...prev,
-      //   { text: text, time: moment().format('HH:mm') },
-      // ]);
       setText('');
     }
     if (textInputRef.current) {

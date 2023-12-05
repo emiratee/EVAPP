@@ -59,7 +59,7 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<Response> 
         const trips = await Trip.find(params);
         let formedTrips: FormedTrip[] = [];
         for (const trip of trips) {
-            const driver = await userController.getDriver(trip.driverID);
+            const driver = await userController.getUserById(trip.driverID);
             formedTrips.push({ trip, driver });
         }
         return res.status(200).json({ trips: formedTrips })

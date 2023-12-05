@@ -21,7 +21,7 @@ export default function Messages() {
 
     return (
         <>
-            {chats.length > 0 && (
+            {chats && chats.length > 0 && (
                 <FlatList
                     data={chats}
                     renderItem={({ item }) => {                        

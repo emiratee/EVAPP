@@ -5,12 +5,12 @@ import { useAuth } from '../utils/auth';
 import * as icons from '@expo/vector-icons';
 
 
-const Message = ({ item }) => {
+const Message = ({ item }) => {    
     const { user } = useAuth();    
     const [checkMessage, setCheckMessage] = useState(false);
     const name = item.driver.userId === user.userId ? item.passenger.name : item.driver.name;
     const imageUrl = item.driver.userId === user.userId ? item.passenger.imageUrl : item.driver.imageUrl;
-    const lastMessage = item.chat && item.chat[item.chat.length - 1].message.content;
+    const lastMessage = item.chat.length > 0 && item.chat[item.chat.length - 1].message.content;
 
     return (
         <View style={[styles.message, { justifyContent: 'space-between' }]}>
