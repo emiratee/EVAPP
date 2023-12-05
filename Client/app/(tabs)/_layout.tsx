@@ -56,13 +56,6 @@ export default function TabLayout() {
                 }}
             />
 
-            <Tabs.Screen
-                name="chatView"
-                options={{
-                    href: null,
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                }}
-            />
             
 
 
