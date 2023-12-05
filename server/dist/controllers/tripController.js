@@ -158,7 +158,7 @@ const putMakeRequest = async (req, res) => {
             },
         });
         const driver = await User_js_1.default.findOne({ userId: trip.driverID });
-        driver.expoPushToken && (0, userUtils_js_1.sendPushNotification)(driver.expoPushToken, 'New Request to your trip!', 'Accept or Reject it!');
+        driver.expoPushToken && (0, userUtils_js_1.sendPushNotification)(driver.expoPushToken, 'Incoming booking request', 'Confirm it now!');
         const updatedTrip = await Trip_js_1.default.findOne({ _id: tripId });
         res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     }
