@@ -167,10 +167,36 @@ const putMakeRequest = async (req, res) => {
         res.status(500).json({ error: "Internal server error in putMakeRequest" });
     }
 };
+const putTripSuccessful = async (req, res) => {
+    try {
+        const validatedUser = await (0, userUtils_js_1.validateUser)(req);
+        if (!validatedUser || !validatedUser.userId || !validatedUser.user)
+            return res.status(401).json({ error: validatedUser });
+        const { tripId, successful } = req.body.data;
+        await Trip_js_1.default.updateOne({ _id: tripId }, {
+            $set: { successful }
+        });
+        const trip = await Trip_js_1.default.findOne({ _id: tripId });
+        //notification for passenger is required
+        // const driver = await User.findOne({ userId: trip.driverID });
+        // driver.expoPushToken && sendPushNotification(
+        //     driver.expoPushToken,
+        //     'New Request to your trip!',
+        //     'Accept or Reject it!'
+        // )
+        const updatedTrip = await Trip_js_1.default.findOne({ _id: tripId });
+        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+    }
+    catch (error) {
+        console.error("Error in putTripSuccessful:", error);
+        res.status(500).json({ error: "Internal server error in putTripSuccessful" });
+    }
+};
 exports.default = {
     postCreate,
     getFilteredTrips,
     putApprovePassenger,
     putRejectPassenger,
-    putMakeRequest
+    putMakeRequest,
+    putTripSuccessful
 };
