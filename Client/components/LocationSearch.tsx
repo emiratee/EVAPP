@@ -9,6 +9,7 @@ type Props = {
 
 const LocationSearch = (props: Props) => {
 
+    
     return (
         <GooglePlacesAutocomplete
             styles={{

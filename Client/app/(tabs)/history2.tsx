@@ -90,21 +90,37 @@ const History2 = () => {
     return (
       <FlatList
         data={upcomingTrips}
-        renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => {
-              user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers: item.trip.passengerIDs });
-            }}
-          >
+        renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
+          const passengers = item.trip.passengerIDs;
+          const requestAmount = passengers.filter(passenger => passenger.userId !== user.userId && passenger.status === 'Pending').length;
+
+          return (
+          <TouchableOpacity style={styles.card} onPress={() => {
+            user.userId === item.trip.driverID && navigate('BookRequest', { trip: item.trip, passengers: item.trip.passengerIDs });
+          }}>
+
             <TripCardItem trip={item.trip} driver={item.driver} />
-            {user.userId === item.trip.driverID && (
-              <View style={[styles.pendingContainer, { backgroundColor: item.trip.passengerIDs.length === 0 ? '#000' : '#5aa363' }]}>
-                <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${item.trip.passengerIDs.length} pending requests`}</Text>
+            {user.userId === item.trip.driverID ? (
+              <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
+                <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
               </View>
+            ) : (
+              <>
+                {passengers.map(passenger => (
+                  passenger.userId === user.userId && (
+                    <View key={passenger.userId} style={[styles.pendingContainer, {
+                      backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
+                        passenger.status === 'Pending' ? '#e29257' : '#ff0000'
+                    }]}>
+                      <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                    </View>
+                  )
+                ))}
+              </>
             )}
           </TouchableOpacity>
-        )}
+          );
+        }}
       />
     );
   };
