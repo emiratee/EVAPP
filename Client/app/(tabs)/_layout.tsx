@@ -47,17 +47,6 @@ export default function TabLayout() {
             />
 
             <Tabs.Screen
-                name="history2"
-                options={{
-                    href: null,
-                    title: 'history 2',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                    // headerLeft: leftHeader
-                }}
-
-            />
-
-            <Tabs.Screen
                 name="login"
                 options={{
                     href: null,
