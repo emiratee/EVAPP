@@ -6,11 +6,7 @@ const socketRouter = (io: Server) => {
             socket.join(chatId);
             
             socket.on('message', (content: any, receiverId: string) => {
-                console.log(content);
-                // io.emit('message', content);
-                socket.in(chatId).to(receiverId).emit('message', content, receiverId);
-                console.log(`Send to ${receiverId} in ${chatId}`);
-                
+                socket.in(chatId).to(receiverId).emit('message', content);
             });
             
             socket.on('disconnect', () => {

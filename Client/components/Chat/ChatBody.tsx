@@ -1,24 +1,46 @@
-import { StyleSheet, ScrollView, ImageBackground } from 'react-native'
-import React from 'react'
-import ChatMessage from './ChatMessage'
-
+import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import ChatMessage from './ChatMessage';
 
 const ChatBody = ({ messages }) => {
+  const scrollViewRef = useRef();
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  };
+
   return (
-      <ScrollView style={{backgroundColor:'#fbfafc', height: '100%', zIndex: -1 }}>
+    <View style={styles.container}>
+      <ScrollView
+        ref={scrollViewRef}
+        style={{ backgroundColor: '#fbfafc', flex: 1, marginBottom: 70 }}
+        contentContainerStyle={styles.scrollViewContent}
+        onContentSizeChange={scrollToBottom}
+      >
         {messages.map((message, index) => (
-          <ChatMessage key={index} text={message.text} time={message.time} />
+          <ChatMessage key={index} message={message} />
         ))}
       </ScrollView>
-  )
-}
+    </View>
+  );
+};
 
-export default ChatBody
+export default ChatBody;
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: -1,
-    resizeMode: 'contain', // or 'contain' based on your preference
-    justifyContent: 'center',
+  container: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
   },
 });

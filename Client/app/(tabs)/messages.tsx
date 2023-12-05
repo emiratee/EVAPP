@@ -20,7 +20,7 @@ export default function Messages() {
       const fetchedChats = await getAllChats(token);
       setChats(fetchedChats.chats);
     })();
-  }, [isAuthenticated, token]);
+  }, [isAuthenticated, token, chats]);
 
   const handleDelete = (messageId) => {
     setChats((prevChats) => prevChats.filter((chat) => chat._id !== messageId));
@@ -45,7 +45,7 @@ export default function Messages() {
       <TouchableOpacity
         style={styles.container}
         onPress={() => navigate('chatView', { chat: item })}
-        activeOpacity={1} // This makes sure that TouchableOpacity doesn't interfere with Swipeable
+        activeOpacity={1} 
       >
         <Message item={item} />
       </TouchableOpacity>
@@ -83,4 +83,3 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-

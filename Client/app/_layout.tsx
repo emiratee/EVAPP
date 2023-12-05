@@ -16,6 +16,7 @@ export const unstable_settings = {
 };
 
 import { ThemeColors } from '../COLORS';
+import { ChatProvider } from '../utils/chat';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -47,6 +48,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
     return (
         <AuthProvider>
+            <ChatProvider>
                 <ThemeProvider value={ThemeColors}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{ headerShown: false,  }} />
@@ -54,6 +56,7 @@ function RootLayoutNav() {
                         <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
                     </Stack>
                 </ThemeProvider>
+            </ChatProvider>
         </AuthProvider>
     );
 }

@@ -1,12 +1,12 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-// const BASE_URL = process.env.ATLAR_URL || 'https://evapp.vercel.app';
-const BASE_URL = process.env.ATLAR_URL || 'http://127.0.0.1:3000'; 
+//const BASE_URL = 'https://evapp.vercel.app';
+const BASE_URL = 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
 
-const getFilteredTrips = async (data: types.TTrip_search, token?: string) => {
+const getFilteredTrips = async (data: types.TTrip_search, token: string) => {
     try {
         if (!data.destination) {
             const response = await fetch(`${BASE_URL}/trips?departureCountry=${data.departure.country}&departureCity=${data.departure.city}&date=${data.date}&seats=${data.seats}`, {
@@ -192,7 +192,6 @@ const putApproveTrip = async (data, token: string) => {
     }
 }
 const putRejectTrip = async (data, token: string) => {
-    console.log('here')
     try {
         const response = await fetch(`${BASE_URL}/user/trips/reject`, {
             method: 'PUT',
@@ -339,14 +338,16 @@ const postChat = async (driverId: string, passengerId: string, token: string) =>
     }
 }
 
-const postMessage = async (chatId: string, token: string) => {
+const postMessage = async (chatId: string, message: any, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/user/chats/${chatId}`, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `${token}`
-            }
-        });
+            },
+            body: JSON.stringify({ content: message.message.content, time: message.message.time })
+        });        
         return await response.json();
     } catch (error) {
         console.error(error);

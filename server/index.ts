@@ -11,7 +11,7 @@ db();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const server = require('http').createServer(app);
-const io = require('socket.io')(server)
+const io = require('socket.io')(server);
 
 app.use(cors());
 app.use(express.json());

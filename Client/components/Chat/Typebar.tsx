@@ -1,19 +1,21 @@
 import { StyleSheet, TextInput, View, TouchableOpacity } from 'react-native';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import * as icons from '@expo/vector-icons';
 import moment from 'moment';
 import io from 'socket.io-client';
 import { useAuth } from '../../utils/auth';
+import { postMessage } from '../../utils/apiService';
 
-const Typebar = ({ setMessages, chat }) => {
-  const { user } = useAuth();
+const Typebar = ({ chat }) => {
+  const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
-  const socket = io('http://localhost:3000');
+//  const socket = io('https://evapp.vercel.app');
+  const socket = io('http://127.0.0.1:3000');
   const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
 
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const message = {
       userId: user?.userId,
       message: {
@@ -24,12 +26,9 @@ const Typebar = ({ setMessages, chat }) => {
     
     socket.emit('conversation', chat.chatId)
     socket.emit('message', message, receiver);
+    await postMessage(chat.chatId, message, token);    
 
     if (text.trim() !== '') {
-      // setMessages((prev) => [
-      //   ...prev,
-      //   { text: text, time: moment().format('HH:mm') },
-      // ]);
       setText('');
     }
     if (textInputRef.current) {

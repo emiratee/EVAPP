@@ -1,28 +1,29 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { useAuth } from '../../utils/auth';
 
 
 
-const ChatMessage = ({ text, time }) => {
+const ChatMessage = ({ message }) => {
+  const { user } = useAuth();
   return (
     <>
-    {/* <View style={[styles.container, {justifyContent: 'flex-start'}]}>
-      <View style={[styles.message, {borderBottomLeftRadius: 0, borderBottomRightRadius: 10, backgroundColor:'#9f81e3'}]}>
-        <Text>{text}</Text>
-        
-        <Text style={[styles.time, {textAlign: 'left', paddingRight: 0, paddingLeft: 10}]}>{time}</Text>
-      </View>
-    </View> */}
-
-    <View style={styles.container}>
-      <View style={styles.message}>
-        <Text>{text}</Text>
-        
-        <Text style={styles.time}>{time}</Text>
-      </View>
-    </View>
-    </>
-  )
+      {user?.userId === message.userId ? (
+        <View style={styles.container}>
+          <View style={styles.message}>
+            <Text>{message.message.content}</Text>
+            <Text style={styles.time}>{message.message.time}</Text>
+          </View>
+        </View>
+      ) : (
+        <View style={[styles.container, { justifyContent: 'flex-start' }]}>
+          <View style={[styles.message, { borderBottomLeftRadius: 0, borderBottomRightRadius: 10, backgroundColor: '#9f81e3' }]}>
+            <Text>{message.message.content}</Text>
+            <Text style={[styles.time, { textAlign: 'left', paddingRight: 0, paddingLeft: 10 }]}>{message.message.time}</Text>
+          </View>
+        </View>
+      )}
+    </>)
 }
 
 export default ChatMessage;
@@ -46,6 +47,6 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   }
 
-  
+
 
 });
