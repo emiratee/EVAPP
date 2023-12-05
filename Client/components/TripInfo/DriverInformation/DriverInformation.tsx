@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import * as icons from '@expo/vector-icons';
+import { postChat } from '../../../utils/apiService';
+import { useAuth } from '../../../utils/auth';
 
 import * as types from '../../../types/types'
 
@@ -85,11 +87,13 @@ const DriverInformation = ({ trip, driver }: Props) => {
                     </View>
                 </View>
             </View>
-            <View style={driver_style.contactContainer}>
-                <TouchableOpacity style={driver_style.contactButton}>
-                    <Text style={driver_style.contactText}>Contact driver</Text>
-                </TouchableOpacity>
-            </View>
+            {user && user.userId !== trip.driverID && (
+                <View style={driver_style.contactContainer}>
+                    <TouchableOpacity style={driver_style.contactButton} onPress={contactDriver}>
+                        <Text style={driver_style.contactText}>Contact driver</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View >
     )
 }
