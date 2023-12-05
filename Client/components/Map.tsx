@@ -13,6 +13,7 @@ type Props = {
 
 const Map = ({ departure, destination }: Props) => {
     if (GOOGLE_MAPS_API_KEY) {}
+    
     type TForMap =
         {
             latitude: number;

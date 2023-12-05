@@ -9,6 +9,8 @@ type Props = {
 
 const LocationSearch = (props: Props) => {
     if (GOOGLE_MAPS_API_KEY) {}
+
+    
     return (
         <GooglePlacesAutocomplete
             styles={{
