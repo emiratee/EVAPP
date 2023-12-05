@@ -10,8 +10,8 @@ const Typebar = ({ chat }) => {
   const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
-//  const socket = io('https://evapp.vercel.app');
-  const socket = io('http://127.0.0.1:3000');
+  const socket = io('https://evapp-production.up.railway.app');
+  // const socket = io('http://127.0.0.1:3000');
   const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
 
 
@@ -23,10 +23,10 @@ const Typebar = ({ chat }) => {
         time: moment().format('HH:mm')
       }
     }
-    
+
     socket.emit('conversation', chat.chatId)
     socket.emit('message', message, receiver);
-    await postMessage(chat.chatId, message, token);    
+    await postMessage(chat.chatId, message, token);
 
     if (text.trim() !== '') {
       setText('');
