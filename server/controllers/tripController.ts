@@ -232,8 +232,8 @@ const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
 
         driver.expoPushToken && sendPushNotification(
             driver.expoPushToken,
-            'New Request to your trip!',
-            'Accept or Reject it!'
+            'Incoming booking request',
+            'Confirm it now!'
         )
 
         const updatedTrip = await Trip.findOne({ _id: tripId })

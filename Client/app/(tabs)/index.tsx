@@ -13,6 +13,7 @@ import * as types from '../../types/types'
 
 const SearchForm = () => {
     if (GOOGLE_MAPS_API_KEY) {}
+    
     const { token } = useAuth();
     const [departure, setDeparture] = useState<types.TDeparture | undefined>(undefined);
     const [destination, setDestination] = useState<types.TDestination | undefined>(undefined);

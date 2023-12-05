@@ -248,7 +248,7 @@ const driver_style = StyleSheet.create({
     },
     contactButton: {
         height: 50,
-        width: '60%',
+        width: '100%',
         backgroundColor: '#000',
         borderRadius: 15,
         alignItems: 'center',
@@ -257,6 +257,6 @@ const driver_style = StyleSheet.create({
     contactText: {
         color: '#fff',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     }
 });
