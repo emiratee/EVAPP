@@ -4,6 +4,7 @@ import { useAuth } from '../../utils/auth';
 import { RadioButton } from 'react-native-paper';
 import { putAvailableCredits } from '../../utils/apiService';
 import * as types from '../../types/types'
+import COLORS from '../../COLORS';
 
 
 const addCredits: React.FC = () => {
@@ -57,7 +58,7 @@ const addCredits: React.FC = () => {
         user && <ScrollView style={styles.container}>
             <View style={styles.creditsBalance}>
                 <Text style={styles.title}>Credit Balance: </Text>
-                <Text style={styles.creditsValue}>{user.credits.available}€</Text>
+                <Text style={styles.creditsValue}>{Number(user.credits.available).toFixed(2)}€</Text>
             </View>
             <Text style={[styles.subtitle, { paddingHorizontal: 15, marginBottom: 10 }]}>Purchase additional credits using the various payment methods shown below.</Text>
 
@@ -71,7 +72,7 @@ const addCredits: React.FC = () => {
                     keyboardType="numeric"
                     value={creditsAmount}
                     onChangeText={(text) => setCreditsAmount(text)}
-                    placeholderTextColor="#838383"
+                    placeholderTextColor={COLORS.textColour}
                 >
                 </TextInput>
                 <View style={[styles.container, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 0, }]}>
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.inputFields,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 1, height: 0 },
@@ -288,10 +289,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         top: 30,
-        backgroundColor: '#000',
+        backgroundColor: COLORS.buttonBackground,
         borderRadius: 50,
         marginBottom: 90,
         height: 60,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        hadowRadius: 2
+
     },
     buttonText: {
         fontSize: 20,
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     radiusButton: {
-        backgroundColor: '#e0e0e0', //  backgroundColor: '#cad7df',
+        backgroundColor: COLORS.boarderBottomColor, 
         height: 35,
         width: 35,
         borderRadius: 50,
@@ -310,19 +316,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 50,
         width: 70,
-        backgroundColor: '#8573c7',
+        backgroundColor: COLORS.iconColor,
 
     },
     creditsButtonText: {
         fontSize: 18,
         fontWeight: '500',
         textAlign: 'center',
-        color: '#fff',
+        color: 'white',
     },
     creditsInput: {
         padding: 10,
         borderRadius: 10,
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.inputFields,
         fontSize: 16,
     },
 })
