@@ -41,6 +41,7 @@ router.post('/user/chats', chatController.postChat)
 router.get('/user/chats', chatController.getAllChats);
 router.get('/user/chats/:chatId', chatController.getChat);
 router.post('/user/chats/:chatId', chatController.postMessage);
+router.put('/user/chats/update/:chatId', chatController.putUpdate);
 
 
 

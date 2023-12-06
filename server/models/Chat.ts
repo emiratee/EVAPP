@@ -33,6 +33,10 @@ const chatSchema = new mongoose.Schema({
         },
         imageUrl: {
             type: String
+        },
+        deletedChat: {
+            type: Boolean,
+            required: true
         }
     },
     passenger: {
@@ -46,6 +50,10 @@ const chatSchema = new mongoose.Schema({
         },
         imageUrl: {
             type: String
+        },
+        deletedChat: {
+            type: Boolean,
+            required: true
         }
     },
     chat: [{
