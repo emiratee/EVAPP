@@ -7,10 +7,8 @@ import { useAuth } from '../../utils/auth'
 import * as icons from '@expo/vector-icons';
 import COLORS from '../../COLORS';
 
-type Props = {}
 
-
-const login= (props: Props) => {
+const login= () => {
 
     const { login, isAuthenticated } = useAuth();
 

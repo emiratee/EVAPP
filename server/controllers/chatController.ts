@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import dotenv from "dotenv";
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { sendPushNotification, validateUser } from '../utils/userUtils';
+import { validateUser } from '../utils/userUtils';
 import Chat from '../models/Chat';
 import User from '../models/User';
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
@@ -22,6 +22,25 @@ const postChat = async (req: Request, res: Response): Promise<Response> => {
         if (!validatedUser || !validatedUser.userId) return res.status(401).json({ error: validatedUser });
 
         const { driverId, passengerId } = req.body;
+
+        const chatExists = await Chat.find({ 
+            $or: [ 
+                { 
+                    $and: [ 
+                        { 'driver.userId': validatedUser.userId }, 
+                        { 'passenger.userId': driverId } 
+                    ] 
+                }, 
+                { 
+                    $and: [ 
+                        { 'driver.userId': driverId }, 
+                        { 'passenger.userId': validatedUser.userId } 
+                    ] 
+                } 
+            ] 
+        });
+
+        if (chatExists && chatExists.length > 0) return res.status(200).send({ chat: chatExists[0] });
 
         const driver = await getUserById(driverId);
         const passenger = await getUserById(passengerId);

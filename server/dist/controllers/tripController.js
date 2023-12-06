@@ -74,7 +74,7 @@ const putApprovePassenger = async (req, res) => {
         await Trip_js_1.default.updateOne({ _id: tripId, "passengerIDs.bookingId": bookingId }, { $set: { "passengerIDs.$.status": "Approved" } }, { new: true });
         const creditsInQuestion = Number(totalCredits);
         const passenger = await User_js_1.default.findOne({ userId: passengerId });
-        passenger.expoPushToken && (0, userUtils_js_1.sendPushNotification)(passenger.expoPushToken, 'The trip you booked has been accepted!', 'Be prepared!');
+        passenger.expoPushToken && (0, userUtils_js_1.sendPushNotification)(passenger.expoPushToken, 'Booking request accepted', 'Have a safe journey! 🚙');
         const currentPassengerOnHold = Number(passenger.credits.onHold);
         await User_js_1.default.updateOne({ userId: passenger.userId }, { $set: { 'credits.onHold': currentPassengerOnHold - creditsInQuestion } });
         const currentDriverEarningOnHold = Number(validatedUser.user.credits.earningsOnHold);
@@ -108,7 +108,7 @@ const putRejectPassenger = async (req, res) => {
         const creditsInQuestion = Number(totalCredits);
         //find passenger by id
         const user = await User_js_1.default.findOne({ userId: passengerId });
-        user.expoPushToken && (0, userUtils_js_1.sendPushNotification)(user.expoPushToken, 'The trip you booked has been rejected!', 'Good luck next time!');
+        user.expoPushToken && (0, userUtils_js_1.sendPushNotification)(user.expoPushToken, 'Booking request rejected', 'Better luck next time! 🍀');
         const currentPassengerOnHold = Number(user.credits.onHold);
         const currentPassengerAvailable = Number(user.credits.available);
         await User_js_1.default.updateOne({ userId: user.userId }, {
