@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import * as types from '../types/types'
-const BASE_URL = 'https://evapp-production.up.railway.app';
-// const BASE_URL = 'http://127.0.0.1:3000'; 
+// const BASE_URL = 'https://evapp-production.up.railway.app';
+const BASE_URL = 'http://127.0.0.1:3000'; 
 const checkResponse = (response: Response): void => {
     if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
 };
@@ -346,7 +346,7 @@ const postMessage = async (chatId: string, message: any, token: string) => {
                 'Content-Type': 'application/json',
                 'Authorization': `${token}`
             },
-            body: JSON.stringify({ content: message.message.content, time: message.message.time })
+            body: JSON.stringify({ message })
         });        
         return await response.json();
     } catch (error) {
@@ -354,6 +354,30 @@ const postMessage = async (chatId: string, message: any, token: string) => {
         throw error;
     }
 }
+
+// This update method is currently limited to (only) updating chat deletion
+const putUpdate = async (chatId: string, userId: string, token: string) => {
+    try { 
+        const response = await fetch(`${BASE_URL}/user/chats/update/${chatId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+
 const putMarkTripSuccessful = async (data, token: string) => {
     try {
         const response = await fetch(`${BASE_URL}/trips/success`, {
@@ -431,5 +455,6 @@ export {
     cloudinaryUpload,
     putMarkTripSuccessful,
     putEarningsToAvailable,
-    putAddReview
+    putAddReview,
+    putUpdate
 }

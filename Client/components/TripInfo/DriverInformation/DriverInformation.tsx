@@ -6,6 +6,7 @@ import * as types from '../../../types/types'
 import { postChat } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import { useNavigation } from 'expo-router';
+import { useChat } from '../../../utils/chat';
 
 type Props = {
     trip: types.TTrip,
@@ -18,7 +19,7 @@ const DriverInformation = ({ trip, driver }: Props) => {
     
     const createConversation = async () => {
         await postChat(trip.driverID, user.userId, token);
-        navigate('messages')
+        navigate('messages');
     }
 
 
@@ -98,7 +99,7 @@ const DriverInformation = ({ trip, driver }: Props) => {
                 </View>
             </View>
             <View style={driver_style.contactContainer}>
-                <TouchableOpacity style={driver_style.contactButton} onPress={()=>createConversation}>
+                <TouchableOpacity style={driver_style.contactButton} onPress={createConversation}>
                     <Text style={driver_style.contactText}>Contact driver</Text>
                 </TouchableOpacity>
             </View>
