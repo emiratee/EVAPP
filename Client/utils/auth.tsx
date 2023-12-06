@@ -34,11 +34,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<types.TUser | null>(null);
 
     useEffect(() => {
-        if (token) {
-            getUser(token).then((data) => {
-                setUser(data)
-            })
-        }
+        (async () => {
+            if (token) {
+                const user = await getUser(token);
+                setUser(user);
+            }
+        })();
     }, [token])
 
     const login = async (token: string): Promise<void> => {
@@ -47,7 +48,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(token);
         } catch (error) {
             console.error('Error storing token:', error);
-
         }
     };
 
@@ -63,10 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const getData = async (): Promise<void> => {
         try {
             const value = await AsyncStorage.getItem('token');
-            if (value !== null) {
-                // value previously stored
-                setToken(value);
-            }
+            if (value !== null) setToken(value);
         } catch (error) {
             console.log(error)
         }

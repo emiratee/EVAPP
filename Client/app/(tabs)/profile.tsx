@@ -58,7 +58,6 @@ const profile = () => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Travel Experience</Text>
                     <View style={styles.sectionInfo}>
-
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Driver</Text>
                             <Text style={styles.sectionInfoText}>{user.driverRating.totalReviews} Reviews</Text>
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     },
     sectionInfo: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 5,
     },

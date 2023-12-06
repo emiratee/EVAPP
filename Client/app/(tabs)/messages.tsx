@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigation } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import { getAllChats } from '../../utils/apiService';
+import { getAllChats, putUpdate } from '../../utils/apiService';
 import { FlatList } from 'react-native-gesture-handler';
 import { Swipeable } from 'react-native-gesture-handler';
 import Message from '../../components/Message';
 
 export default function Messages() {
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, user } = useAuth();
   const [chats, setChats] = useState([]);
   const { navigate } = useNavigation();
-  const [swipedMessageId, setSwipedMessageId] = useState(null);
+  const [swipedChatId, setSwipedChatId] = useState(null);
   const swipeableRef = useRef(null);
 
   useEffect(() => {
@@ -22,10 +22,18 @@ export default function Messages() {
     })();
   }, [isAuthenticated, token, chats]);
 
-  const handleDelete = (messageId) => {
-    setChats((prevChats) => prevChats.filter((chat) => chat._id !== messageId));
-    setSwipedMessageId(null);
+  const handleDelete = async (chatId) => {
+    try {
+  
+      const response = await putUpdate(chatId, user.userId, token);
+      setChats((prevChats) => prevChats.filter((chat) => chat.chatId !== chatId));
+      setSwipedChatId(null);
+  
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+    }
   };
+  
 
   const renderSwipeDelete = (onPress) => (
     <View style={{ width: 70, justifyContent: 'center', alignItems: 'center', backgroundColor: '#b0221d', borderRadius: 5, height: 60, marginTop: 15, marginRight: 10, }}>
@@ -37,9 +45,9 @@ export default function Messages() {
 
   const renderItem = ({ item }) => (
     <Swipeable
-      renderRightActions={() => renderSwipeDelete(() => handleDelete(item._id))}
-      onSwipeableOpen={() => setSwipedMessageId(item._id)}
-      onSwipeableClose={() => setSwipedMessageId(null)}
+      renderRightActions={() => renderSwipeDelete(() => handleDelete(item.chatId))}
+      onSwipeableOpen={() => setSwipedChatId(item._id)}
+      onSwipeableClose={() => setSwipedChatId(null)}
       ref={swipeableRef}
     >
       <TouchableOpacity

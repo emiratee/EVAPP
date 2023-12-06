@@ -38,4 +38,5 @@ router.post('/user/chats', chatController_js_1.default.postChat);
 router.get('/user/chats', chatController_js_1.default.getAllChats);
 router.get('/user/chats/:chatId', chatController_js_1.default.getChat);
 router.post('/user/chats/:chatId', chatController_js_1.default.postMessage);
+router.put('/user/chats/update/:chatId', chatController_js_1.default.putUpdate);
 exports.default = router;
