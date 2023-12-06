@@ -89,14 +89,9 @@ const putApprovePassenger = async (req, res) => {
 };
 const putRejectPassenger = async (req, res) => {
     try {
-        //what we need? 
-        //trip id, passengerid, driverid 
         const validatedUser = await (0, userUtils_1.validateUser)(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user)
             return res.status(401).json({ error: validatedUser });
-        //change trip passengersid status to Approved  WORKS
-        //onhold credits from passenger deduct  WORKS
-        //passengers credits goes to driver creits(onhold) WORKS
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
         const trip = await Trip_1.default.findOne({ _id: tripId });
         const passenger = await Trip_1.default.findOne({ _id: tripId, "passengerIDs.bookingId": bookingId }, { "passengerIDs.$": 1 });
@@ -106,7 +101,6 @@ const putRejectPassenger = async (req, res) => {
             $inc: { 'seats.available': seats }
         });
         const creditsInQuestion = Number(totalCredits);
-        //find passenger by id
         const user = await User_1.default.findOne({ userId: passengerId });
         user.expoPushToken && (0, userUtils_1.sendPushNotification)(user.expoPushToken, 'Booking request rejected', 'Better luck next time! 🍀');
         const currentPassengerOnHold = Number(user.credits.onHold);
@@ -125,16 +119,11 @@ const putRejectPassenger = async (req, res) => {
         return res.status(500).json({ error: "Internal server error in putRejectPassenger" });
     }
 };
-//on reject update seats available of trip
 const putMakeRequest = async (req, res) => {
     try {
         const validatedUser = await (0, userUtils_1.validateUser)(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user)
             return res.status(401).json({ error: validatedUser });
-        // add validateduser to trips passengers list
-        // add trip to users array trips as passanger
-        //
-        //make - seats
         const { tripId, seats } = req.body.data;
         await Trip_1.default.updateOne({ _id: tripId }, {
             $push: {

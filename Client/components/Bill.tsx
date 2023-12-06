@@ -14,7 +14,7 @@ type Props = {
     hasEnoughCredits: boolean
 }
 const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Props) => {
-    const { user } = useAuth();
+    const { user,token } = useAuth();
     const navigate = useNavigation();
 
     const handleButtonPress = () => {
@@ -28,7 +28,7 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
       }
 
     return (
-        user && <View style={styles.container}>
+        user && token &&<View style={styles.container}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderColor: '#000'}}>
                 <View style={styles.creditsContainer}>
                     <Text style={styles.title}>Credits:</Text>

@@ -73,8 +73,6 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<Respons
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
 
-
-
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.bookingId": bookingId },
             { $set: { "passengerIDs.$.status": "Approved" } },
@@ -118,14 +116,8 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<Respons
 const putRejectPassenger = async (req: Request, res: Response): Promise<Response> => {
     try {
 
-        //what we need? 
-
-        //trip id, passengerid, driverid 
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-        //change trip passengersid status to Approved  WORKS
-        //onhold credits from passenger deduct  WORKS
-        //passengers credits goes to driver creits(onhold) WORKS
 
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
         const trip = await Trip.findOne({ _id: tripId });
@@ -149,8 +141,6 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<Response
 
         const creditsInQuestion = Number(totalCredits)
 
-
-        //find passenger by id
         const user = await User.findOne({ userId: passengerId });
 
         user.expoPushToken && sendPushNotification(
@@ -181,18 +171,11 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<Response
         return res.status(500).json({ error: "Internal server error in putRejectPassenger" });
     }
 };
-//on reject update seats available of trip
 
 const putMakeRequest = async (req: Request, res: Response): Promise<Response> => {
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-
-        // add validateduser to trips passengers list
-        // add trip to users array trips as passanger
-        //
-        //make - seats
-
 
         const { tripId, seats } = req.body.data
 

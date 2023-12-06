@@ -51,12 +51,11 @@ const postRegister = async (req, res) => {
             }
         });
         const token = jsonwebtoken_1.default.sign({ userId }, SECRET_KEY);
-        res.status(201).json({ token });
-        return;
+        return res.status(201).json({ token });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 };
 const getDriver = async (driverId) => {
@@ -79,11 +78,11 @@ const getUser = async (req, res) => {
             return res.status(401).json({ error: validatedUser });
         const { user } = validatedUser;
         const { _id, password, __v, ...filteredUser } = user.toObject(); // Filter out unnecessary properties
-        res.status(200).json(filteredUser); // Return the filtered user
+        return res.status(200).json(filteredUser); // Return the filtered user
     }
     catch (error) {
         console.error("Error in getUser:", error);
-        res.status(500).json({ error: "Internal server error in getUser" });
+        return res.status(500).json({ error: "Internal server error in getUser" });
     }
 };
 const putCar = async (req, res) => {
@@ -97,11 +96,11 @@ const putCar = async (req, res) => {
             },
         });
         const updatedUser = await User_1.default.findOne({ userId: validatedUser.userId });
-        res.status(200).json({ message: 'Car added successfully', car: updatedUser.cars[updatedUser.cars.length - 1] });
+        return res.status(200).json({ message: 'Car added successfully', car: updatedUser.cars[updatedUser.cars.length - 1] });
     }
     catch (error) {
         console.error("Error in putCar:", error);
-        res.status(500).json({ error: "Internal server error in putCar" });
+        return res.status(500).json({ error: "Internal server error in putCar" });
     }
 };
 const putTripsAsDriver = async (req, res) => {
@@ -114,12 +113,11 @@ const putTripsAsDriver = async (req, res) => {
                 tripsAsDriverIDs: req.body._id,
             },
         });
-        // const updatedUser = await User.findOne({ userId: validatedUser.userId })
-        res.status(200).json({ message: 'Trip as Driver added successfully' });
+        return res.status(200).json({ message: 'Trip as Driver added successfully' });
     }
     catch (error) {
         console.error("Error in putCar:", error);
-        res.status(500).json({ error: "Internal server error in putCar" });
+        return res.status(500).json({ error: "Internal server error in putCar" });
     }
 };
 const postLogin = async (req, res) => {
@@ -134,12 +132,11 @@ const postLogin = async (req, res) => {
         if (!validPassword)
             return res.status(401).json({ error: "Incorrect password" });
         const token = jsonwebtoken_1.default.sign({ userId: user.userId }, SECRET_KEY); //Create a JWT from the user_id and secret key
-        res.status(200).json({ token });
-        return;
+        return res.status(200).json({ token });
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 };
 const putAvailableCredits = async (req, res) => {
@@ -155,11 +152,11 @@ const putAvailableCredits = async (req, res) => {
             },
         });
         const updatedUser = await User_1.default.findOne({ userId: validatedUser.userId });
-        res.status(200).json({ message: 'Available Credits Changed', credits: updatedUser.credits });
+        return res.status(200).json({ message: 'Available Credits Changed', credits: updatedUser.credits });
     }
     catch (error) {
         console.error("Error in putAvailableCredits:", error);
-        res.status(500).json({ error: "Internal server error in putAvailableCredits" });
+        return res.status(500).json({ error: "Internal server error in putAvailableCredits" });
     }
 };
 const putOnHoldCredits = async (req, res) => {
@@ -175,11 +172,11 @@ const putOnHoldCredits = async (req, res) => {
             },
         });
         const updatedUser = await User_1.default.findOne({ userId: validatedUser.userId });
-        res.status(200).json({ message: 'OnHold Credits Changed ', credits: updatedUser.credits });
+        return res.status(200).json({ message: 'OnHold Credits Changed ', credits: updatedUser.credits });
     }
     catch (error) {
         console.error("Error in putOnHoldCredits:", error);
-        res.status(500).json({ error: "Internal server error in putOnHoldCredits" });
+        return res.status(500).json({ error: "Internal server error in putOnHoldCredits" });
     }
 };
 const putEarningsCredits = async (req, res) => {
@@ -195,11 +192,11 @@ const putEarningsCredits = async (req, res) => {
             },
         });
         const updatedUser = await User_1.default.findOne({ userId: validatedUser.userId });
-        res.status(200).json({ message: 'earningsOnHold Credits Changed ', credits: updatedUser.credits });
+        return res.status(200).json({ message: 'earningsOnHold Credits Changed ', credits: updatedUser.credits });
     }
     catch (error) {
         console.error("Error in putearningsOnHoldCredits:", error);
-        res.status(500).json({ error: "Internal server error in putearningsOnHoldCredits" });
+        return res.status(500).json({ error: "Internal server error in putearningsOnHoldCredits" });
     }
 };
 const getHistory = async (req, res) => {
@@ -215,11 +212,11 @@ const getHistory = async (req, res) => {
             const driver = await getDriver(trip.driverID);
             return { trip, driver };
         }));
-        res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
+        return res.status(200).json({ data: tripsWithDrivers }); // Return the filtered user
     }
     catch (error) {
         console.error("Error in getHistory:", error);
-        res.status(500).json({ error: "Internal server error in getHistory" });
+        return res.status(500).json({ error: "Internal server error in getHistory" });
     }
 };
 async function putUpdateAccount(req, res) {
@@ -247,11 +244,11 @@ async function putUpdateAccount(req, res) {
         // hash and update the new password
         const hashedPassword = await bcrypt_1.default.hash(newPassword, 10);
         await User_1.default.updateOne({ userId: user.userId }, { $set: { password: hashedPassword } });
-        res.status(200).json({ message: 'Password changed successfully' });
+        return res.status(200).json({ message: 'Password changed successfully' });
     }
     catch (error) {
         console.error("Error in updateAccount:", error);
-        res.status(500).json({ error: "Internal server error in updateAccount" });
+        return res.status(500).json({ error: "Internal server error in updateAccount" });
     }
 }
 const putEarningsToAvailable = async (req, res) => {
@@ -271,11 +268,11 @@ const putEarningsToAvailable = async (req, res) => {
             },
         });
         const updatedUser = await User_1.default.findOne({ userId: validatedUser.userId });
-        res.status(200).json({ message: 'putEarningsToAvailable Credits Changed ', credits: updatedUser.credits });
+        return res.status(200).json({ message: 'putEarningsToAvailable Credits Changed ', credits: updatedUser.credits });
     }
     catch (error) {
         console.error("Error in putEarningsToAvailable:", error);
-        res.status(500).json({ error: "Internal server error in putEarningsToAvailable" });
+        return res.status(500).json({ error: "Internal server error in putEarningsToAvailable" });
     }
 };
 const putAddReview = async (req, res) => {
@@ -286,11 +283,7 @@ const putAddReview = async (req, res) => {
             return res.status(401).json({ error: validatedUser });
         //driver ID
         const { tripId, driverId, rating } = req.body.data;
-        console.log(tripId);
-        console.log(driverId);
-        console.log(rating);
         const driver = await User_1.default.findOne({ userId: driverId });
-        console.log('here: ', driver);
         const currentTotalReviews = Number(driver.driverRating.totalReviews);
         const currentTotalRating = Number(driver.driverRating.totalRating);
         //add reviews to driver
@@ -304,11 +297,11 @@ const putAddReview = async (req, res) => {
         await Trip_1.default.updateOne({ _id: tripId, "passengerIDs.userId": validatedUser.userId }, {
             $set: { "passengerIDs.$.reviewed": true },
         });
-        res.status(200).json({ message: 'putAddReview Changed ' });
+        return res.status(200).json({ message: 'putAddReview Changed ' });
     }
     catch (error) {
         console.error("Error in putAddReview:", error);
-        res.status(500).json({ error: "Internal server error in putAddReview" });
+        return res.status(500).json({ error: "Internal server error in putAddReview" });
     }
 };
 exports.default = {
