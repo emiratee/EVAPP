@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CarPreview component renders correctly with selected car 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "borderColor": "#e30000",
+      "borderRadius": 10,
+      "borderWidth": 1,
+      "height": 100,
+      "justifyContent": "space-between",
+      "marginRight": 10,
+      "opacity": 1,
+      "padding": 10,
+      "width": 100,
+    }
+  }
+  testID="car-preview-wrapper"
+>
+  <Text
+    style={
+      {
+        "fontWeight": "bold",
+      }
+    }
+  >
+    Toyota Camry
+  </Text>
+  <Text>
+    Silver
+  </Text>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text>
+      5
+    </Text>
+    <Text
+      allowFontScaling={false}
+      selectable={false}
+      style={
+        [
+          {
+            "color": undefined,
+            "fontSize": 18,
+          },
+          undefined,
+          {
+            "fontFamily": "material-community",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+    >
+      󱉉
+    </Text>
+  </View>
+  <Text>
+    ABC-123
+  </Text>
+</View>
+`;
+
+exports[`CarPreview component renders correctly with unselected car 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "borderColor": "#a8a8a8",
+      "borderRadius": 10,
+      "borderWidth": 1,
+      "height": 100,
+      "justifyContent": "space-between",
+      "marginRight": 10,
+      "opacity": 1,
+      "padding": 10,
+      "width": 100,
+    }
+  }
+  testID="car-preview-wrapper"
+>
+  <Text
+    style={
+      {
+        "fontWeight": "bold",
+      }
+    }
+  >
+    Toyota Camry
+  </Text>
+  <Text>
+    Silver
+  </Text>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Text>
+      5
+    </Text>
+    <Text />
+  </View>
+  <Text>
+    ABC-123
+  </Text>
+</View>
+`;

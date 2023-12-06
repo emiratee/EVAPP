@@ -21,7 +21,9 @@ const TripCard = ({ response }: Props) => {
             <FlatList
                 data={response.trips}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.cardButton} onPress={() => {
+                    <TouchableOpacity 
+                    testID='trip-card-item'
+                    style={styles.cardButton} onPress={() => {
                         navigate('TripInfo', { trip: item.trip, driver: item.driver })
                     }} >
                         <TripCardItem trip={item.trip} driver={item.driver} />

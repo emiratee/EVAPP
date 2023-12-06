@@ -2,7 +2,7 @@ import React from 'react'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, } from 'expo-router';
 import { useEffect } from 'react';
 import { AuthProvider } from '../utils/auth' 
 export {
@@ -20,6 +20,7 @@ import { ChatProvider } from '../utils/chat';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
     const [loaded, error] = useFonts({

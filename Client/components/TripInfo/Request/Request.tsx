@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from 'react-native-wheel-pick';
 import Bill from '../../Bill';
-import { putRequestTrip, putAvailableCredits  } from '../../../utils/apiService';
+import { putRequestTrip, putAvailableCredits } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import * as types from '../../../types/types';
 import { router } from 'expo-router';
@@ -57,25 +57,27 @@ const Request = ({ trip }: Props) => {
             try {
                 // Deduct credits only once
                 if (!deductedCredits && user) {
-                    const newCredits = parseFloat(user.credits.available) - (parseFloat(trip.price) * seats);
+                    const newCredits = (parseFloat(user.credits.available) - (parseFloat(trip.price) * seats)).toFixed(2);
+
                     setUser((prevUser) => ({
                         ...prevUser!,
-                        'credits.available': newCredits.toFixed(2),
+                        credits: {
+                            available: newCredits
+                        }
                     }));
-                    await putAvailableCredits(newCredits.toFixed(2), token);
                     setDeductedCredits(true);
+                    //we dont have to call this function here, it is only for adding balance. putrequest trips covers all the logic of tranferring funds from available to onhold
+                    // await putAvailableCredits(newCredits.toFixed(2), token);
                 }
-
-                // Make the API call to request the trip
-                token && (await putRequestTrip(formData, token));
-
                 // Navigate to the history screen
                 router.push('(tabs)/history');
-
+                // Make the API call to request the trip
+                token && (await putRequestTrip(formData, token));
                 Alert.alert(
                     'Yuuuhu!',
                     'The trip has been successfully booked!  ',
                 );
+                
             } catch (error) {
                 console.error('Error booking trip:', error);
                 // Handle error appropriately

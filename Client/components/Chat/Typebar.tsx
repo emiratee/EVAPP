@@ -37,7 +37,9 @@ const Typebar = ({ chat }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View 
+
+    style={styles.container}>
       <View
         style={{
           width: 300,

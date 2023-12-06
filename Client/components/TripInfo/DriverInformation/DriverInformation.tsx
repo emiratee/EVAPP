@@ -15,11 +15,13 @@ type Props = {
 const DriverInformation = ({ trip, driver }: Props) => {
     const { user, token } = useAuth();
     const { navigate } = useNavigation();
-
+    
     const createConversation = async () => {
         await postChat(trip.driverID, user.userId, token);
         navigate('messages')
     }
+
+
     return (
         <View style={driver_style.container}>
             <View style={driver_style.header}>
@@ -96,7 +98,7 @@ const DriverInformation = ({ trip, driver }: Props) => {
                 </View>
             </View>
             <View style={driver_style.contactContainer}>
-                <TouchableOpacity style={driver_style.contactButton} onPress={createConversation}>
+                <TouchableOpacity style={driver_style.contactButton} onPress={()=>createConversation}>
                     <Text style={driver_style.contactText}>Contact driver</Text>
                 </TouchableOpacity>
             </View>

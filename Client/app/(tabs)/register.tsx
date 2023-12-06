@@ -1,7 +1,8 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator, Text, View, Platform, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import * as icons from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler'
+// import { TextInput } from 'react-native'
 import { Link } from 'expo-router';
 import { useAuth } from '../../utils/auth';
 import * as ImagePicker from 'expo-image-picker';
@@ -133,7 +134,7 @@ const register = (props: Props) => {
             postRegister(data).then(data => {
                 login(data.token)
             }).catch(error => {
-                alert(error)
+                Alert.alert(error)
             })
         }
     }
@@ -145,7 +146,10 @@ const register = (props: Props) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
             <View style={styles.container}>
-                <TouchableOpacity style={styles.picture} onPress={pickImage} >
+                <TouchableOpacity 
+                style={styles.picture} 
+                onPress={pickImage}
+                >
                     <View style={styles.picture}>
                         {
                             isLoading ? <ActivityIndicator size={'large'} /> :
@@ -321,12 +325,12 @@ async function registerForPushNotificationsAsync() {
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
+            Alert.alert('Failed to get push token for push notification!');
             return;
         }
         token = (await Notifications.getExpoPushTokenAsync({ projectId: 'e742dc1b-029a-4980-8364-e2d0e7b1f40e' })).data;
     } else {
-        alert('Must use physical device for Push Notifications');
+        Alert.alert('Must use physical device for Push Notifications');
     }
 
     return token;

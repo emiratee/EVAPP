@@ -22,6 +22,7 @@ const CarPreview = (props: Props) => {
         <TouchableOpacity
             style={[styles.wrapper, isSelected && styles.selected]}
             onPress={props.onPress}
+            testID='car-preview-wrapper'
         >
             <Text style={{ fontWeight: "bold" }}>{props.item.model}</Text>
 
