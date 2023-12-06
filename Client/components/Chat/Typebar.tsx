@@ -10,7 +10,7 @@ const Typebar = ({ chat }) => {
   const { user, token } = useAuth();
   const textInputRef = useRef(null);
   const [text, setText] = useState('');
-  const socket = io('https://resilient-cast-production.up.railway.app');
+  const socket = io('https://evapp-production.up.railway.app');
   // const socket = io('http://127.0.0.1:3000');
   const receiver = chat.driver.userId === user.userId ? chat.passenger.userId : chat.driver.userId;
 
