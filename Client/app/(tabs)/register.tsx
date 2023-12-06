@@ -12,6 +12,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import * as types from '../../types/types'
+import COLORS from '../../COLORS';
 type Props = {}
 
 const register = (props: Props) => {
@@ -154,7 +155,7 @@ const register = (props: Props) => {
                         {
                             isLoading ? <ActivityIndicator size={'large'} /> :
                                 image ? <Image source={{ uri: image }} style={styles.picture} /> :
-                                    <icons.AntDesign name="user" size={50} color="black" style={{ alignSelf: 'center' }} />
+                                    <icons.AntDesign name="user" size={50} color={COLORS.iconColor} style={{ alignSelf: 'center' }} />
 
                         }
                     </View>
@@ -209,7 +210,7 @@ const register = (props: Props) => {
 
                     />
                     <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color={COLORS.iconColor} style={{ padding: 10 }} />
                     </TouchableOpacity>
                 </View>
 
@@ -227,7 +228,7 @@ const register = (props: Props) => {
 
                     />
                     <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                        <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                        <icons.MaterialCommunityIcons name={showConfirmPassword ? 'eye' : 'eye-off'} size={20} color={COLORS.iconColor} style={{ padding: 10 }} />
                     </TouchableOpacity>
                 </View>
                 {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
@@ -236,7 +237,7 @@ const register = (props: Props) => {
                     onPress={handleSubmit}
                     disabled={isLoading}
                 >
-                    <Text style={{ color: '#fff' }} >Register</Text>
+                    <Text style={{ color: '#fff', fontSize: 18 }} >Register</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.inputFields,
         fontSize: 16,
         marginBottom: 15,
         zIndex: 1,
@@ -269,11 +270,15 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.buttonBackground,
         borderRadius: 25,
         padding: 15,
         alignItems: 'center',
         marginTop: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
     },
     errorInput: {
         borderColor: 'red',
@@ -286,7 +291,8 @@ const styles = StyleSheet.create({
         height: 120,
         width: 120,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: COLORS.iconColor,
+        backgroundColor: COLORS.inputFields,
         borderRadius: 80,
         marginVertical: 10,
         alignSelf: 'center',
@@ -298,7 +304,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 50,
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.inputFields,
         borderRadius: 10,
         marginBottom: 15,
     },
