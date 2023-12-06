@@ -5,6 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { addCar } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 import * as types from '../types/types'
+import COLORS from '../COLORS';
 type Props = {
     setAddNewCar: any,
     setAddCarSnackBar: any
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
         width: windowWidth * 0.8
     },
     btn: {
-        backgroundColor: 'red',
+        backgroundColor: COLORS.textColour,
         alignItems: 'center',
         padding: 20,
         borderRadius: 10
