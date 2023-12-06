@@ -57,10 +57,10 @@ const profile = () => {
                 {/* TRAVEL EXPERIENCE */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Travel Experience</Text>
-                    <View style={styles.sectionInfo}>
+                    <View style={[styles.sectionInfo, {justifyContent: 'center'}]}>
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Driver</Text>
-                            <Text style={styles.sectionInfoText}>{user.driverRating.totalReviews} Reviews</Text>
+                            <Text style={styles.sectionInfoText}>{`${user.driverRating.totalReviews} Reviews • ${Number(user.driverRating.totalReviews) === 0 ? "0" : Number(user.driverRating.totalRating/user.driverRating.totalReviews).toFixed(1)}`}</Text>
                             <RatingStars rating={Number(user.driverRating.totalReviews) === 0 ? 0 : Number(user.driverRating.totalRating/user.driverRating.totalReviews)} />
                         </View>
                     </View>
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     },
     sectionInfo: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 5,
     },
