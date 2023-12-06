@@ -87,8 +87,8 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
 
         passenger.expoPushToken && sendPushNotification(
             passenger.expoPushToken,
-            'The trip you booked has been accepted!',
-            'Be prepared!'
+            'Booking request accepted',
+            'Have a safe journey! 🚙'
         )
 
         const currentPassengerOnHold = Number(passenger.credits.onHold);
@@ -155,8 +155,8 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
         user.expoPushToken && sendPushNotification(
             user.expoPushToken,
-            'The trip you booked has been rejected!',
-            'Good luck next time!'
+            'Booking request rejected',
+            'Better luck next time! 🍀'
         )
 
         const currentPassengerOnHold = Number(user.credits.onHold);
