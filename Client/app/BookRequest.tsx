@@ -47,7 +47,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
     }, [status]);
 
     const createConversation = async () => {
-        const { chat } = await postChat(trip.driverID, user.userId, token);        
+        const { chat } = await postChat(user.userId, trip.driverID, token);        
         navigate('chatView', { chat });
         setName(chat.driver.name);
         setImageUrl(chat.driver.imageUrl);
