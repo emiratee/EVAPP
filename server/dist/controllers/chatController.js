@@ -27,6 +27,24 @@ const postChat = async (req, res) => {
         if (!validatedUser || !validatedUser.userId)
             return res.status(401).json({ error: validatedUser });
         const { driverId, passengerId } = req.body;
+        const chatExists = await Chat_1.default.find({
+            $or: [
+                {
+                    $and: [
+                        { 'driver.userId': validatedUser.userId },
+                        { 'passenger.userId': driverId }
+                    ]
+                },
+                {
+                    $and: [
+                        { 'driver.userId': driverId },
+                        { 'passenger.userId': validatedUser.userId }
+                    ]
+                }
+            ]
+        });
+        if (chatExists && chatExists.length > 0)
+            return res.status(200).send({ chat: chatExists[0] });
         const driver = await (0, exports.getUserById)(driverId);
         const passenger = await (0, exports.getUserById)(passengerId);
         const chat = await Chat_1.default.insertMany({
