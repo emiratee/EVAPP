@@ -42,7 +42,7 @@ const profile = () => {
 
                 {/* CREDITS INFO */}
                 <View style={styles.section}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: '##ededed' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: COLORS.boarderBottomColor }}>
                         <Text style={styles.sectionTitle}>Current Credit Balance: </Text>
                         <Text style={[styles.sectionTitle, { paddingRight: 50, fontWeight: '400' }]}>{parseFloat(user.credits.available).toFixed(2)}€</Text>
                     </View>
@@ -58,16 +58,11 @@ const profile = () => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Travel Experience</Text>
                     <View style={styles.sectionInfo}>
-                        {/* <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
-                            <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Passenger</Text>
-                            <Text style={styles.sectionInfoText}>{user.passengerRating.totalReviews} Reviews</Text>
-                            <RatingStars rating={user.passengerRating.averageRating} />
-                        </View> */}
 
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Driver</Text>
                             <Text style={styles.sectionInfoText}>{user.driverRating.totalReviews} Reviews</Text>
-                            <RatingStars rating={user.driverRating.totalRating/user.driverRating.totalReviews} />
+                            <RatingStars rating={Number(user.driverRating.totalReviews) === 0 ? 0 : Number(user.driverRating.totalRating/user.driverRating.totalReviews)} />
                         </View>
                     </View>
                 </View>

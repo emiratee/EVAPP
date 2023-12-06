@@ -74,7 +74,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                         <Text style={styles.name}>{driver.name}</Text>
                         <View style={styles.ratingContainer}>
                             <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
-                            <Text style={styles.rating}>{driver.driverRating.averageRating}</Text>
+                            <Text style={styles.rating}>{Number(driver.driverRating.totalReviews) === 0 ? 0 : Number(driver.driverRating.totalRating/driver.driverRating.totalReviews).toFixed(1)}</Text>
                         </View>
                     </View>
                     {driver.imageUrl ?

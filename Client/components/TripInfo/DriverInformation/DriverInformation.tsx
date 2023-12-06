@@ -32,7 +32,8 @@ const DriverInformation = ({ trip, driver }: Props) => {
                     </View>
                     <View style={driver_style.profileInformation}>
                         <View style={driver_style.rating}>
-                            <Text style={driver_style.ratingText}>{`${driver.driverRating.totalReviews} reviews • ${driver.driverRating.averageRating}`}</Text>
+                            <Text style={driver_style.ratingText}>
+                                {`${driver.driverRating.totalReviews} reviews • ${Number(driver.driverRating.totalReviews) === 0 ? "0" : Number(driver.driverRating.totalRating/driver.driverRating.totalReviews).toFixed(1)}`}</Text>
                             <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
                         </View>
                         <TouchableOpacity>

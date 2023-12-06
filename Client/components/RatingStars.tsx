@@ -25,7 +25,7 @@ const RatingStars = ({ rating }: Props) => {
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {renderStars(rating)}
-            <Text style={{ marginLeft: 5 }}>{Math.floor(rating)}/5</Text>
+            {/* <Text style={{ marginLeft: 5 }}>{(rating).toFixed(1)}/5</Text> */}
         </View>
     );
 };
