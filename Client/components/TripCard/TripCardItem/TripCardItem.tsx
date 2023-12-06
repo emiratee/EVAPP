@@ -40,9 +40,8 @@ const TripCardItem = ({ trip, driver }: Props) => {
         <Animated.View style={styles.cardContainer}>
             <View style={styles.locationContainer}>
                 <View style={styles.dotContainer}>
-                    <View style={styles.dot}>
-                        <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
-                    </View>
+                    <View style={styles.dot}></View>
+                    <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
                     <View style={styles.dot}></View>
                 </View>
                 <View style={styles.addressContainer}>
@@ -74,7 +73,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                         <Text style={styles.name}>{driver.name}</Text>
                         <View style={styles.ratingContainer}>
                             <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
-                            <Text style={styles.rating}>{Number(driver.driverRating.totalReviews) === 0 ? 0 : Number(driver.driverRating.totalRating/driver.driverRating.totalReviews).toFixed(1)}</Text>
+                            <Text style={styles.rating}>{Number(driver.driverRating.totalReviews) === 0 ? 0 : Number(driver.driverRating.totalRating / driver.driverRating.totalReviews).toFixed(1)}</Text>
                         </View>
                     </View>
                     {driver.imageUrl ?
@@ -146,16 +145,17 @@ const styles = StyleSheet.create({
         width: 12,
         height: 12,
         borderRadius: 50,
+        zIndex: 999
     },
     line: {
         position: 'absolute',
         backgroundColor: COLORS.iconColor,
         width: 6,
         height: 120,
-        top: 10,
+        top: 15,
         bottom: 0,
         left: 3,
-        zIndex: 999
+        marginLeft: 15
     },
     cardContainer: {
         flex: 1,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2
-        
+
     },
     city: {
         fontSize: 18,
