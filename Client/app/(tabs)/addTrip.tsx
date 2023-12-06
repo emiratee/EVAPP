@@ -7,17 +7,14 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { Snackbar } from 'react-native-paper';
 import moment from 'moment';
-
-
 import * as types from '../../types/types'
-
-
 import CarPreview from '../../components/CarPreview';
 import AddNewCar from '../../components/AddNewCar';
 import LocationSearch from '../../components/LocationSearch';
 import { useAuth } from '../../utils/auth';
 import { addNewTrip, putTripsAsDriver } from '../../utils/apiService';
 import { GOOGLE_MAPS_API_KEY } from '@env';
+import COLORS from '../../COLORS';
 
 const addTrip = () => {
     if (GOOGLE_MAPS_API_KEY) {}
@@ -166,13 +163,9 @@ const addTrip = () => {
                 'Yuuuhu!',
                 'The trip has been created!',
             );
-
-
-
         } else {
             Alert.alert('Missing fields', 'Please fill in all mandatory fields');
         }
-
     }
     const [seatOptions, setSeatOptions] = useState<{ label: string; value: number }[]>([]);
 
@@ -188,16 +181,14 @@ const addTrip = () => {
         };
         setNumberOfSeats(1); // Reset number of seats when selected car changes
     }, [selectedCar])
+
     return (
-
-
         token && user && <ScrollView
             ref={scrollViewRef}
             automaticallyAdjustKeyboardInsets={true}
             style={styles.container}
             keyboardShouldPersistTaps={'handled'}
         >
-
             <Overlay
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
@@ -208,7 +199,7 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-on' size={24} color={"black"} />
+                        <icons.MaterialIcons name='location-on' size={24} color={COLORS.iconColor} />
                         <Text>From: </Text>
                     </View>
                     <View
@@ -217,7 +208,7 @@ const addTrip = () => {
                     </View>
                     <View
                         style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-searching' size={24} color={"black"} />
+                        <icons.MaterialIcons name='location-searching' size={24} color={COLORS.iconColor} />
                         <Text>To: </Text>
                     </View>
                     <View
@@ -245,7 +236,7 @@ const addTrip = () => {
                             onCancel={() => setDatePickerVisibility(false)}
                             minimumDate={new Date()} // Set the minimum date to today
                         />
-                        <icons.FontAwesome name="calendar" size={24} color="black" />
+                        <icons.FontAwesome name="calendar" size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
                     </TouchableOpacity>
 
@@ -269,14 +260,14 @@ const addTrip = () => {
                             }
                             onCancel={() => setIsTimePickerVisible(false)}
                         />
-                        <icons.FontAwesome5 name="clock" size={24} color="black" />
+                        <icons.FontAwesome5 name="clock" size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>{moment(time).format('HH:mm')}</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name="ios-people" size={24} color={"black"} />
+                        <icons.Ionicons name="ios-people" size={24} color={COLORS.iconColor} />
                         <Text>Number of seats: </Text>
                     </View>
                     <RNPickerSelect
@@ -299,68 +290,68 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='smoking' size={24} color={"black"} />
+                        <icons.MaterialCommunityIcons name='smoking' size={24} color={COLORS.iconColor} />
                         <Text>Smoking</Text>
                     </View>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{ false: COLORS.backgroundColor, true: COLORS.textColour }}
+                        ios_backgroundColor={COLORS.backgroundColor}
                         onValueChange={() => { setSmokingToggled(!smokingToggled) }}
                         value={smokingToggled}
                     />
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={"black"} />
+                        <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={COLORS.iconColor} />
                         <Text>Child Seat</Text>
                     </View>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{ false: COLORS.backgroundColor, true: COLORS.textColour }}
+                        ios_backgroundColor={COLORS.backgroundColor}
                         onValueChange={() => { setChildSeatToggled(!childSeatToggled) }}
                         value={childSeatToggled}
                     />
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='pets' size={24} color={"black"} />
+                        <icons.MaterialIcons name='pets' size={24} color={COLORS.iconColor} />
                         <Text>Pets</Text>
                     </View>
 
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{ false: COLORS.backgroundColor, true: COLORS.textColour }}
+                        ios_backgroundColor={COLORS.backgroundColor}
                         onValueChange={() => { setPetsToggled(!petsToggled) }}
                         value={petsToggled}
                     />
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.FontAwesome5 name='wine-bottle' size={24} color={"black"} />
+                        <icons.FontAwesome5 name='wine-bottle' size={24} color={COLORS.iconColor} />
                         <Text>Alcohol</Text>
                     </View>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{ false: COLORS.backgroundColor, true: COLORS.textColour }}
+                        ios_backgroundColor={COLORS.backgroundColor}
                         onValueChange={() => { setAlcoholToggled(!alcoholToggled) }}
                         value={alcoholToggled}
                     />
                 </View>
                 <View style={styles.parameter}>
                     <View style={styles.iconContainer}>
-                        <icons.MaterialIcons name='luggage' size={24} color={"black"} />
+                        <icons.MaterialIcons name='luggage' size={24} color={COLORS.iconColor} />
                         <Text>Luggage</Text>
                     </View>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        ios_backgroundColor="#3e3e3e"
+                        trackColor={{ false: COLORS.backgroundColor, true: COLORS.textColour }}
+                        ios_backgroundColor={COLORS.backgroundColor}
                         onValueChange={() => { setLuggageToggled(!luggageToggled) }}
                         value={luggageToggled}
                     />
                 </View>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
+                        <icons.MaterialIcons name='comment' size={24} color={COLORS.iconColor} />
                         <Text>Additional Comments: </Text>
                     </View>
                     <TextInput
@@ -392,7 +383,7 @@ const addTrip = () => {
                             style={styles.addNewCar}
                             onPress={() => setAddNewCar(true)}
                         >
-                            <icons.FontAwesome name='plus' size={28} color={"black"} />
+                            <icons.FontAwesome name='plus' size={28} color={COLORS.iconColor} />
                         </TouchableOpacity>
                     }
                 />
@@ -400,12 +391,11 @@ const addTrip = () => {
             <View style={styles.parameters}>
                 <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='comment' size={24} color={"black"} />
+                        <icons.MaterialIcons name='comment' size={24} color={COLORS.iconColor} />
                         <Text>Price per seat</Text>
                     </View>
                     <View style={styles.priceContainer}>
 
-                        <Text style={styles.currency}>EUR</Text>
 
                         <TextInput
                             style={styles.inputPrice}
@@ -416,6 +406,7 @@ const addTrip = () => {
                             placeholderTextColor="#838383"
 
                         />
+                        <Text style={styles.currency}>€</Text>
                     </View>
 
                 </View>
@@ -425,7 +416,7 @@ const addTrip = () => {
                 style={styles.btn}
                 onPress={handleSubmit}
             >
-                <Text >Create a trip</Text>
+                <Text style={{color: 'white', fontSize: 16}} >Create a trip</Text>
             </TouchableOpacity>
             <Snackbar
                 visible={addCarSnackBar}
@@ -436,7 +427,7 @@ const addTrip = () => {
                         setAddCarSnackBar(false)
                     },
                 }}
-                style={{ backgroundColor: 'green', }}
+                style={{ backgroundColor: COLORS.backgroundColor2, }}
             >
                 <Text style={{ textAlign: 'center' }}>
                     The car has been created succefully!
@@ -455,11 +446,16 @@ const styles = StyleSheet.create({
     },
 
     btn: {
-        backgroundColor: 'red',
+        backgroundColor: COLORS.buttonBackground,
         alignItems: 'center',
-        padding: 20,
-        borderRadius: 10,
-        marginBottom: 20
+        padding: 15,
+        borderRadius: 25,
+        marginBottom: 20,
+        color: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
     },
 
     container: {
@@ -483,24 +479,33 @@ const styles = StyleSheet.create({
 
     parameters: {
         gap: 5,
-        borderRadius: 10,
+        borderRadius: 25,
         borderColor: '#a8a8a8',
-        padding: 5,
+        padding: 10,
         marginBottom: 10,
-        backgroundColor: '#fff'
+        backgroundColor: COLORS.inputFields,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.9,
+        shadowRadius: 2
     },
 
     input: {
         height: 50,
         width: '100%',
-        borderWidth: 1,
+        // borderWidth: 1,
         padding: 10,
         borderRadius: 10,
-        borderColor: '#a8a8a8',
+        backgroundColor: COLORS.inputFields,
+        // borderColor: '#a8a8a8',
         color: "black",
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
     },
 
     currency: {
@@ -516,12 +521,17 @@ const styles = StyleSheet.create({
     inputPrice: {
         height: 50,
         width: '100%',
-        borderWidth: 1,
+        backgroundColor: COLORS.inputFields,
+        // borderWidth: 1,
         padding: 10,
         borderRadius: 10,
         borderColor: '#a8a8a8',
         color: "black",
-        paddingLeft: 40
+        paddingLeft: 40,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        hadowRadius: 2,
     },
 
     addNewCar: {
