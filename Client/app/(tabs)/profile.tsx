@@ -8,6 +8,7 @@ import * as icons from '@expo/vector-icons';
 import RatingStars from '../../components/RatingStars';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
 import ImageUploader from '../../components/ImageUploader';
+import COLORS from '../../COLORS';
 
 const profile = () => {
     const { isAuthenticated, logout, user, token } = useAuth();
@@ -77,7 +78,7 @@ const profile = () => {
 
                     <View style={styles.sectionInfo}>
                         <View style={styles.sectionInfo}>
-                            <icons.MaterialIcons name="phone" size={24} color="black" />
+                            <icons.MaterialIcons name="phone" size={24} color={COLORS.iconColor} />
                             <Text style={[styles.sectionInfoText, { fontWeight: '600', paddingLeft: 10 }]}>Telephone: </Text>
                         </View>
                         <Text style={styles.sectionInfoText}>{user.phoneNumber}</Text>
@@ -85,7 +86,7 @@ const profile = () => {
 
                     <View style={styles.sectionInfo}>
                         <View style={styles.sectionInfo}>
-                            <icons.MaterialIcons name="email" size={24} color="black" />
+                            <icons.MaterialIcons name="email" size={24} color={COLORS.iconColor} />
                             <Text style={[styles.sectionInfoText, { fontWeight: '600', paddingLeft: 10 }]}>Email: </Text>
                         </View>
                         <Text style={styles.sectionInfoText}>{user.email}</Text>
@@ -93,7 +94,7 @@ const profile = () => {
 
                     <View style={styles.sectionInfo}>
                         <View style={styles.sectionInfo}>
-                            <icons.MaterialIcons name="card-membership" size={24} color="black" />
+                            <icons.MaterialIcons name="card-membership" size={24} color={COLORS.iconColor} />
                             <Text style={[styles.sectionInfoText, { fontWeight: '600', paddingLeft: 10 }]}>Member since: </Text>
                         </View>
                         <Text style={styles.sectionInfoText}>{moment(parseInt(user.memberSince)).format('MMMM Do, YYYY')}</Text>
@@ -109,7 +110,7 @@ const profile = () => {
                     >
                         <View style={styles.sectionInfo}>
                             <Text style={styles.sectionInfoText}>Change password</Text>
-                            <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />
+                            <icons.MaterialIcons name="arrow-forward-ios" size={18} color={COLORS.iconColor} />
                         </View>
                     </TouchableOpacity>
                     <Overlay isVisible={visible} onBackdropPress={() => { setVisible(!visible) }}>
@@ -131,7 +132,7 @@ export default profile;
 const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.backgroundColor,
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     button: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.buttonBackground,
         borderRadius: 25,
         marginHorizontal: 60,
         marginVertical: 20,
