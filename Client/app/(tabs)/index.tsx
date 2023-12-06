@@ -44,7 +44,7 @@ const SearchForm = () => {
                 numberOfPeople,
             };
 
-            const response = token && await getFilteredTrips({
+            const response =  await getFilteredTrips({
                 departure: formData.departure,
                 destination: formData.destination,
                 date: formData.date,

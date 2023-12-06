@@ -4,9 +4,9 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import Trip from '../models/Trip.js';
-import User from '../models/User.js';
-import { validateUser, sendPushNotification } from '../utils/userUtils.js';
+import Trip from '../models/Trip';
+import User from '../models/User';
+import { validateUser, sendPushNotification } from '../utils/userUtils';
 
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
