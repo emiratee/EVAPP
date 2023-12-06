@@ -4,9 +4,11 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
-import { putApproveTrip, putRejectTrip } from "../utils/apiService";
+import { postChat, putApproveTrip, putRejectTrip } from "../utils/apiService";
 import * as types from '../types/types'
 import COLORS from "../COLORS";
+import { useChat } from "../utils/chat";
+import { useNavigation } from "expo-router";
 
 type Props = {
     trip: types.TTrip,
@@ -16,7 +18,9 @@ type Props = {
 }
 
 const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
-    const { token } = useAuth();
+    const { token, user } = useAuth();
+    const { setName, setImageUrl } = useChat();
+    const { navigate } = useNavigation();
 
     const [icon, setIcon] = useState<React.JSX.Element | undefined>(undefined);
     const [statusColor, setStatusColor] = useState<string>('#5aa363');
@@ -41,6 +45,13 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
                 setStatusColor('#e29257')
         }
     }, [status]);
+
+    const createConversation = async () => {
+        const { chat } = await postChat(trip.driverID, user.userId, token);        
+        navigate('chatView', { chat });
+        setName(chat.driver.name);
+        setImageUrl(chat.driver.imageUrl);
+    }
 
     const handleSubmit = (type: string): any => {
         let confirmationMessage = type === 'Approved'
@@ -96,9 +107,9 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
                 </View>
             ) : (
                 <View style={request.footerContainer}>
-                    <Text style={request.footerText}>
-                        {status === 'Approved' ? 'You accepted this booking offer' : "You rejected this booking offer"}
-                    </Text>
+                    <TouchableOpacity style={request.contact} onPress={createConversation}>
+                        <Text style={request.contactText}>Contact passenger</Text>
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
@@ -194,7 +205,7 @@ const request = StyleSheet.create({
         gap: 10,
         width: '100%',
         marginTop: 10,
-        paddingHorizontal: 10,
+        paddingHorizontal: 10,        
     },
     button: {
         flex: 1,
@@ -209,8 +220,18 @@ const request = StyleSheet.create({
         fontWeight: '500',
         color: '#fff'
     },
-    footerText: {
+    contact: {
+        backgroundColor: COLORS.iconColor,
+        borderRadius: 25,
+        borderColor: 'transparent',
+        borderWidth: 1,
+        width: '100%',
+    },
+    contactText: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center',
+        padding: 3,
+        color: '#fff'
     }
 });
