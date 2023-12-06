@@ -113,7 +113,10 @@ const profile = () => {
                             <icons.MaterialIcons name="arrow-forward-ios" size={18} color={COLORS.iconColor} />
                         </View>
                     </TouchableOpacity>
-                    <Overlay isVisible={visible} onBackdropPress={() => { setVisible(!visible) }}>
+                    <Overlay 
+                    overlayStyle={styles.overlay}
+                    isVisible={visible} 
+                    onBackdropPress={() => { setVisible(!visible) }}>
                         <ChangePasswordForm setVisible={() => { setVisible(!visible) }} />
                     </Overlay>
                 </View>
@@ -193,6 +196,9 @@ const styles = StyleSheet.create({
     },
     sectionInfoText: {
         fontSize: 16,
+    },
+    overlay:{
+        borderRadius: 15,
     },
 
 });
