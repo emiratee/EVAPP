@@ -18,6 +18,7 @@ type Props = {
 }
 
 const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
+    
     const { token, user } = useAuth();
     const { setName, setImageUrl } = useChat();
     const { navigate } = useNavigation();
@@ -47,7 +48,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
     }, [status]);
 
     const createConversation = async () => {
-        const { chat } = await postChat(user.userId, trip.driverID, token);        
+        const { chat } = await postChat(user.userId, passenger.userId, token);        
         navigate('chatView', { chat });
         setName(chat.driver.name);
         setImageUrl(chat.driver.imageUrl);
