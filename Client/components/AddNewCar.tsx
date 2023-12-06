@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Dimensions, TouchableOpacity, Alert, Text, View } from 'react-native'
+import { StyleSheet, TextInput, Dimensions, TouchableOpacity, Alert, Text, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState } from 'react'
 import * as icons from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -19,111 +19,113 @@ const AddNewCar = (props: Props) => {
     const { token, setUser, user } = useAuth()
 
     return (
-        user && token && <View style={{ width: '90%' }}>
-            <Text style={{ fontSize: 24, textAlign: 'center' }}>Add New Car</Text>
+        user && token && <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={{ width: '90%' }}>
+                <Text style={{ fontSize: 24, textAlign: 'center' }}>Add New Car</Text>
 
 
-            <View style={styles.parameters}>
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
-                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.FontAwesome5 name='car' size={24} color={'black'} />
-                        <Text>Model: </Text>
+                <View style={styles.parameters}>
+                    <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                        <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                            <icons.FontAwesome5 name='car' size={24} color={'black'} />
+                            <Text>Model: </Text>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            editable
+                            onChangeText={text => setNewModel(text)}
+                            value={newModel}
+                            placeholder="Type here..."
+                            placeholderTextColor="#838383"
+                            testID="model-input"
+
+                        />
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        editable
-                        onChangeText={text => setNewModel(text)}
-                        value={newModel}
-                        placeholder="Type here..."
-                        placeholderTextColor="#838383"
-                        testID="model-input" 
-
-                    />
-                </View>
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
-                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name='color-fill' size={24} color={'black'} />
-                        <Text>Color: </Text>
+                    <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                        <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                            <icons.Ionicons name='color-fill' size={24} color={'black'} />
+                            <Text>Color: </Text>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            editable
+                            onChangeText={text => setNewColor(text)}
+                            value={newColor}
+                            placeholder="Type here..."
+                            placeholderTextColor="#838383"
+                            testID="color-input"
+                        />
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        editable
-                        onChangeText={text => setNewColor(text)}
-                        value={newColor}
-                        placeholder="Type here..."
-                        placeholderTextColor="#838383"
-                        testID="color-input" 
-                    />
-                </View>
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
-                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name='documents' size={24} color={'black'} />
-                        <Text>Licence Plates: </Text>
+                    <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                        <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                            <icons.Ionicons name='documents' size={24} color={'black'} />
+                            <Text>Licence Plates: </Text>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            editable
+                            onChangeText={text => setNewLicencePlates(text)}
+                            value={newLicencePlates}
+                            placeholder="Type here..."
+                            placeholderTextColor="#838383"
+                            testID="licence-plates-input"
+                        />
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        editable
-                        onChangeText={text => setNewLicencePlates(text)}
-                        value={newLicencePlates}
-                        placeholder="Type here..."
-                        placeholderTextColor="#838383"
-                        testID="licence-plates-input"
-                    />
-                </View>
 
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
-                    <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.Ionicons name="ios-people" size={24} color={'black'} />
-                        <Text>Number of seats: </Text>
+                    <View style={[styles.parameter, { flexDirection: 'column', gap: 10 }]}>
+                        <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
+                            <icons.Ionicons name="ios-people" size={24} color={'black'} />
+                            <Text>Number of seats: </Text>
+                        </View>
+                        <RNPickerSelect
+                            onValueChange={(value) => { setNewNumberOfSeats(value) }}
+                            style={{
+                                inputIOS: styles.input,
+                                inputAndroid: styles.input,
+                            }}
+                            placeholder={{
+                                label: '1',
+                                value: 1,
+                            }}
+                            items={[
+                                { label: '2', value: 2 },
+                                { label: '3', value: 3 },
+                                { label: '4', value: 4 },
+                                { label: '5', value: 5 },
+                                { label: '6', value: 6 },
+                            ]}
+                        />
                     </View>
-                    <RNPickerSelect
-                        onValueChange={(value) => { setNewNumberOfSeats(value) }}
-                        style={{
-                            inputIOS: styles.input,
-                            inputAndroid: styles.input,
-                        }}
-                        placeholder={{
-                            label: '1',
-                            value: 1,
-                        }}
-                        items={[
-                            { label: '2', value: 2 },
-                            { label: '3', value: 3 },
-                            { label: '4', value: 4 },
-                            { label: '5', value: 5 },
-                            { label: '6', value: 6 },
-                        ]}
-                    />
-                </View>
 
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => {
-                        if (newModel && newColor && newLicencePlates && newNumberOfSeats) {
+                    <TouchableOpacity
+                        style={styles.btn}
+                        onPress={() => {
+                            if (newModel && newColor && newLicencePlates && newNumberOfSeats) {
 
-                            const formData: types.TCarNoId = {
-                                model: newModel,
-                                color: newColor,
-                                licencePlate: newLicencePlates,
-                                seats: newNumberOfSeats,
+                                const formData: types.TCarNoId = {
+                                    model: newModel,
+                                    color: newColor,
+                                    licencePlate: newLicencePlates,
+                                    seats: newNumberOfSeats,
+                                }
+                                addCar(formData, token).then((data: { car: types.TCar }) => {
+                                    props.setAddNewCar(false);
+                                    setUser((user: types.TUser | null) => (
+                                        { ...user!, cars: [...user?.cars || [], data.car] }
+                                    ))
+                                })
+                                props.setAddCarSnackBar(true)
+                            } else {
+                                Alert.alert('Missing fields', 'Please fill in all mandatory fields');
                             }
-                            addCar(formData, token).then((data: { car: types.TCar }) => {
-                                props.setAddNewCar(false);
-                                setUser((user: types.TUser | null) => (
-                                    { ...user!, cars: [...user?.cars || [], data.car] }
-                                ))
-                            })
-                            props.setAddCarSnackBar(true)
-                        } else {
-                            Alert.alert('Missing fields', 'Please fill in all mandatory fields');
-                        }
 
-                    }}
-                >
-                    <Text >Add a car</Text>
-                </TouchableOpacity>
-            </View>
-        </View >
+                        }}
+                    >
+                        <Text >Add a car</Text>
+                    </TouchableOpacity>
+                </View>
+            </View >
+        </TouchableWithoutFeedback>
     )
 }
 

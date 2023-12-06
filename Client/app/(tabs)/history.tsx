@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import * as icons from '@expo/vector-icons';
 import TripCardItem from '../../components/TripCard/TripCardItem/TripCardItem';
 import StarRating from 'react-native-star-rating-widget';
@@ -34,7 +34,6 @@ const History2 = () => {
                 // if (!isAuthenticated) return router.push('./login')
 
                 const history = token && await getHistory(token);
-
                 const upcomingTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => { return new Date(trip.trip.date + 'T' + trip.trip.departure.time + ':00') >= new Date() });
                 const previousTrips = history.data.filter((trip: { trip: types.TTrip, driver: types.TUser }) => {
                     return (
@@ -57,12 +56,36 @@ const History2 = () => {
         }, [isAuthenticated])
     );
 
-    const handleRating = (tripId, driverId, ratedValue) => {
+    const handleRating = (tripId: string, driverId: string, ratedValue: number) => {
+
+        setPreviousTrips(prev => prev.map((el) => {
+
+            if (el.trip._id === tripId) {
+                // Find the passenger with the matching user ID and update the "reviewed" property
+                const updatedPassengers = el.trip.passengerIDs.map((passenger) => {
+                    if (user && passenger.userId === user.userId) {
+                        return {
+                            ...passenger,
+                            reviewed: true,
+                        };
+                    } else return passenger;
+                });
+
+                // Update the trip's passengerIDs array with the updatedPassengers array
+                return {
+                    ...el,
+                    passengerIDs: updatedPassengers,
+                };
+            }
+            return el;
+        }))
         setRating(ratedValue);
-        putAddReview({ tripId, driverId, rating: ratedValue }, token);
+
+
+        token && putAddReview({ tripId, driverId, rating: ratedValue }, token);
     };
 
-    const handleComplete = (trip) => {
+    const handleComplete = (trip: types.TTrip) => {
         const formData = {
             tripId: trip._id,
             successful: true,
@@ -75,9 +98,11 @@ const History2 = () => {
         }, 0);
 
         const totalCredits = (totalSeats * Number(price)).toString();
+        const updatedTrips = currentTrips.filter((el) => el.trip._id !== trip._id);
 
-        putMarkTripSuccessful(formData, token);
-        putEarningsToAvailable({ totalCredits }, token);
+        setCurrentTrips(updatedTrips)
+        token && putMarkTripSuccessful(formData, token);
+        token && putEarningsToAvailable({ totalCredits }, token);
     };
 
     const buttons = ['Upcoming', 'Previous', 'Ongoing'];
@@ -85,7 +110,7 @@ const History2 = () => {
     const renderUpcomingTrips = () => {
         return (
 
-            <View style={styles.container}>
+            user && <View style={styles.container}>
                 {upcomingTrips.length > 0 ? (
                     <FlatList
                         data={upcomingTrips}
@@ -105,9 +130,9 @@ const History2 = () => {
                                         </View>
                                     ) : (
                                         <>
-                                            {passengers.map(passenger => (
+                                            {passengers.map((passenger, index) => (
                                                 passenger.userId === user.userId && (
-                                                    <View key={passenger.userId} style={[styles.pendingContainer, {
+                                                    <View key={`${passenger.userId}_${index}`} style={[styles.pendingContainer, {
                                                         backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
                                                             passenger.status === 'Pending' ? '#e29257' : '#ff0000'
                                                     }]}>
@@ -132,21 +157,26 @@ const History2 = () => {
     };
 
     const renderPreviousTrips = () => {
+
         return (
             <View style={styles.container}>
                 {previousTrips.length > 0 ? (<FlatList
                     data={previousTrips}
                     renderItem={({ item }: { item: { trip: types.TTrip; driver: types.TUser } }) => {
+
                         {
                             reviewed = item.trip.passengerIDs.some(
-                                passenger => user && passenger.userId === user.userId && passenger.reviewed
+
+                                passenger => {
+                                    return user && passenger.userId === user.userId && passenger.reviewed
+                                }
                             )
                         }
                         return <View style={[styles.card, { opacity: 0.5 }]}>
                             <TripCardItem trip={item.trip} driver={item.driver} />
 
 
-                            {user.userId !== item.trip.driverID && !reviewed &&
+                            {user && user.userId !== item.trip.driverID && !reviewed &&
 
                                 <View style={styles.starRatingContainer}>
                                     <StarRating
@@ -154,9 +184,9 @@ const History2 = () => {
                                         rating={rating}
                                         onChange={(newRating) => { handleRating(item.trip._id, item.trip.driverID, newRating) }}
                                         starSize={30} // Customize the size of the stars
-                                        inactiveColor="#000" // Set inactive star color to black
-                                        activeColor="#000" // Set active star color to black
-                                        starStyle={styles.starRating} // Customize the active star color
+                                        // inactiveColor="#000" // Set inactive star color to black
+                                        // activeColor="#000" // Set active star color to black
+                                        starStyle={styles.starRating as StyleProp<ViewStyle>} // Customize the active star color
                                     />
                                 </View>
                             }
@@ -178,7 +208,7 @@ const History2 = () => {
                     renderItem={({ item }) => (
                         <View style={styles.card}>
                             <TripCardItem trip={item.trip} driver={item.driver} />
-                            {user.userId === item.trip.driverID &&
+                            {user && user.userId === item.trip.driverID &&
                                 (new Date(item.trip.date + 'T' + item.trip.departure.time + ':00') < new Date()) &&
                                 (new Date(item.trip.destination.date + 'T' + item.trip.destination.time + ':00') < new Date()) &&
                                 <TouchableOpacity style={styles.buttonContainer} onPress={() => { handleComplete(item.trip) }}>

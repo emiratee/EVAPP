@@ -51,7 +51,7 @@ function RootLayoutNav() {
         <AuthProvider>
             <ChatProvider>
                 <ThemeProvider value={ThemeColors}>
-                    <Stack>
+                    <Stack initialRouteName='index'>
                         <Stack.Screen name="(tabs)" options={{ headerShown: false,  }} />
                         <Stack.Screen name="TripInfo" options={{ presentation: 'modal' }} />
                         <Stack.Screen name="BookRequest" options={{ presentation: 'modal' }} />
