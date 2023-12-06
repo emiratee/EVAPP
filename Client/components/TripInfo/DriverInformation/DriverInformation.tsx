@@ -8,6 +8,7 @@ import { useAuth } from '../../../utils/auth';
 import { useNavigation } from 'expo-router';
 import { useChat } from '../../../utils/chat';
 import COLORS from '../../../COLORS';
+import { useChat } from '../../../utils/chat';
 
 type Props = {
     trip: types.TTrip,
@@ -16,11 +17,14 @@ type Props = {
 
 const DriverInformation = ({ trip, driver }: Props) => {
     const { user, token } = useAuth();
+    const { setName, setImageUrl } = useChat();
     const { navigate } = useNavigation();
     
     const createConversation = async () => {
-        await postChat(trip.driverID, user.userId, token);
-        navigate('messages');
+        const { chat } = await postChat(trip.driverID, user.userId, token);
+        navigate('chatView', { chat });
+        setName(chat.driver.name);
+        setImageUrl(chat.driver.imageUrl);
     }
 
 

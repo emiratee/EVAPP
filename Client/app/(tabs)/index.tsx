@@ -8,11 +8,12 @@ import * as icons from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../utils/auth';
 import { getFilteredTrips } from '../../utils/apiService';
-import { GOOGLE_MAPS_API_KEY } from "@env";
+//import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as types from '../../types/types'
 import COLORS from '../../COLORS';
 
 const SearchForm = () => {
+    const GOOGLE_MAPS_API_KEY = 'AIzaSyBKyJV9kEv1bofDeXIzMvp2UpDq0bHWSBM'
     if (GOOGLE_MAPS_API_KEY) {}
     const { token } = useAuth();
     const [departure, setDeparture] = useState<types.TDeparture | undefined>(undefined);
