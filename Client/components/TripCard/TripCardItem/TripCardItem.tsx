@@ -83,7 +83,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                             style={{ height: 50, width: 50, borderRadius: 50 }}
                         />
                         :
-                        <icons.AntDesign testID='default-icon' name="user" size={30} color="black" style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
+                        <icons.AntDesign testID='default-icon' name="user" size={30} color={COLORS.iconColor} style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
                     }
                 </View>
             </View>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 5,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.inputFields,
         borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
@@ -200,10 +200,10 @@ const styles = StyleSheet.create({
         maxHeight: 40,
         justifyContent: 'center',
         paddingHorizontal: 10,
-        shadowColor: COLORS.boarderBottomColor,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 2
+        // shadowColor: COLORS.boarderBottomColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2
     },
     price: {
         color: COLORS.textColour,

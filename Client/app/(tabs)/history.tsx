@@ -126,7 +126,7 @@ const History = () => {
 
                                     <TripCardItem trip={item.trip} driver={item.driver} />
                                     {user.userId === item.trip.driverID ? (
-                                        <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? COLORS.iconColor : '#5aa363' }]}>
+                                        <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? COLORS.iconColor : COLORS.iconColor }]}>
                                             <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount}   `}<icons.Entypo name="bell" size={18} color='white' /></Text>
                                         </View>
                                     ) : (
@@ -134,10 +134,17 @@ const History = () => {
                                             {passengers.map((passenger, index) => (
                                                 passenger.userId === user.userId && (
                                                     <View key={`${passenger.userId}_${index}`} style={[styles.pendingContainer, {
-                                                        backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
-                                                            passenger.status === 'Pending' ? COLORS.iconColor : '#ff0000'
+                                                        backgroundColor: passenger.status === 'Approved' ? COLORS.textColour :
+                                                            passenger.status === 'Pending' ? COLORS.iconColor : 'black'
                                                     }]}>
-                                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                                                        
+                                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
+                                                            {passenger.status === 'Pending' ? <icons.MaterialIcons name="pending" size={24} color="white" />
+                                                            : passenger.status === 'Approved' ? 
+                                                            <icons.AntDesign name="checkcircle" size={18} color="white" /> :
+                                                            <icons.Entypo name="circle-with-cross" size={24} color="white" />
+                                                            
+                                                            }</Text>
                                                     </View>
                                                 )
                                             ))}
@@ -273,8 +280,8 @@ const styles = StyleSheet.create({
     },
     pendingContainer: {
         position: 'absolute',
-        top: 15,
-        left: 140,
+        bottom: 70,
+        right: 60,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',

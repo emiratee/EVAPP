@@ -6,6 +6,7 @@ import * as icons from '@expo/vector-icons';
 import { useAuth } from "../utils/auth";
 import { putApproveTrip, putRejectTrip } from "../utils/apiService";
 import * as types from '../types/types'
+import COLORS from "../COLORS";
 
 type Props = {
     trip: types.TTrip,
@@ -24,19 +25,19 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
     useEffect(() => {
         switch (status) {
             case 'Pending':
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
-                setStatusColor('#e29257')
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color={COLORS.iconColor} style={[{ transform: [{ rotate: '180deg' }] }]} />);
+                setStatusColor(COLORS.iconColor)
                 break;
             case 'Approved':
-                setIcon(<icons.Ionicons name="ios-checkmark-circle" size={20} color="black" />);
-                setStatusColor('#5aa363')
+                setIcon(<icons.Ionicons name="ios-checkmark-circle" size={20} color={COLORS.backgroundColor} />);
+                setStatusColor(COLORS.textColour)
                 break;
             case 'Rejected':
                 setIcon(<icons.FontAwesome5 name="exclamation-circle" size={20} color="black" />)
-                setStatusColor('#ff0000')
+                setStatusColor('black')
                 break;
             default:
-                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color="black" style={[{ transform: [{ rotate: '180deg' }] }]} />);
+                setIcon(<icons.MaterialIcons name="hourglass-top" size={20} color={COLORS.backgroundColor} style={[{ transform: [{ rotate: '180deg' }] }]} />);
                 setStatusColor('#e29257')
         }
     }, [status]);
@@ -74,7 +75,7 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
                 <View style={request.information}>
                     <Text style={request.name}>{passenger.name}</Text>
                     <View style={request.seats}>
-                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color={COLORS.iconColor} />
                         <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{passenger.seats}</Text>
                     </View>
                 </View>
@@ -86,10 +87,10 @@ const BookingCard = ({ trip, passenger, bookingId, setRequests }: Props) => {
             </View>
             {status === 'Pending' ? (
                 <View style={request.footerContainer}>
-                    <TouchableOpacity style={[request.button, { backgroundColor: '#5aa363' }]} onPress={() => { handleSubmit('Approved') }}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: COLORS.textColour }]} onPress={() => { handleSubmit('Approved') }}>
                         <Text style={request.buttonText}>Approve</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[request.button, { backgroundColor: 'red' }]} onPress={() => { handleSubmit('Rejected') }}>
+                    <TouchableOpacity style={[request.button, { backgroundColor: 'black' }]} onPress={() => { handleSubmit('Rejected') }}>
                         <Text style={request.buttonText}>Reject</Text>
                     </TouchableOpacity>
                 </View>
@@ -128,7 +129,7 @@ const request = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.backgroundColor,
         position: 'relative',
         width: '100%',
         padding: 5,
