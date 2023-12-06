@@ -21,12 +21,11 @@ const DriverInformation = ({ trip, driver }: Props) => {
     const { navigate } = useNavigation();
     
     const createConversation = async () => {
-        const { chat } = await postChat(trip.driverID, user.userId, token);
+        const { chat } = await postChat(trip.driverID, user.userId, token);        
         navigate('chatView', { chat });
         setName(chat.driver.name);
         setImageUrl(chat.driver.imageUrl);
     }
-
 
     return (
         <View style={driver_style.container}>
