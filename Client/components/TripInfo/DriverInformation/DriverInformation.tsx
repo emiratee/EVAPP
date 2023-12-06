@@ -7,6 +7,7 @@ import { postChat } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import { useNavigation } from 'expo-router';
 import { useChat } from '../../../utils/chat';
+import COLORS from '../../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -32,12 +33,13 @@ const DriverInformation = ({ trip, driver }: Props) => {
                     </View>
                     <View style={driver_style.profileInformation}>
                         <View style={driver_style.rating}>
-                            <Text style={driver_style.ratingText}>{`${driver.driverRating.totalReviews} reviews • ${driver.driverRating.averageRating}`}</Text>
-                            <icons.AntDesign name='star' size={12} />
+                            <Text style={driver_style.ratingText}>
+                                {`${driver.driverRating.totalReviews} reviews • ${Number(driver.driverRating.totalReviews) === 0 ? "0" : Number(driver.driverRating.totalRating/driver.driverRating.totalReviews).toFixed(1)}`}</Text>
+                            <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
                         </View>
                         <TouchableOpacity>
                             {driver.imageUrl ? <Image source={{ uri: driver.imageUrl }} style={{ height: 40, width: 40, borderRadius: 50 }} /> :
-                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }} />}
+                                <icons.AntDesign name="user" size={50} color={COLORS.iconColor} style={{ height: 40, width: 40, borderRadius: 50 }} />}
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -70,29 +72,29 @@ const DriverInformation = ({ trip, driver }: Props) => {
                 <View style={driver_style.serviceTable}>
                     <View style={driver_style.serviceInformationLeft}>
                         <View style={driver_style.serviceInformationItem}>
-                            <icons.MaterialCommunityIcons name='smoking' size={24} />
+                            <icons.MaterialCommunityIcons name='smoking' size={24} color={COLORS.iconColor} />
                             <Text style={driver_style.serviceInformationItemText}>{trip.services.smoking ? 'Smoking allowed' : 'No smoking'}</Text>
                         </View>
                         <View style={driver_style.serviceInformationItem}>
-                            <icons.MaterialCommunityIcons name='car-child-seat' size={24} />
+                            <icons.MaterialCommunityIcons name='car-child-seat' size={24} color={COLORS.iconColor} />
                             <Text style={driver_style.serviceInformationItemText}>{trip.services.childSeat ? 'Has a child seat' : 'No child seat'}</Text>
                         </View>
                         <View style={driver_style.serviceInformationItem}>
-                            <icons.MaterialIcons name='pets' size={24} />
+                            <icons.MaterialIcons name='pets' size={24} color={COLORS.iconColor} />
                             <Text style={driver_style.serviceInformationItemText}>{trip.services.pets ? 'Pets allowed' : 'No pets'}</Text>
                         </View>
                         <View style={driver_style.serviceInformationItem}>
-                            <icons.FontAwesome5 name='wine-bottle' size={24} />
+                            <icons.FontAwesome5 name='wine-bottle' size={24} color={COLORS.iconColor} />
                             <Text style={driver_style.serviceInformationItemText}>{trip.services.alcohol ? 'Alcohol allowed' : 'No alcohol'}</Text>
                         </View>
                     </View>
                     <View style={driver_style.serviceInformationRight}>
                         <View style={driver_style.serviceInformationItem}>
-                            <icons.MaterialIcons name='luggage' size={24} />
+                            <icons.MaterialIcons name='luggage' size={24}  color={COLORS.iconColor}/>
                             <Text style={driver_style.serviceInformationItemText}>{trip.services.luggage ? 'Luggage allowed' : 'No luggage'}</Text>
                         </View>
                         <View style={[driver_style.serviceInformationItem, { marginTop: 10 }]}>
-                            <icons.MaterialIcons name="insert-comment" size={24} color="black" style={{ marginBottom: 75 }} />
+                            <icons.MaterialIcons name="insert-comment" size={24} color={COLORS.iconColor} style={{ marginBottom: 75 }} />
                             <Text style={driver_style.serviceInformationCommentText}>{trip.services.comments || 'No comment'}</Text>
                         </View>
                     </View>
@@ -163,18 +165,22 @@ const driver_style = StyleSheet.create({
     carContainer: {
         width: '100%',
         height: 130,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
-        marginBottom: 20
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
     },
     carName: {
         fontSize: 20,
         fontWeight: 'bold'
     },
     carInformation: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         marginBottom: 10
@@ -184,7 +190,7 @@ const driver_style = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'column',
         gap: 5,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
     },
     carInformationItemText: {
         fontSize: 13,
@@ -197,29 +203,33 @@ const driver_style = StyleSheet.create({
     serviceContainer: {
         width: '100%',
         height: 200,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         borderColor: '#a8a8a8',
         borderRadius: 15,
-        padding: 10
+        padding: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
     },
     serviceTitle: {
         fontSize: 20,
         fontWeight: 'bold'
     },
     serviceTable: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         gap: 40
     },
     serviceInformationLeft: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         marginTop: 10
     },
     serviceInformationRight: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         flexDirection: 'column',
         justifyContent: 'flex-start',
         marginTop: 10
@@ -228,7 +238,7 @@ const driver_style = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         gap: 5,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.inputFields,
         marginBottom: 10
     },
     serviceInformationItemText: {
@@ -252,7 +262,8 @@ const driver_style = StyleSheet.create({
     contactButton: {
         height: 50,
         width: '100%',
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
+        opacity: 0.8,
         borderRadius: 15,
         alignItems: 'center',
         justifyContent: 'center',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Image, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -7,12 +7,17 @@ import { updateAccount, cloudinaryUpload } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 
 import * as types from '../types/types'
+import COLORS from '../COLORS';
 
 const ImageUploader = ({ }) => {
     const { token, user } = useAuth()
     const [image, setImage] = useState<string>(user && user.imageUrl || "");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    useEffect(() => {
+        setImage(user && user.imageUrl || "")
+    }, [user, token])
+    
     const pickImage = async () => {
         setIsLoading(true);
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,13 +70,13 @@ const ImageUploader = ({ }) => {
                 {isLoading ? (
                     <ActivityIndicator size={'large'} />
                 ) : image ? (
-                    <Image source={{ uri: image }} 
-                    style={styles.picture} />
+                    <Image source={{ uri: image }}
+                        style={styles.picture} />
                 ) : (
                     <icons.AntDesign
                         name="user"
                         size={50}
-                        color="black"
+                        color={COLORS.iconColor}
                         style={{ alignSelf: 'center' }}
                     />
                 )}
@@ -86,8 +91,8 @@ const styles = StyleSheet.create({
     picture: {
         height: 120,
         width: 120,
-        borderWidth: 1,
-        borderColor: '#000',
+        borderWidth: 2,
+        borderColor: COLORS.iconColor,
         borderRadius: 80,
         marginVertical: 10,
         alignSelf: 'center',

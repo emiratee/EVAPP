@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../utils/auth';
 import * as icons from '@expo/vector-icons';
 import * as types from '../types/types'
+import COLORS from '../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -31,10 +32,10 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderColor: '#000'}}>
                 <View style={styles.creditsContainer}>
                     <Text style={styles.title}>Credits:</Text>
-                    <Text style={styles.credits}>{user.credits.available}€</Text>
+                    <Text style={styles.credits}>{Number(user.credits.available).toFixed(2)}€</Text>
                 </View>
                 <TouchableOpacity onPress={handleCloseBill}>
-                    <icons.AntDesign name="close" size={24} color='black' style={{bottom: 5}}/>
+                    <icons.AntDesign name="close" size={24} color={COLORS.iconColor} style={{bottom: 5}}/>
                 </TouchableOpacity>
             </View>
 
@@ -47,7 +48,7 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
                         <Text style={[styles.labelCredits, { fontSize: 20, fontWeight: '300' }]}>{Number(price).toFixed(2)}€</Text>
                     </View>
                     <View style={styles.totalContainer}>
-                        <icons.Ionicons name="ios-information-circle-sharp" size={10} color="black" />
+                        <icons.Ionicons name="ios-information-circle-sharp" size={10} color={COLORS.iconColor} />
                         <Text style={styles.hint}>Seats are booked when the driver accepts the request</Text>
                     </View>
                 </View>

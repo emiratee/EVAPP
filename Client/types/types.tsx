@@ -50,7 +50,8 @@ export type TPassengerIDs = {
     userId: string,
     name: string,
     status: string,
-    seats: number
+    seats: number,
+    reviewed: boolean
 }
 
 export type TUser = {

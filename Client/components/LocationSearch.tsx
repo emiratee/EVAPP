@@ -8,9 +8,9 @@ type Props = {
 }
 
 const LocationSearch = (props: Props) => {
-    if (GOOGLE_MAPS_API_KEY) {}
+    if (GOOGLE_MAPS_API_KEY) { }
 
-    
+
     return (
         <GooglePlacesAutocomplete
             styles={{
@@ -25,10 +25,14 @@ const LocationSearch = (props: Props) => {
                     fontSize: 16,
                     height: 50,
                     width: '100%',
-                    borderWidth: 1,
+                    // borderWidth: 1,
                     padding: 10,
                     borderRadius: 10,
                     borderColor: '#a8a8a8',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 2,
                 },
             }
 
