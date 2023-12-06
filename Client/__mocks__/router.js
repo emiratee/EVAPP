@@ -1,5 +1,7 @@
 jest.mock('expo-router', () => ({
-    useNavigation: jest.fn(),
+    useNavigation: () => ({
+        navigate: jest.fn(),
+    }),
     useFocusEffect: jest.fn(),
     Link: jest.fn()
 }));

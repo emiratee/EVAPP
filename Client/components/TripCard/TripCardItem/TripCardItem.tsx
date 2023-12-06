@@ -82,7 +82,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                             style={{ height: 50, width: 50, borderRadius: 50 }}
                         />
                         :
-                        <icons.AntDesign name="user" size={30} color="black" style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
+                        <icons.AntDesign testID='default-icon' name="user" size={30} color="black" style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
                     }
                 </View>
             </View>
