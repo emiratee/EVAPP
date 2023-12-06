@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import * as icons from '@expo/vector-icons';
+import COLORS from '../COLORS';
 
 type Props = {
     rating: number
@@ -15,7 +16,7 @@ const renderStars = (rating: number) => {
                 : i - 0.5 === rating
                     ? 'star-half'
                     : 'star-border';
-        stars.push(<Text key={i} testID='star-icon'><icons.MaterialIcons key={i} name={iconName} size={24} color="black" /></Text>);
+        stars.push(<Text key={i} testID='star-icon'><icons.MaterialIcons key={i} name={iconName} size={24} color={COLORS.iconColor} /></Text>);
     }
     return stars;
 };
@@ -24,7 +25,7 @@ const RatingStars = ({ rating }: Props) => {
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {renderStars(rating)}
-            <Text style={{ marginLeft: 5 }}>{rating}/5</Text>
+            <Text style={{ marginLeft: 5 }}>{Math.floor(rating)}/5</Text>
         </View>
     );
 };

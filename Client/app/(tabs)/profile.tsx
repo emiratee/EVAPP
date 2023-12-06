@@ -49,7 +49,7 @@ const profile = () => {
                     <TouchableOpacity onPress={() => navigate('addCredits')}>
                         <View style={[styles.sectionInfo, { paddingTop: 10 }]}>
                             <Text style={styles.sectionInfoText}>Add more credits</Text>
-                            <icons.MaterialIcons name="arrow-forward-ios" size={18} color="black" />
+                            <icons.MaterialIcons name="arrow-forward-ios" size={18} color={COLORS.iconColor} />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -58,16 +58,16 @@ const profile = () => {
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Travel Experience</Text>
                     <View style={styles.sectionInfo}>
-                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
+                        {/* <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Passenger</Text>
                             <Text style={styles.sectionInfoText}>{user.passengerRating.totalReviews} Reviews</Text>
                             <RatingStars rating={user.passengerRating.averageRating} />
-                        </View>
+                        </View> */}
 
                         <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: 5, }}>
                             <Text style={[styles.sectionInfoText, { fontWeight: '600' }]}>As Driver</Text>
                             <Text style={styles.sectionInfoText}>{user.driverRating.totalReviews} Reviews</Text>
-                            <RatingStars rating={user.driverRating.averageRating} />
+                            <RatingStars rating={user.driverRating.totalRating/user.driverRating.totalReviews} />
                         </View>
                     </View>
                 </View>
@@ -146,6 +146,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 60,
         marginVertical: 20,
         padding: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
     },
     buttonText: {
         textAlign: 'center',
@@ -169,10 +173,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     section: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.inputFields,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        borderRadius: 10,
+        borderRadius: 15,
+        borderColor: '#a8a8a8',
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 0 },
         shadowOpacity: 0.4,
