@@ -15,7 +15,7 @@ import { useFocusEffect, useNavigation } from 'expo-router';
 import { ButtonGroup } from 'react-native-elements';
 import COLORS from '../../COLORS';
 
-const History2 = () => {
+const History = () => {
     const { token, user, isAuthenticated } = useAuth();
     const { navigate } = useNavigation();
 
@@ -312,4 +312,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default History2;
+export default History;
