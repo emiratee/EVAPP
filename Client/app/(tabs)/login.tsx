@@ -5,6 +5,7 @@ import { Link, useFocusEffect, useNavigation } from 'expo-router'
 import { postLogin } from '../../utils/apiService';
 import { useAuth } from '../../utils/auth'
 import * as icons from '@expo/vector-icons';
+import COLORS from '../../COLORS';
 
 type Props = {}
 
@@ -73,13 +74,13 @@ const login= (props: Props) => {
 
                     />
                     <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color='black' style={{ padding: 10 }} />
+                        <icons.MaterialCommunityIcons name={showPassword ? 'eye' : 'eye-off'} size={20} color={COLORS.iconColor} style={{ padding: 10 }} />
                     </TouchableOpacity>
                 </View>
 
                 {errPassword ? <Text style={styles.errorText}>{errPassword}</Text> : null}
                 <TouchableOpacity style={styles.button} onPress={handleSubmit} >
-                    <Text style={{ color: '#fff' }}>Login</Text>
+                    <Text style={{ color: '#fff', fontSize: 18}}>Login</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ marginTop: 10, alignItems: 'center' }} >
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.inputFields,
         fontSize: 16,
         marginBottom: 15,
         zIndex: 1,
@@ -124,15 +125,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 50,
-        backgroundColor: '#ededed',
+        backgroundColor: COLORS.inputFields,
         borderRadius: 10,
         marginBottom: 15,
+        fontSize: 16,
     },
     button: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.buttonBackground,
         borderRadius: 25,
         padding: 15,
         alignItems: 'center',
         marginTop: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
     },
 })
