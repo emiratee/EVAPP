@@ -5,6 +5,7 @@ import moment from 'moment';
 import io from 'socket.io-client';
 import { useAuth } from '../../utils/auth';
 import { postMessage, sendPushNotification } from '../../utils/apiService';
+import COLORS, { ThemeColors } from '../../COLORS';
 
 const Typebar = ({ chat }) => {
   const { user, token } = useAuth();
@@ -46,7 +47,7 @@ const Typebar = ({ chat }) => {
           maxHeight: 50,
           paddingLeft: 20,
           paddingVertical: 15,
-          backgroundColor: '#fff',
+          backgroundColor:  COLORS.inputFields,
           borderRadius: 50,
         }}>
         <TextInput
@@ -75,14 +76,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     bottom: 0,
     position: 'absolute',
-    backgroundColor: '#efefef',
+    backgroundColor: ThemeColors.colors.background,
     shadowColor: '#000',
     shadowOffset: { width: 1, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 2,
   },
   button: {
-    backgroundColor: '#000',
+    backgroundColor: COLORS.buttonBackground,
     borderRadius: 50,
     padding: 15,
   },

@@ -105,7 +105,7 @@ export default function TabLayout() {
                     ),
                     headerRight: () => (
                         imageUrl ? (
-                            <Image source={{ uri: imageUrl }} style={{ marginRight: 20, height: 40, width: 40, borderWidth: 1, borderRadius: 50, borderColor: '#000' }} />
+                            <Image source={{ uri: imageUrl }} style={{ marginRight: 20, height: 40, width: 40, borderWidth: 1, borderRadius: 50, borderColor: COLORS.iconColor }} />
                         ) : (
                             <icons.AntDesign name="user" size={40} color="black" style={{ marginRight: 20 }} />
                         )
