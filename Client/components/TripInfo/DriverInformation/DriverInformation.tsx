@@ -37,7 +37,7 @@ const DriverInformation = ({ trip, driver }: Props) => {
                         </View>
                         <TouchableOpacity>
                             {driver.imageUrl ? <Image source={{ uri: driver.imageUrl }} style={{ height: 40, width: 40, borderRadius: 50 }} /> :
-                                <icons.AntDesign name="user" size={50} color="black" style={{ height: 40, width: 40, borderRadius: 50 }} />}
+                                <icons.AntDesign name="user" size={50} color={COLORS.iconColor} style={{ height: 40, width: 40, borderRadius: 50 }} />}
                         </TouchableOpacity>
                     </View>
                 </View>

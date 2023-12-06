@@ -7,6 +7,7 @@ import { updateAccount, cloudinaryUpload } from '../utils/apiService';
 import { useAuth } from '../utils/auth';
 
 import * as types from '../types/types'
+import COLORS from '../COLORS';
 
 const ImageUploader = ({ }) => {
     const { token, user } = useAuth()
@@ -71,7 +72,7 @@ const ImageUploader = ({ }) => {
                     <icons.AntDesign
                         name="user"
                         size={50}
-                        color="black"
+                        color={COLORS.iconColor}
                         style={{ alignSelf: 'center' }}
                     />
                 )}
@@ -86,8 +87,8 @@ const styles = StyleSheet.create({
     picture: {
         height: 120,
         width: 120,
-        borderWidth: 1,
-        borderColor: '#000',
+        borderWidth: 2,
+        borderColor: COLORS.iconColor,
         borderRadius: 80,
         marginVertical: 10,
         alignSelf: 'center',
