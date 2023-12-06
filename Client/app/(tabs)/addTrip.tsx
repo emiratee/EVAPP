@@ -1,6 +1,6 @@
 import { Alert, FlatList, ScrollView, StyleSheet, TouchableOpacity, Switch, TextInput, Text, View } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import { useFocusEffect, useNavigation } from 'expo-router';
+import { useFocusEffect, useNavigation, } from 'expo-router';
 import { Overlay } from '@rneui/themed';
 import * as icons from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -67,6 +67,7 @@ const addTrip = () => {
         React.useCallback(() => {
             if (!isAuthenticated) {
                 navigation.navigate('login');
+
             }
         }, [isAuthenticated])
     );
