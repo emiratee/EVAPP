@@ -36,7 +36,8 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
                 'departure.city': departureCity,
                 date: { $gte: date },
                 'seats.available': { $gte: seats },
-                'driverID': { $ne: validatedUser.userId }
+                'driverID': { $ne: validatedUser.userId },
+                'passengerIDs.userId': { $nin: [validatedUser.userId] }
             };
         } else {
             params = {
@@ -46,7 +47,9 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
                 'destination.city': destinationCity,
                 date: { $gte: date },
                 'seats.available': { $gte: seats },
-                'driverID': { $ne: validatedUser.userId }
+                'driverID': { $ne: validatedUser.userId },
+                'passengerIDs.userId': { $nin: [validatedUser.userId] }
+
             };
         }
         //todo remove any
