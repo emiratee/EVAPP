@@ -17,7 +17,7 @@ import { GOOGLE_MAPS_API_KEY } from '@env';
 import COLORS from '../../COLORS';
 
 const addTrip = () => {
-    if (GOOGLE_MAPS_API_KEY) {}
+    if (GOOGLE_MAPS_API_KEY) { }
     const scrollViewRef = useRef<ScrollView>(null);
     const { user, token, isAuthenticated } = useAuth();
 
@@ -190,6 +190,7 @@ const addTrip = () => {
             keyboardShouldPersistTaps={'handled'}
         >
             <Overlay
+                overlayStyle={styles.overlay}
                 isVisible={addNewCar}
                 onBackdropPress={() => { setAddNewCar(false) }}
                 animationType="fade">
@@ -416,13 +417,14 @@ const addTrip = () => {
                 style={styles.btn}
                 onPress={handleSubmit}
             >
-                <Text style={{color: 'white', fontSize: 16}} >Create a trip</Text>
+                <Text style={{ color: 'white', fontSize: 16 }} >Create a trip</Text>
             </TouchableOpacity>
             <Snackbar
                 visible={addCarSnackBar}
                 onDismiss={() => setAddCarSnackBar(false)}
                 action={{
                     label: 'Okay',
+                    textColor: '#fff',
                     onPress: () => {
                         setAddCarSnackBar(false)
                     },
@@ -543,7 +545,10 @@ const styles = StyleSheet.create({
         width: 100,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    overlay: {
+        borderRadius: 15,
+    },
 })
 
 
