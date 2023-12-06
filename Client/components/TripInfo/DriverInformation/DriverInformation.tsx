@@ -8,7 +8,6 @@ import { useAuth } from '../../../utils/auth';
 import { useNavigation } from 'expo-router';
 import { useChat } from '../../../utils/chat';
 import COLORS from '../../../COLORS';
-import { useChat } from '../../../utils/chat';
 
 type Props = {
     trip: types.TTrip,
