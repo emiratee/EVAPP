@@ -138,7 +138,7 @@ const driver_style = StyleSheet.create({
         marginBottom: 10
     },
     profileName: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold'
     },
     profileInformation: {
