@@ -35,7 +35,8 @@ const getFilteredTrips = async (req, res) => {
                 'departure.city': departureCity,
                 date: { $gte: date },
                 'seats.available': { $gte: seats },
-                'driverID': { $ne: validatedUser.userId }
+                'driverID': { $ne: validatedUser.userId },
+                'passengerIDs.userId': { $nin: [validatedUser.userId] }
             };
         }
         else {
@@ -46,7 +47,8 @@ const getFilteredTrips = async (req, res) => {
                 'destination.city': destinationCity,
                 date: { $gte: date },
                 'seats.available': { $gte: seats },
-                'driverID': { $ne: validatedUser.userId }
+                'driverID': { $ne: validatedUser.userId },
+                'passengerIDs.userId': { $nin: [validatedUser.userId] }
             };
         }
         //todo remove any
