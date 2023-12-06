@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import * as icons from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
 import * as types from '../types/types'
+import COLORS from '../COLORS'
 
 type Props = {
     item: types.TCar,
@@ -29,7 +30,7 @@ const CarPreview = (props: Props) => {
             <Text>{props.item.color}</Text>
             <View style={{ flexDirection: 'row' }}>
                 <Text>{props.item.seats}</Text>
-                <icons.MaterialCommunityIcons name='seat-passenger' size={18} />
+                <icons.MaterialCommunityIcons name='seat-passenger' size={18} color={COLORS.iconColor} />
             </View>
             <Text>{props.item.licencePlate}</Text>
 
@@ -47,17 +48,26 @@ const getDynamicStyles = () => {
         wrapper: {
             padding: 10,
             borderRadius: 10,
-            borderWidth: 1,
+            // borderWidth: 1,
+            backgroundColor: COLORS.inputFields,
             borderColor: '#a8a8a8',
             height: 100,
             width: 100,
             marginRight: 10,
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 2
 
         },
         selected: {
-            borderWidth: 1,
-            borderColor: '#e30000',
+            borderWidth: 2,
+            borderColor: COLORS.iconColor,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 2
         }
 
     })

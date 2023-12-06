@@ -13,8 +13,9 @@ import {
 import { useAuth } from '../../utils/auth';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { ButtonGroup } from 'react-native-elements';
+import COLORS from '../../COLORS';
 
-const History2 = () => {
+const History = () => {
     const { token, user, isAuthenticated } = useAuth();
     const { navigate } = useNavigation();
 
@@ -125,18 +126,25 @@ const History2 = () => {
 
                                     <TripCardItem trip={item.trip} driver={item.driver} />
                                     {user.userId === item.trip.driverID ? (
-                                        <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? '#000' : '#5aa363' }]}>
-                                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount} pending requests`}</Text>
+                                        <View style={[styles.pendingContainer, { backgroundColor: requestAmount === 0 ? COLORS.iconColor : COLORS.iconColor }]}>
+                                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{`${requestAmount}   `}<icons.Entypo name="bell" size={18} color='white' /></Text>
                                         </View>
                                     ) : (
                                         <>
                                             {passengers.map((passenger, index) => (
                                                 passenger.userId === user.userId && (
                                                     <View key={`${passenger.userId}_${index}`} style={[styles.pendingContainer, {
-                                                        backgroundColor: passenger.status === 'Approved' ? '#5aa363' :
-                                                            passenger.status === 'Pending' ? '#e29257' : '#ff0000'
+                                                        backgroundColor: passenger.status === 'Approved' ? COLORS.textColour :
+                                                            passenger.status === 'Pending' ? COLORS.iconColor : 'black'
                                                     }]}>
-                                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>{passenger.status}</Text>
+                                                        
+                                                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
+                                                            {passenger.status === 'Pending' ? <icons.MaterialIcons name="pending" size={24} color="white" />
+                                                            : passenger.status === 'Approved' ? 
+                                                            <icons.AntDesign name="checkcircle" size={18} color="white" /> :
+                                                            <icons.Entypo name="circle-with-cross" size={24} color="white" />
+                                                            
+                                                            }</Text>
                                                     </View>
                                                 )
                                             ))}
@@ -172,7 +180,7 @@ const History2 = () => {
                                 }
                             )
                         }
-                        return <View style={[styles.card, { opacity: 0.5 }]}>
+                        return <View style={[styles.card, { opacity: 0.9 }]}>
                             <TripCardItem trip={item.trip} driver={item.driver} />
 
 
@@ -251,13 +259,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: '#000',
+        borderColor: COLORS.iconColor,
     },
     selectedButton: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.backgroundColor2,
     },
     container: {
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.backgroundColor,
         position: 'relative',
         height: '100%',
         width: '100%',
@@ -268,27 +276,28 @@ const styles = StyleSheet.create({
     },
     card: {
         minWidth: '95%',
-        backgroundColor: '#f2f2f2',
+        backgroundColor: COLORS.backgroundColor,
     },
     pendingContainer: {
         position: 'absolute',
-        top: 15,
-        left: 140,
+        bottom: 70,
+        right: 60,
         flex: 1,
         backgroundColor: '#000',
         borderColor: 'transparent',
         borderWidth: 1,
-        borderRadius: 12,
-        height: 40,
+        borderRadius: 25,
+        height: 35,
         justifyContent: 'center',
         paddingHorizontal: 10
     },
     buttonContainer: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center', // Align the text in the center
-        marginTop: 10, // Add margin if needed
+        marginTop: 5,
+        marginBottom: 5,
     },
 
     buttonText: {
@@ -297,16 +306,17 @@ const styles = StyleSheet.create({
         fontSize: 16, // Customize the font size
     },
     starRatingContainer: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 5,
     },
     starRating: {
-        tintColor: '#000',
+        tintColor: 'white',
     },
 });
 
-export default History2;
+export default History;

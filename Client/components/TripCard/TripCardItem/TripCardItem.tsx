@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
 import * as types from '../../../types/types'
+import COLORS from '../../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -39,9 +40,8 @@ const TripCardItem = ({ trip, driver }: Props) => {
         <Animated.View style={styles.cardContainer}>
             <View style={styles.locationContainer}>
                 <View style={styles.dotContainer}>
-                    <View style={styles.dot}>
-                        <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
-                    </View>
+                    <View style={styles.dot}></View>
+                    <Animated.View style={[styles.line, { height: lineHeight }]}></Animated.View>
                     <View style={styles.dot}></View>
                 </View>
                 <View style={styles.addressContainer}>
@@ -64,7 +64,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                         <Text style={styles.price}>{`${parseFloat(trip.price).toFixed(2)}€`}</Text>
                     </View>
                     <View style={styles.seatContainer}>
-                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color="black" />
+                        <icons.MaterialCommunityIcons name="seat-passenger" size={18} color={COLORS.iconColor} />
                         <Text style={styles.seats}>{`${trip.seats.available}/${trip.seats.total}`}</Text>
                     </View>
                 </View>
@@ -72,8 +72,8 @@ const TripCardItem = ({ trip, driver }: Props) => {
                     <View>
                         <Text style={styles.name}>{driver.name}</Text>
                         <View style={styles.ratingContainer}>
-                            <icons.AntDesign name='star' size={12} />
-                            <Text style={styles.rating}>{driver.driverRating.averageRating}</Text>
+                            <icons.AntDesign name='star' size={12} color={COLORS.iconColor} />
+                            <Text style={styles.rating}>{Number(driver.driverRating.totalReviews) === 0 ? 0 : Number(driver.driverRating.totalRating / driver.driverRating.totalReviews).toFixed(1)}</Text>
                         </View>
                     </View>
                     {driver.imageUrl ?
@@ -82,7 +82,7 @@ const TripCardItem = ({ trip, driver }: Props) => {
                             style={{ height: 50, width: 50, borderRadius: 50 }}
                         />
                         :
-                        <icons.AntDesign testID='default-icon' name="user" size={30} color="black" style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
+                        <icons.AntDesign testID='default-icon' name="user" size={30} color={COLORS.iconColor} style={{ alignSelf: 'center', height: 50, width: 50, borderRadius: 50, padding: 10 }} />
                     }
                 </View>
             </View>
@@ -145,25 +145,31 @@ const styles = StyleSheet.create({
         width: 12,
         height: 12,
         borderRadius: 50,
+        zIndex: 999
     },
     line: {
         position: 'absolute',
-        backgroundColor: '#000',
+        backgroundColor: COLORS.iconColor,
         width: 6,
         height: 120,
-        top: 10,
+        top: 15,
         bottom: 0,
         left: 3,
-        zIndex: 999
+        marginLeft: 15
     },
     cardContainer: {
         flex: 1,
         flexDirection: 'row',
         marginVertical: 5,
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.inputFields,
         borderColor: '#a8a8a8',
         borderRadius: 15,
         padding: 10,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2
+
     },
     city: {
         fontSize: 18,
@@ -187,17 +193,21 @@ const styles = StyleSheet.create({
     },
     priceContainer: {
         flex: 1,
-        backgroundColor: '#000',
-        borderColor: '#000',
+        // backgroundColor: '#000',
+        borderColor: 'transparent',
         borderWidth: 1,
         borderRadius: 12,
         maxHeight: 40,
         justifyContent: 'center',
         paddingHorizontal: 10,
+        // shadowColor: COLORS.boarderBottomColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 2
     },
     price: {
-        color: '#fff',
-        fontSize: 20,
+        color: COLORS.textColour,
+        fontSize: 24,
         fontWeight: 'bold'
     },
     seatContainer: {

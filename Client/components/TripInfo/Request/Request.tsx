@@ -6,6 +6,7 @@ import { putRequestTrip, putAvailableCredits } from '../../../utils/apiService';
 import { useAuth } from '../../../utils/auth';
 import * as types from '../../../types/types';
 import { router } from 'expo-router';
+import COLORS from '../../../COLORS';
 
 type Props = {
     trip: types.TTrip,
@@ -136,7 +137,7 @@ const request_styles = StyleSheet.create({
         height: '100%',
         borderColor: '#a8a8a8',
         borderRadius: 10,
-        backgroundColor: '#000'
+        backgroundColor: COLORS.buttonBackground
     },
     button: {
         // backgroundColor: '#000',

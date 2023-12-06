@@ -10,10 +10,10 @@ import { useAuth } from '../../utils/auth';
 import { getFilteredTrips } from '../../utils/apiService';
 import { GOOGLE_MAPS_API_KEY } from "@env";
 import * as types from '../../types/types'
+import COLORS from '../../COLORS';
 
 const SearchForm = () => {
     if (GOOGLE_MAPS_API_KEY) {}
-    
     const { token } = useAuth();
     const [departure, setDeparture] = useState<types.TDeparture | undefined>(undefined);
     const [destination, setDestination] = useState<types.TDestination | undefined>(undefined);
@@ -70,17 +70,25 @@ const SearchForm = () => {
             automaticallyAdjustKeyboardInsets={true}
             keyboardShouldPersistTaps={'handled'}
             style={styles.container}>
-            <Text style={styles.title}>EVAPP</Text>
+            <Image source={require('../../assets/images/EVAPPtv.png')} style={{alignSelf: 'center', left: 20}}/>
             <Text style={styles.subtitle}>Welcome to EVAPP, please select your travel destination!</Text>
             <Image
                 style={styles.image}
-                source={require('../../assets/images/evapp.jpeg')}
+                source={require('../../assets/images/mainpic2.png')}
             />
+            {/* something 
+            
+            // borderWidth: 1, borderColor: 'black',
+
+            backgroundColor: COLORS.inputFields,
+        shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.5,shadowRadius: 2,
+            */}
 
             <View style={styles.parameters}>
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 2, borderWidth: 1, borderColor: 'black', padding: 10 }]}>
+                <View style={[styles.parameter, { flexDirection: 'column', gap: 2, padding: 10, backgroundColor: COLORS.inputFields, 
+                shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.5,shadowRadius: 2, borderRadius: 8 }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-on' size={24} color='black' />
+                        <icons.MaterialIcons name='location-on' size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>From: </Text>
                     </View>
                     <View style={{ width: '100%' }}>
@@ -88,7 +96,9 @@ const SearchForm = () => {
                             styles={{
                                 textInput: {
                                     borderBottomWidth: 1,
+                                    borderBottomColor: COLORS.boarderBottomColor,
                                     fontSize: 18,
+                                    backgroundColor: COLORS.inputFields
                                 }
                             }}
                             textInputProps={{
@@ -131,7 +141,7 @@ const SearchForm = () => {
 
 
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
-                        <icons.MaterialIcons name='location-searching' size={24} color='black' />
+                        <icons.MaterialIcons name='location-searching' size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>To: </Text>
                     </View>
                     <View style={{ width: '100%' }}>
@@ -139,7 +149,9 @@ const SearchForm = () => {
                             styles={{
                                 textInput: {
                                     borderBottomWidth: 1,
+                                    borderBottomColor: COLORS.boarderBottomColor,
                                     fontSize: 18,
+                                    backgroundColor: COLORS.inputFields
                                 }
                             }}
                             textInputProps={{
@@ -190,14 +202,14 @@ const SearchForm = () => {
                             onCancel={() => setDatePickerVisibility(false)}
                             minimumDate={new Date()} // Set the minimum date to today
                         />
-                        <icons.FontAwesome name="calendar" size={24} color="black" />
+                        <icons.FontAwesome name="calendar" size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>{moment(date).format('YYYY-MM-DD')}</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.sectionContainer}>
                     <View style={styles.textInput}>
-                        <icons.Ionicons name="ios-people" size={24} color="black" />
+                        <icons.Ionicons name="ios-people" size={24} color={COLORS.iconColor} />
                         <RNPickerSelect
                             onValueChange={(value) => setNumberOfPeople(value)}
                             items={[
@@ -254,7 +266,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: COLORS.textColour,
 
     },
     subtitle: {
@@ -264,8 +277,8 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     image: {
-        width: 150,
-        height: 150,
+        width: 200,
+        height: 200,
         alignSelf: 'center',
         resizeMode: 'contain',
         padding: 0
@@ -283,7 +296,15 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 152,
         height: 60,
-        borderWidth: 1,
+        // borderWidth: 1,
+        borderRadius: 8,
+        // borderColor: 'black',
+        backgroundColor: COLORS.inputFields,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        
     },
     doubleSectionContainer: {
         flexDirection: 'row',
@@ -297,11 +318,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     button: {
-        backgroundColor: '#000',
+        backgroundColor: COLORS.buttonBackground,
         borderRadius: 25,
         marginHorizontal: 60,
         marginVertical: 20,
         padding: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2
     },
     buttonText: {
         textAlign: 'center',

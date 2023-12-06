@@ -3,6 +3,7 @@ import { Link, Tabs } from 'expo-router';
 import React from 'react';
 import { TouchableOpacity, Text, Image } from 'react-native';
 import { useChat } from '../../utils/chat';
+import COLORS from '../../COLORS';
 
 
 function TabBarIcon(props: {
@@ -18,7 +19,7 @@ export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: "#393939",
+                tabBarActiveTintColor: COLORS.textColour,
             }}>
             <Tabs.Screen
                 name="TripCardRedirect"
