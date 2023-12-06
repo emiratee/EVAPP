@@ -134,7 +134,7 @@ const register = (props: Props) => {
             postRegister(data).then(data => {
                 login(data.token)
             }).catch(error => {
-                Alert.alert(error)
+                Alert.alert("User with this email already exists")
             })
         }
     }

@@ -31,7 +31,7 @@ const Bill = ({ trip, price, seats, setIsPickerVisible, hasEnoughCredits }: Prop
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderColor: '#000'}}>
                 <View style={styles.creditsContainer}>
                     <Text style={styles.title}>Credits:</Text>
-                    <Text style={styles.credits}>{user.credits.available}€</Text>
+                    <Text style={styles.credits}>{Number(user.credits.available).toFixed(2)}€</Text>
                 </View>
                 <TouchableOpacity onPress={handleCloseBill}>
                     <icons.AntDesign name="close" size={24} color='black' style={{bottom: 5}}/>
