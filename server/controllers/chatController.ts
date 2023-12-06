@@ -118,7 +118,7 @@ const getChat = async (req: Request, res: Response): Promise<Response> => {
     };
 };
 
-const postMessage = async (req: Request, res: Response) => {
+const postMessage = async (req: Request, res: Response): Promise<Response> => {
     try {
         
         const { chatId } = req.params;

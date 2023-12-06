@@ -13,7 +13,7 @@ import * as types from '../../types/types'
 import COLORS from '../../COLORS';
 
 const SearchForm = () => {
-    if (GOOGLE_MAPS_API_KEY) {}
+    if (GOOGLE_MAPS_API_KEY) { }
     const { token } = useAuth();
     const [departure, setDeparture] = useState<types.TDeparture | undefined>(undefined);
     const [destination, setDestination] = useState<types.TDestination | undefined>(undefined);
@@ -44,7 +44,7 @@ const SearchForm = () => {
                 numberOfPeople,
             };
 
-            const response =  await getFilteredTrips({
+            const response = await getFilteredTrips({
                 departure: formData.departure,
                 destination: formData.destination,
                 date: formData.date,
@@ -70,7 +70,7 @@ const SearchForm = () => {
             automaticallyAdjustKeyboardInsets={true}
             keyboardShouldPersistTaps={'handled'}
             style={styles.container}>
-            <Image source={require('../../assets/images/EVAPPtv.png')} style={{alignSelf: 'center', left: 20}}/>
+            <Image source={require('../../assets/images/EVAPPtv.png')} style={{ alignSelf: 'center', left: 20 }} />
             <Text style={styles.subtitle}>Welcome to EVAPP, please select your travel destination!</Text>
             <Image
                 style={styles.image}
@@ -85,8 +85,10 @@ const SearchForm = () => {
             */}
 
             <View style={styles.parameters}>
-                <View style={[styles.parameter, { flexDirection: 'column', gap: 2, padding: 10, backgroundColor: COLORS.inputFields, 
-                shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.5,shadowRadius: 2, borderRadius: 8 }]}>
+                <View style={[styles.parameter, {
+                    flexDirection: 'column', gap: 2, padding: 10, backgroundColor: COLORS.inputFields,
+                    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.5, shadowRadius: 2, borderRadius: 8
+                }]}>
                     <View style={[styles.iconContainer, { alignSelf: 'flex-start' }]}>
                         <icons.MaterialIcons name='location-on' size={24} color={COLORS.iconColor} />
                         <Text style={styles.label}>From: </Text>
@@ -304,7 +306,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 2,
-        
+
     },
     doubleSectionContainer: {
         flexDirection: 'row',
