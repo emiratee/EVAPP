@@ -1,60 +1,129 @@
 "use strict";
-// import request from 'supertest';
-// const mockingoose = require('mockingoose')
-// import { createServer } from '../server'
-// // import { entries } from './__fixtures__/entries'
-// // import diaryEntryModel from '../models/diaryEntry'
-// const app = createServer()
-// import TripModel from '../models/Trip'
-// import userController from '../controllers/userController';
-// import { validateUser } from '../utils/userUtils';
-// // Mock the userController's getDriver function
-// jest.mock('../controllers/userController', () => ({
-//     getDriver: jest.fn(),
-// }));
-// describe('GET /trips', () => {
-//     afterEach(() => {
-//         jest.clearAllMocks();
-//     });
-//     it('should return trips with no destination', async () => {
-//         const mockUser = { userId: 'mockUserId' };
-//         const mockTrips = [{ /* Mock trip data here */ }];
-//         const mockDriver = { /* Mock driver data here */ };
-//         validateUser.mockResolvedValue(mockUser);
-//         TripModel.find.mockResolvedValue(mockTrips);
-//         userController.getDriver.mockResolvedValue(mockDriver);
-//         const response = await request(app)
-//             .get('/trips')
-//             .query({
-//                 departureCountry: 'Country',
-//                 departureCity: 'City',
-//                 date: '2023-12-06',
-//                 seats: 2,
-//             });
-//         expect(response.status).toEqual(200);
-//         expect(response.body.trips).toHaveLength(1);
-//         expect(userController.getDriver).toHaveBeenCalledWith(mockTrips[0].driverID);
-//     });
-//     // describe('when there are no tags', () => {
-//     //     beforeEach(() => {
-//     //         mockingoose.resetAll()
-//     //     })
-//     //     it('should return an empty array', async () => {
-//     //         mockingoose(TripModel).toReturn([], 'find')
-//     //         const response = await request(app).get('/trips')
-//     //         expect(response.status).toEqual(200)
-//     //         expect(response.body).toEqual({ trips: [] })
-//     //     })
-//     // })
-//     //   describe('when there are tags', () => {
-//     //     beforeEach(() => {
-//     //       mockingoose.resetAll()
-//     //     })
-//     //     it('should return an array of tags', async () => {
-//     //       mockingoose(tagModel).toReturn(tags, 'find')
-//     //       const response = await request(app).get('/tags')
-//     //       expect(response.status).toEqual(200)
-//     //       expect(response.body[0].name).toEqual(tags[0].name)
-//     //     })
-//     //   })
-// })
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const supertest_1 = __importDefault(require("supertest"));
+const index_1 = require("../index");
+const User_1 = __importDefault(require("../models/User"));
+const mockingoose = require('mockingoose');
+const mocks_1 = require("../__mocks__/mocks");
+jest.mock('../utils/userUtils');
+// const validateUserMock = validateUser as jest.Mock;
+// const postRegisterMock = postRegister as jest.Mock;
+const bcrypt_1 = __importDefault(require("bcrypt"));
+jest.mock('jsonwebtoken', () => ({
+    ...jest.requireActual('jsonwebtoken'),
+    verify: jest.fn().mockReturnValue({ foo: 'bar' }),
+    sign: jest.fn().mockReturnValue("token")
+}));
+// jest.mock('jsonwebtoken')
+// jest.mock('dotenv');
+describe('User routes', () => {
+    afterAll(() => {
+        index_1.server.close();
+        mockingoose.disconnect();
+    });
+    beforeEach(() => {
+        mockingoose.resetAll(); // Reset the mocked state before each test
+        // process.env.SECRET_KEY = 'your-mocked-secret-key'; // Set your mocked SECRET_KEY here
+    });
+    describe('/user/account/register', () => {
+        it('should register a new user', async () => {
+            // mockingoose(User).toReturn({}, 'save');
+            mockingoose(User_1.default).toReturn(null, 'findOne');
+            // mockingoose(User).toReturn(null, 'insertMany');
+            // validateUserMock.mockResolvedValue({ userId: '123', user: mockUser });
+            // Mock the bcrypt hash function
+            const bcryptHash = jest.spyOn(bcrypt_1.default, 'hash');
+            bcryptHash.mockResolvedValue('hashedPassword');
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/register')
+                .send(mocks_1.mockRegistrationData);
+            expect(User_1.default.insertMany).toHaveBeenCalledWith(expect.any(Object));
+            expect(response.status).toBe(201);
+            expect(response.body.token).toBeDefined();
+        });
+        it('should return an error if a user with the same email exists', async () => {
+            mockingoose(User_1.default).toReturn(mocks_1.mockUser, 'findOne');
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/register')
+                .send(mocks_1.mockRegistrationData);
+            expect(User_1.default.insertMany).toHaveBeenCalledWith(expect.any(Object));
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBeDefined();
+        });
+    });
+    describe('/user/account/login', () => {
+        afterAll(() => {
+            index_1.server.close();
+        });
+        beforeEach(() => {
+            mockingoose.resetAll();
+        });
+        it('should log in a user with valid credentials', async () => {
+            mockingoose(User_1.default).toReturn(mocks_1.mockUser, 'findOne'); // Mock a user in the database
+            const bcryptCompare = jest.spyOn(bcrypt_1.default, 'compare');
+            bcryptCompare.mockResolvedValue('hashedPassword');
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/login')
+                .send(mocks_1.mockLoginData); // Send a login request with valid credentials
+            expect(response.status).toBe(200);
+            expect(response.body.token).toBeDefined();
+        });
+        it('should return an error if the user does not exist', async () => {
+            mockingoose(User_1.default).toReturn(null, 'findOne'); // Mock a user not found in the database
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/login')
+                .send(mocks_1.mockLoginData);
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe('User does not exists');
+        });
+        it('should return an error if the password is incorrect', async () => {
+            mockingoose(User_1.default).toReturn(mocks_1.mockUser, 'findOne'); // Mock a user in the database
+            const invalidLoginData = { ...mocks_1.mockLoginData, password: 'wrongPassword' };
+            const bcryptCompare = jest.spyOn(bcrypt_1.default, 'compare');
+            bcryptCompare.mockResolvedValue(false);
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/login')
+                .send(invalidLoginData);
+            expect(response.status).toBe(401);
+            expect(response.body.error).toBe('Incorrect password');
+        });
+        it('should return an error if credentials are not provided correctly', async () => {
+            const response = await (0, supertest_1.default)(index_1.app)
+                .post('/user/account/login')
+                .send({});
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe('Credentials not provided correctly');
+        });
+    });
+});
+// it('should handle registration error when user already exists', async () => {
+//     mockingoose(User).toReturn({ email: 'john.doe@example.com' }, 'findOne');
+//     const response = await request(app)
+//         .post('/api/user/account/register')
+//         .send({
+//             name: 'John Doe',
+//             email: 'john.doe@example.com',
+//             phoneNumber: '1234567890',
+//             password: 'password123',
+//             imageUrl: 'https://example.com/image.jpg',
+//             expoPushToken: 'expoPushToken123',
+//         });
+//     expect(response.status).toBe(400);
+//     expect(response.body.error).toBe('Account with this E-Mail already exists');
+// });
+// it('should handle registration error when credentials are not provided correctly', async () => {
+//     const response = await request(app)
+//         .post('/api/user/account/register')
+//         .send({
+//             name: 'John Doe',
+//             // Missing required fields for testing
+//         });
+//     expect(response.status).toBe(400);
+//     expect(response.body.error).toBe('Credentials not provided correctly');
+// });
+// Similar tests for login and update account can be added
+// ...
+// It's also recommended to test the error cases for login and update account

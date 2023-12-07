@@ -77,6 +77,7 @@ const getUser = async (req, res) => {
         if (!validatedUser || !validatedUser.userId || !validatedUser.user)
             return res.status(401).json({ error: validatedUser });
         const { user } = validatedUser;
+        console.log(user);
         const { _id, password, __v, ...filteredUser } = user.toObject(); // Filter out unnecessary properties
         return res.status(200).json(filteredUser); // Return the filtered user
     }

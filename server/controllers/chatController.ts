@@ -169,8 +169,8 @@ const putUpdate = async (req: Request, res: Response): Promise<any> => {
   
       // Use a separate variable for the $set block
       const updatedValues = {
-        'driver.deletedChat': userId === updatedChat.driver.userId,
-        'passenger.deletedChat': userId === updatedChat.passenger.userId
+        'driver.deletedChat': userId === updatedChat.driver?.userId,
+        'passenger.deletedChat': userId === updatedChat.passenger?.userId
       };
   
       const finalChat = await Chat.findOneAndUpdate(

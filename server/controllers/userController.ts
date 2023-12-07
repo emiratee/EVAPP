@@ -18,7 +18,6 @@ const postRegister = async (req: Request, res: Response): Promise<Response> => {
 
         const user = await User.findOne({ email });
         if (user) return res.status(400).json({ error: "Account with this E-Mail already exists" });
-
         const userId = uuidv4();
         await User.insertMany({
             userId,
@@ -48,6 +47,8 @@ const postRegister = async (req: Request, res: Response): Promise<Response> => {
                 earningsOnHold: '0',
             }
         });
+
+
         const token = jwt.sign({ userId }, SECRET_KEY);
         return res.status(201).json({ token });
 
@@ -57,7 +58,7 @@ const postRegister = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
-const getDriver = async (driverId: string): Promise<any> => {
+const getDriver = async (driverId: string) => {
     try {
         //if (!driverId) return res.status(400).json({ error: "Credentials not provided correctly" });
 
@@ -80,8 +81,10 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
 
         const { user } = validatedUser;
+        console.log(user);
 
         const { _id, password, __v, ...filteredUser } = user.toObject(); // Filter out unnecessary properties
+
 
         return res.status(200).json(filteredUser); // Return the filtered user
     } catch (error) {
@@ -149,7 +152,7 @@ const postLogin = async (req: Request, res: Response): Promise<Response> => {
 
         const token = jwt.sign({ userId: user.userId }, SECRET_KEY); //Create a JWT from the user_id and secret key
         return res.status(200).json({ token });
-        
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error" });

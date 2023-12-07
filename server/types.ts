@@ -45,6 +45,8 @@ export type TTrip = {
     successful: boolean
 }
 
+
+
 export type TPassengerIDs = {
     bookingId: string,
     userId: string,

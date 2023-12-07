@@ -13,14 +13,13 @@ const userController_1 = __importDefault(require("./userController"));
 dotenv_1.default.config({ path: path_1.default.join(__dirname, '..', '..', '.env') });
 const postCreate = async (req, res) => {
     try {
-        const validUser = (0, userUtils_1.validateUser)(req);
+        const validUser = await (0, userUtils_1.validateUser)(req);
         if (!validUser)
             return res.status(401).json({ error: "Authentication failed" });
         const newTrip = await Trip_1.default.insertMany([req.body]);
         return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     }
     catch (error) {
-        console.error(error);
         return res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -103,8 +102,9 @@ const putRejectPassenger = async (req, res) => {
         const creditsInQuestion = Number(totalCredits);
         const user = await User_1.default.findOne({ userId: passengerId });
         user.expoPushToken && (0, userUtils_1.sendPushNotification)(user.expoPushToken, 'Booking request rejected', 'Better luck next time! 🍀');
-        const currentPassengerOnHold = Number(user.credits.onHold);
-        const currentPassengerAvailable = Number(user.credits.available);
+        const currentPassengerOnHold = Number(user.credits?.onHold);
+        const currentPassengerAvailable = Number(user.credits?.available);
+        console.log('here');
         await User_1.default.updateOne({ userId: user.userId }, {
             $set: {
                 'credits.onHold': currentPassengerOnHold - creditsInQuestion,
@@ -163,11 +163,11 @@ const putTripSuccessful = async (req, res) => {
         const validatedUser = await (0, userUtils_1.validateUser)(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user)
             return res.status(401).json({ error: validatedUser });
+        console.log(validatedUser);
         const { tripId, successful } = req.body.data;
         await Trip_1.default.updateOne({ _id: tripId }, {
             $set: { successful }
         });
-        const trip = await Trip_1.default.findOne({ _id: tripId });
         //notification for passenger is required
         // const driver = await User.findOne({ userId: trip.driverID });
         // driver.expoPushToken && sendPushNotification(

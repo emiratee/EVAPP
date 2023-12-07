@@ -11,15 +11,15 @@ dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const postCreate = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const validUser = validateUser(req);
-        if (!validUser) return res.status(401).json({ error: "Authentication failed" });
 
+        const validUser = await validateUser(req);
+
+        if (!validUser) return res.status(401).json({ error: "Authentication failed" });
 
         const newTrip = await Trip.insertMany([req.body as types.TTrip]);
 
         return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -149,9 +149,9 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<Response
             'Better luck next time! 🍀'
         )
 
-        const currentPassengerOnHold = Number(user.credits.onHold);
-        const currentPassengerAvailable = Number(user.credits.available);
-
+        const currentPassengerOnHold = Number(user.credits?.onHold);
+        const currentPassengerAvailable = Number(user.credits?.available);
+        console.log('here')
         await User.updateOne(
             { userId: user.userId },
             {
@@ -235,7 +235,7 @@ const putTripSuccessful = async (req: Request, res: Response): Promise<Response>
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-
+        console.log(validatedUser)
         const { tripId, successful } = req.body.data
 
         await Trip.updateOne(
@@ -244,8 +244,6 @@ const putTripSuccessful = async (req: Request, res: Response): Promise<Response>
                 $set: { successful }
             }
         )
-
-        const trip = await Trip.findOne({ _id: tripId })
 
         //notification for passenger is required
         // const driver = await User.findOne({ userId: trip.driverID });
