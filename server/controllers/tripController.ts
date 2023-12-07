@@ -2,29 +2,29 @@ import { Request, Response } from 'express';
 import path from 'path'
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from 'uuid';
-import { sendPushNotification, validateUser } from '../utils/userUtils.js';
-import Trip from '../models/Trip.js';
-import User from '../models/User.js';
-import userController from './userController.js'
-
+import { sendPushNotification, validateUser } from '../utils/userUtils';
+import Trip from '../models/Trip';
+import User from '../models/User';
+import userController from './userController'
+import * as types from '../types'
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
-const postCreate = async (req: Request, res: Response): Promise<any> => {
+const postCreate = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const validUser = validateUser(req);
+
+        const validUser = await validateUser(req);
+
         if (!validUser) return res.status(401).json({ error: "Authentication failed" });
 
-
-        const newTrip = await Trip.insertMany([req.body]);
+        const newTrip = await Trip.insertMany([req.body as types.TTrip]);
 
         return res.status(201).json({ stauts: 201, message: 'Successfully created trip', trip: newTrip[0] });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
-const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
+const getFilteredTrips = async (req: Request, res: Response): Promise<Response> => {
     try {
         const validatedUser = await validateUser(req);
         const { departureCountry, departureCity, destinationCountry, destinationCity, date, seats } = req.query;
@@ -54,7 +54,7 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         }
         //todo remove any
         const trips = await Trip.find(params);
-        let formedTrips: any[] = [];
+        let formedTrips: { trip: types.TTrip; driver: types.TUser }[] = [];
         for (const trip of trips) {
             const driver = await userController.getDriver(trip.driverID);
             formedTrips.push({ trip, driver });
@@ -62,18 +62,16 @@ const getFilteredTrips = async (req: Request, res: Response): Promise<any> => {
         return res.status(200).json({ trips: formedTrips })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
 
-const putApprovePassenger = async (req: Request, res: Response): Promise<any> => {
+const putApprovePassenger = async (req: Request, res: Response): Promise<Response> => {
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
-
-
 
         await Trip.updateOne(
             { _id: tripId, "passengerIDs.bookingId": bookingId },
@@ -106,26 +104,20 @@ const putApprovePassenger = async (req: Request, res: Response): Promise<any> =>
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putCar:", error);
-        res.status(500).json({ error: "Internal server error in putCar" });
+        return res.status(500).json({ error: "Internal server error in putCar" });
     }
 };
 
 
 
-const putRejectPassenger = async (req: Request, res: Response): Promise<any> => {
+const putRejectPassenger = async (req: Request, res: Response): Promise<Response> => {
     try {
 
-        //what we need? 
-
-        //trip id, passengerid, driverid 
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-        //change trip passengersid status to Approved  WORKS
-        //onhold credits from passenger deduct  WORKS
-        //passengers credits goes to driver creits(onhold) WORKS
 
         const { tripId, passengerId, bookingId, totalCredits } = req.body.data;
         const trip = await Trip.findOne({ _id: tripId });
@@ -149,8 +141,6 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
         const creditsInQuestion = Number(totalCredits)
 
-
-        //find passenger by id
         const user = await User.findOne({ userId: passengerId });
 
         user.expoPushToken && sendPushNotification(
@@ -159,9 +149,9 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
             'Better luck next time! 🍀'
         )
 
-        const currentPassengerOnHold = Number(user.credits.onHold);
-        const currentPassengerAvailable = Number(user.credits.available);
-
+        const currentPassengerOnHold = Number(user.credits?.onHold);
+        const currentPassengerAvailable = Number(user.credits?.available);
+        console.log('here')
         await User.updateOne(
             { userId: user.userId },
             {
@@ -175,24 +165,17 @@ const putRejectPassenger = async (req: Request, res: Response): Promise<any> => 
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putRejectPassenger:", error);
-        res.status(500).json({ error: "Internal server error in putRejectPassenger" });
+        return res.status(500).json({ error: "Internal server error in putRejectPassenger" });
     }
 };
-//on reject update seats available of trip
 
-const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
+const putMakeRequest = async (req: Request, res: Response): Promise<Response> => {
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-
-        // add validateduser to trips passengers list
-        // add trip to users array trips as passanger
-        //
-        //make - seats
-
 
         const { tripId, seats } = req.body.data
 
@@ -241,18 +224,18 @@ const putMakeRequest = async (req: Request, res: Response): Promise<any> => {
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putMakeRequest:", error);
-        res.status(500).json({ error: "Internal server error in putMakeRequest" });
+        return res.status(500).json({ error: "Internal server error in putMakeRequest" });
     }
 };
 
-const putTripSuccessful = async (req: Request, res: Response): Promise<any> => {
+const putTripSuccessful = async (req: Request, res: Response): Promise<Response> => {
     try {
         const validatedUser = await validateUser(req);
         if (!validatedUser || !validatedUser.userId || !validatedUser.user) return res.status(401).json({ error: validatedUser });
-
+        console.log(validatedUser)
         const { tripId, successful } = req.body.data
 
         await Trip.updateOne(
@@ -261,8 +244,6 @@ const putTripSuccessful = async (req: Request, res: Response): Promise<any> => {
                 $set: { successful }
             }
         )
-
-        const trip = await Trip.findOne({ _id: tripId })
 
         //notification for passenger is required
         // const driver = await User.findOne({ userId: trip.driverID });
@@ -275,10 +256,10 @@ const putTripSuccessful = async (req: Request, res: Response): Promise<any> => {
 
         const updatedTrip = await Trip.findOne({ _id: tripId })
 
-        res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
+        return res.status(200).json({ message: 'Trip edited successfully', trip: updatedTrip });
     } catch (error) {
         console.error("Error in putTripSuccessful:", error);
-        res.status(500).json({ error: "Internal server error in putTripSuccessful" });
+        return res.status(500).json({ error: "Internal server error in putTripSuccessful" });
     }
 };
 

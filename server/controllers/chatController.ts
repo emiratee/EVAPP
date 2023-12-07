@@ -118,7 +118,7 @@ const getChat = async (req: Request, res: Response): Promise<Response> => {
     };
 };
 
-const postMessage = async (req: Request, res: Response) => {
+const postMessage = async (req: Request, res: Response): Promise<Response> => {
     try {
         
         const { chatId } = req.params;
@@ -169,8 +169,8 @@ const putUpdate = async (req: Request, res: Response): Promise<any> => {
   
       // Use a separate variable for the $set block
       const updatedValues = {
-        'driver.deletedChat': userId === updatedChat.driver.userId,
-        'passenger.deletedChat': userId === updatedChat.passenger.userId
+        'driver.deletedChat': userId === updatedChat.driver?.userId,
+        'passenger.deletedChat': userId === updatedChat.passenger?.userId
       };
   
       const finalChat = await Chat.findOneAndUpdate(
