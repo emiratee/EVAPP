@@ -15,7 +15,7 @@ type Props = {
 }
 
 const TripInfoModalScreen = ({ trip, driver }: Props) => {
-    const { user } = useAuth();
+    const { user,token } = useAuth();
 
     return (
         <View style={styles.container}>
@@ -31,7 +31,7 @@ const TripInfoModalScreen = ({ trip, driver }: Props) => {
                 keyExtractor={(item, index) => index.toString()}
                 style={{ width: '100%', height: '100%' }}
             />
-            {user && user.userId !== trip.driverID && <Request trip={trip} />}
+            {user &&token && user.userId !== trip.driverID && <Request trip={trip} />}
         </View>
     );
 }

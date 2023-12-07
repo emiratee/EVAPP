@@ -152,8 +152,8 @@ const putUpdate = async (req, res) => {
         }
         // Use a separate variable for the $set block
         const updatedValues = {
-            'driver.deletedChat': userId === updatedChat.driver.userId,
-            'passenger.deletedChat': userId === updatedChat.passenger.userId
+            'driver.deletedChat': userId === updatedChat.driver?.userId,
+            'passenger.deletedChat': userId === updatedChat.passenger?.userId
         };
         const finalChat = await Chat_1.default.findOneAndUpdate({ chatId }, { $set: updatedValues }, { new: true } // Return the modified document
         );
